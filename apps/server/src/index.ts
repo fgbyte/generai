@@ -3,7 +3,6 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
 import { corsMiddleware } from "./middlewares/cors-middleware";
-import { todosRoute } from "./routes/todos.routes";
 import { peopleRoutes } from "./routes/people.routes";
 import { testRoute } from "./routes/test.routes";
 
@@ -24,7 +23,6 @@ const router = app
   .use(logger())
   //routes
   .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
-  .route("/api/todos", todosRoute) //protected & OpenAPI route
   .route("/api/people", peopleRoutes) //public route
   .route("/api/test", testRoute); //public route
 
