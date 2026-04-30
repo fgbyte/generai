@@ -9,13 +9,13 @@ import ws from "ws";
 // Configurar WebSocket para Node.js (necesario para migraciones)
 neonConfig.webSocketConstructor = ws;
 
-// Carga .env.local
-const localEnvPath = resolve(".env.local");
+// Carga .env.dev
+const localEnvPath = resolve(".env.dev");
 if (existsSync(localEnvPath)) {
   config({ path: localEnvPath });
-  console.log("[migrate] ✅ Loaded .env.local");
+  console.log("[migrate] ✅ Loaded .env.dev");
 } else {
-  console.warn("[migrate] ⚠️ No .env.local found");
+  console.warn("[migrate] ⚠️ No .env.dev found");
 }
 
 const DATABASE_URL = process.env.DATABASE_URL;

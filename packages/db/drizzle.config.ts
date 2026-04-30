@@ -4,13 +4,13 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
 // Carga .env local (solo para desarrollo)
-const localEnvPath = resolve(".env.local");
+const localEnvPath = resolve(".env.dev");
 if (existsSync(localEnvPath)) {
   config({ path: localEnvPath });
-  console.log("[drizzle🌧️] Loaded local .env.local");
+  console.log("[drizzle🌧️] Loaded local .env.dev");
 } else {
   console.warn(
-    "[drizzle] No local packages/db/.env.local found. Make sure to create one with DATABASE_URL for development.",
+    "[drizzle] No local packages/db/.env.dev found. Make sure to create one with DATABASE_URL for development.",
   );
 }
 
