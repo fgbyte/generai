@@ -1,0 +1,29 @@
+{
+  "name": "@generai/auth",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.5.5",
+    "@generai/db": "workspace:*",
+    "@generai/env": "workspace:*",
+    "@generai/mail": "workspace:*",
+    "bcryptjs": "^3.0.3",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@generai/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

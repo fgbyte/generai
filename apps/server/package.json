@@ -1,0 +1,36 @@
+{
+  "name": "server",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -b",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "^1.2.4",
+    "@hono/zod-validator": "^0.7.6",
+    "@scalar/hono-api-reference": "^0.10.9",
+    "@generai/auth": "workspace:*",
+    "@generai/db": "workspace:*",
+    "@generai/env": "workspace:*",
+    "@generai/mail": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "catalog:",
+    "@generai/config": "workspace:*",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "alchemy": "catalog:",
+    "jsdom": "catalog:",
+    "tsdown": "^0.16.5",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "wrangler": "^4.54.0"
+  }
+}

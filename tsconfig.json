@@ -1,0 +1,3 @@
+{
+  "extends": "@generai/config/tsconfig.base.json",
+}
