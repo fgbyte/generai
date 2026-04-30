@@ -24,7 +24,7 @@
   "type": "module",
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo -F @generai/infra -F @generai/db dev db:studio",
+    "dev": "turbo -F @generai/infra dev",
     "deploy:dev": "bun run --filter @generai/infra deploy:dev",
     "deploy:staging": "bun run --filter @generai/infra deploy:staging",
     "deploy:prod": "bun run --filter @generai/infra deploy:prod",
