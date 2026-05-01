@@ -12,6 +12,12 @@ export const auth = betterAuth({
     provider: "pg",
 
     schema: schema,
+    user: {
+      additionalFields: {
+        points: { type: "number", default: 50 },
+        stripeCustomerId: { type: "string", required: false },
+      },
+    },
   }),
   trustedOrigins: [env.CORS_ORIGIN],
   emailAndPassword: {
