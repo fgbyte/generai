@@ -10,6 +10,7 @@
     "test:db": "bunx vitest run --config vitest.config.ts"
   },
   "dependencies": {
+    "@google/genai": "^0.12.0",
     "@hono/zod-openapi": "^1.2.4",
     "@hono/zod-validator": "^0.7.6",
     "@scalar/hono-api-reference": "^0.10.9",

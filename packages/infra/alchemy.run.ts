@@ -31,6 +31,7 @@ export const server = await Worker("server", {
     BETTER_AUTH_URL: requireEnv("BETTER_AUTH_URL"),
     POSTMARK_SERVER_TOKEN: requireEnv("POSTMARK_SERVER_TOKEN"),
     POSTMARK_FROM_EMAIL: requireEnv("POSTMARK_FROM_EMAIL"),
+    GEMINI_API_KEY: requireEnv("GEMINI_API_KEY"),
   },
   dev: {
     port: 3000,
