@@ -12,7 +12,8 @@
   "scripts": {
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
-    "db:migrate": "bun run src/migrate.ts"
+    "db:migrate": "bun run src/migrate.ts",
+    "test": "bunx vitest run src/queries/*.test.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -20,6 +21,7 @@
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
+    "vitest": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
