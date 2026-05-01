@@ -210,10 +210,8 @@ export function getPostmarkClient() {
 export const client = {
   sendEmail: (...args: Parameters<postmark.ServerClient["sendEmail"]>) =>
     getClient().sendEmail(...args),
-  sendEmailWithTemplate: (
-    ...args: Parameters<postmark.ServerClient["sendEmailWithTemplate"]>
-  ) => getClient().sendEmailWithTemplate(...args),
-  sendEmailBatch: (
-    ...args: Parameters<postmark.ServerClient["sendEmailBatch"]>
-  ) => getClient().sendEmailBatch(...args),
+  sendEmailWithTemplate: (...args: Parameters<postmark.ServerClient["sendEmailWithTemplate"]>) =>
+    getClient().sendEmailWithTemplate(...args),
+  sendEmailBatch: (...args: Parameters<postmark.ServerClient["sendEmailBatch"]>) =>
+    getClient().sendEmailBatch(...args),
 };

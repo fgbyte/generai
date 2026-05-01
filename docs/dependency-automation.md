@@ -173,9 +173,9 @@ This prevents partial or corrupted updates.
 
 ## Summary
 
-| System | Scope | Auto-Merge | Limitation |
-|--------|-------|------------|------------|
-| Dependabot | Workspace packages | Patch only | No catalog support |
-| Catalog Script | Root catalog deps | None (manual) | Custom solution |
+| System         | Scope              | Auto-Merge    | Limitation         |
+| -------------- | ------------------ | ------------- | ------------------ |
+| Dependabot     | Workspace packages | Patch only    | No catalog support |
+| Catalog Script | Root catalog deps  | None (manual) | Custom solution    |
 
 Both systems work together to keep dependencies current while respecting the monorepo structure.

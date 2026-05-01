@@ -26,11 +26,13 @@ This project is a modified version of [Better Fullstack](https://github.com/Marv
 Create environment files for each stage:
 
 **apps/web/.env.{stage}** - Frontend variables:
+
 - `.env.dev` - Development
 - `.env.staging` - Staging
 - `.env.production` - Production
 
 **apps/server/.env.{stage}** - Backend variables:
+
 - `.env.dev` - Development
 - `.env.staging` - Staging
 - `.env.production` - Production
@@ -38,11 +40,13 @@ Create environment files for each stage:
 ### Required Variables
 
 **apps/web/.env.{stage}:**
+
 ```
 VITE_SERVER_URL=https://server-{stage}.your-domain.workers.dev
 ```
 
 **apps/server/.env.{stage}:**
+
 ```
 DATABASE_URL=postgresql://user:pass@host/db-{stage}?sslmode=require
 CORS_ORIGIN=https://web-{stage}.your-domain.workers.dev
@@ -105,6 +109,7 @@ bun run destroy:prod     # Destroy production
 ```
 
 Each stage creates isolated Workers:
+
 - `generai-web-dev` / `generai-server-dev`
 - `generai-web-staging` / `generai-server-staging`
 - `generai-web-production` / `generai-server-production`
@@ -143,6 +148,7 @@ generai/
 - `bun run check`: Run Oxlint and Oxfmt
 
 ### Deployment
+
 - `bun run deploy:dev`: Deploy to development
 - `bun run deploy:staging`: Deploy to staging
 - `bun run deploy:prod`: Deploy to production

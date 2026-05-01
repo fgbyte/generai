@@ -5,6 +5,7 @@ import { logger } from "hono/logger";
 import { corsMiddleware } from "./middlewares/cors-middleware";
 import { peopleRoutes } from "./routes/people.routes";
 import { testRoute } from "./routes/test.routes";
+import { generateRoutes } from "./routes/generate.routes";
 
 const app = new OpenAPIHono();
 
@@ -24,7 +25,8 @@ const router = app
   //routes
   .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
   .route("/api/people", peopleRoutes) //public route
-  .route("/api/test", testRoute); //public route
+  .route("/api/test", testRoute) //public route
+  .route("/", generateRoutes); //auth-protected generate routes
 
 // Global error handler
 app.onError((err, c) => {

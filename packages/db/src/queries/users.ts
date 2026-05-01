@@ -23,7 +23,7 @@ export const updateUserPoints = async (userId: string, pointsToAdd: number) => {
   const [result] = await db
     .update(user)
     .set({
-      points: sql`${user.points} + ${pointsToAdd}`
+      points: sql`${user.points} + ${pointsToAdd}`,
     })
     .where(eq(user.id, userId))
     .returning();

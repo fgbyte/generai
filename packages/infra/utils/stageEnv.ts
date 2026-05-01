@@ -14,7 +14,9 @@ function detectStage(): string {
   }
 
   // 2. --stage CLI argument (handles both "--stage=value" and "--stage value" formats)
-  const stageIndex = process.argv.findIndex((arg) => arg === "--stage" || arg.startsWith("--stage="));
+  const stageIndex = process.argv.findIndex(
+    (arg) => arg === "--stage" || arg.startsWith("--stage="),
+  );
   if (stageIndex !== -1) {
     const stageArg = process.argv[stageIndex];
     if (stageArg) {

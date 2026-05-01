@@ -30,14 +30,14 @@ packages/db/
 
 ## Where to Look
 
-| Task | Location |
-|------|----------|
-| Add table | `src/schema/*.ts` (auth.ts, subscriptions.ts, generated-content.ts) |
-| Add queries | `src/queries/*.ts` |
-| Run migrations | `bun run db:migrate` (from root) |
-| Generate migration | `bun run db:generate` |
-| DB client | `src/index.ts` - exports `db` |
-| Queries | `src/queries/` - custom query helpers |
+| Task               | Location                                                            |
+| ------------------ | ------------------------------------------------------------------- |
+| Add table          | `src/schema/*.ts` (auth.ts, subscriptions.ts, generated-content.ts) |
+| Add queries        | `src/queries/*.ts`                                                  |
+| Run migrations     | `bun run db:migrate` (from root)                                    |
+| Generate migration | `bun run db:generate`                                               |
+| DB client          | `src/index.ts` - exports `db`                                       |
+| Queries            | `src/queries/` - custom query helpers                               |
 
 ## Conventions
 

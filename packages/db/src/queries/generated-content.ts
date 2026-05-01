@@ -25,13 +25,22 @@ export const saveGeneratedContent = async (
 };
 
 /**
+ * Get generated content by ID
+ */
+export const getGeneratedContentById = async (id: string) => {
+  const [result] = await db
+    .select()
+    .from(generatedContent)
+    .where(eq(generatedContent.id, id))
+    .limit(1);
+  return result;
+};
+
+/**
  * Delete generated content by ID
  */
 export const deleteGeneratedContent = async (id: string) => {
-  const [result] = await db
-    .delete(generatedContent)
-    .where(eq(generatedContent.id, id))
-    .returning();
+  const [result] = await db.delete(generatedContent).where(eq(generatedContent.id, id)).returning();
   return result;
 };
 

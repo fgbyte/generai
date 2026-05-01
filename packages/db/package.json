@@ -16,8 +16,8 @@
     "test": "bunx vitest run src/queries/*.test.ts"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.2",
     "@generai/env": "workspace:*",
+    "@neondatabase/serverless": "^1.0.2",
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
