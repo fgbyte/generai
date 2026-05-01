@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1775081688575,
-      "tag": "0000_green_jack_murdock",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1775231521704,
-      "tag": "0001_cooing_silver_centurion",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1775538829647,
-      "tag": "0002_majestic_susan_delgado",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1777591243652,
-      "tag": "0003_round_colossus",
+      "when": 1777642072828,
+      "tag": "0000_tired_lady_mastermind",
       "breakpoints": true
     }
   ]
