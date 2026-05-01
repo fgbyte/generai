@@ -40,6 +40,7 @@
     "db:studio": "turbo -F @generai/db db:studio",
     "db:generate": "turbo -F @generai/db db:generate",
     "db:migrate": "turbo -F @generai/db db:migrate",
+    "test:db": "bun run --cwd apps/server test:db",
     "open-auth-docs": "open-cli http://localhost:3000/api/auth/reference",
     "check": "oxlint && oxfmt --write"
   },
