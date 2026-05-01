@@ -15,8 +15,7 @@ packages/db/
 │   │   ├── index.ts     # Schema exports
 │   │   ├── auth.ts      # Better-Auth tables (user, session, account, verification)
 │   │   ├── subscriptions.ts  # Subscription records (Stripe)
-│   │   ├── generated-content.ts  # AI-generated content history
-│   │   └── todos.ts     # Todo items (per-user)
+│   │   └── generated-content.ts  # AI-generated content history
 │   ├── migrations/      # Drizzle migrations
 │   │   ├── meta/        # Migration metadata
 │   │   └── *.sql         # Migration files
@@ -24,8 +23,7 @@ packages/db/
 │   │   ├── index.ts     # Query exports
 │   │   ├── users.ts     # User queries (points, stripeCustomerId)
 │   │   ├── subscriptions.ts  # Subscription queries
-│   │   ├── generated-content.ts  # Content history queries
-│   │   └── todos.ts     # Todo queries
+│   │   └── generated-content.ts  # Content history queries
 │   └── index.ts         # DB client export
 └── drizzle.config.ts    # Drizzle configuration
 ```
@@ -34,7 +32,7 @@ packages/db/
 
 | Task | Location |
 |------|----------|
-| Add table | `src/schema/*.ts` (auth.ts, subscriptions.ts, generated-content.ts, todos.ts) |
+| Add table | `src/schema/*.ts` (auth.ts, subscriptions.ts, generated-content.ts) |
 | Add queries | `src/queries/*.ts` |
 | Run migrations | `bun run db:migrate` (from root) |
 | Generate migration | `bun run db:generate` |
@@ -61,7 +59,6 @@ packages/db/
 
 ```bash
 # From root:
-bun run db:push       # Push schema changes to DB
 bun run db:generate   # Generate migration from schema changes
 bun run db:migrate    # Run pending migrations
 bun run db:studio     # Drizzle Studio UI
