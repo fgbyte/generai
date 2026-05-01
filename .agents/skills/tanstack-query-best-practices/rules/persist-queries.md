@@ -176,12 +176,12 @@ function MainApp() {
 
 ## Persistence Configuration
 
-| Option | Purpose |
-|--------|---------|
-| `maxAge` | Maximum cache age before considered invalid |
-| `buster` | String to invalidate cache (use app version) |
-| `dehydrateOptions.shouldDehydrateQuery` | Filter which queries to persist |
-| `hydrateOptions.shouldHydrate` | Filter which queries to restore |
+| Option                                  | Purpose                                      |
+| --------------------------------------- | -------------------------------------------- |
+| `maxAge`                                | Maximum cache age before considered invalid  |
+| `buster`                                | String to invalidate cache (use app version) |
+| `dehydrateOptions.shouldDehydrateQuery` | Filter which queries to persist              |
+| `hydrateOptions.shouldHydrate`          | Filter which queries to restore              |
 
 ## Context
 

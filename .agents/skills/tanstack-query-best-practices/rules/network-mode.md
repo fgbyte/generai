@@ -140,11 +140,11 @@ function TodoApp() {
 
 ## Network Mode Comparison
 
-| Mode | Behavior | Use Case |
-|------|----------|----------|
-| `'online'` (default) | Pauses when offline, resumes when online | Most apps, show offline state |
-| `'always'` | Always runs queryFn regardless of network | Offline-first apps, local-only data |
-| `'offlineFirst'` | Tries once, then waits for network if fails | Best-effort offline |
+| Mode                 | Behavior                                    | Use Case                            |
+| -------------------- | ------------------------------------------- | ----------------------------------- |
+| `'online'` (default) | Pauses when offline, resumes when online    | Most apps, show offline state       |
+| `'always'`           | Always runs queryFn regardless of network   | Offline-first apps, local-only data |
+| `'offlineFirst'`     | Tries once, then waits for network if fails | Best-effort offline                 |
 
 ## Good Example: Online Status Detection
 

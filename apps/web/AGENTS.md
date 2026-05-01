@@ -22,13 +22,13 @@ apps/web/
 
 ## Where to Look
 
-| Task | Location |
-|------|----------|
-| Add route | `src/routes/` - create `.tsx` file |
-| Route layout | `src/routes/__root.tsx` |
-| UI components | `src/components/ui/` |
-| Styling | `src/index.css` - Tailwind v4 CSS vars |
-| Vite config | `vite.config.ts` - Tailwind + TanStack Router plugin |
+| Task          | Location                                             |
+| ------------- | ---------------------------------------------------- |
+| Add route     | `src/routes/` - create `.tsx` file                   |
+| Route layout  | `src/routes/__root.tsx`                              |
+| UI components | `src/components/ui/`                                 |
+| Styling       | `src/index.css` - Tailwind v4 CSS vars               |
+| Vite config   | `vite.config.ts` - Tailwind + TanStack Router plugin |
 
 ## Conventions
 
@@ -95,6 +95,7 @@ const mutation = useMutation({
 ### Examples by Operation Type
 
 **Create (Add to list):**
+
 ```typescript
 onMutate: async (newItem) => {
   await queryClient.cancelQueries({ queryKey: ["items"] });
@@ -115,6 +116,7 @@ onMutate: async (newItem) => {
 ```
 
 **Update (Modify existing):**
+
 ```typescript
 onMutate: async ({ id, updates }) => {
   await queryClient.cancelQueries({ queryKey: ["items"] });
@@ -131,6 +133,7 @@ onMutate: async ({ id, updates }) => {
 ```
 
 **Delete (Remove from list):**
+
 ```typescript
 onMutate: async (id) => {
   await queryClient.cancelQueries({ queryKey: ["items"] });
@@ -154,12 +157,12 @@ onMutate: async (id) => {
 
 ### When to Use
 
-| Use Optimistic | Don't Use |
-|---------------|-----------|
+| Use Optimistic  | Don't Use            |
+| --------------- | -------------------- |
 | Toggle switches | Payment transactions |
-| Delete items | Irreversible actions |
-| Reorder lists | Critical data writes |
-| Like/upvote | Multi-step workflows |
+| Delete items    | Irreversible actions |
+| Reorder lists   | Critical data writes |
+| Like/upvote     | Multi-step workflows |
 
 ### Reference Implementation
 

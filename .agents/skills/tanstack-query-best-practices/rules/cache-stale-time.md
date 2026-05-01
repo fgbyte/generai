@@ -63,13 +63,13 @@ const queryClient = new QueryClient({
 
 ## Recommended staleTime Values
 
-| Data Type | staleTime | Rationale |
-|-----------|-----------|-----------|
-| Real-time (stocks, live feeds) | 0 | Must always be current |
+| Data Type                           | staleTime  | Rationale                      |
+| ----------------------------------- | ---------- | ------------------------------ |
+| Real-time (stocks, live feeds)      | 0          | Must always be current         |
 | Frequently changing (notifications) | 30s - 1min | Balance freshness and requests |
-| User-generated content | 1 - 5min | Changes on user action |
-| Reference data (categories, config) | 10 - 30min | Rarely changes |
-| Static content | Infinity | Never changes |
+| User-generated content              | 1 - 5min   | Changes on user action         |
+| Reference data (categories, config) | 10 - 30min | Rarely changes                 |
+| Static content                      | Infinity   | Never changes                  |
 
 ## Context
 

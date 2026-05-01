@@ -126,13 +126,13 @@ function PostLink({ post }: { post: Post }) {
 
 ## Prefetch Triggers
 
-| Trigger | When to Use |
-|---------|-------------|
-| `onMouseEnter` | Desktop, links/buttons user will likely click |
-| `onFocus` | Keyboard navigation, accessibility |
-| `onTouchStart` | Mobile, before navigation |
-| Component mount | Likely next pages, wizard steps |
-| Intersection Observer | Below-fold content |
+| Trigger               | When to Use                                   |
+| --------------------- | --------------------------------------------- |
+| `onMouseEnter`        | Desktop, links/buttons user will likely click |
+| `onFocus`             | Keyboard navigation, accessibility            |
+| `onTouchStart`        | Mobile, before navigation                     |
+| Component mount       | Likely next pages, wizard steps               |
+| Intersection Observer | Below-fold content                            |
 
 ## Context
 

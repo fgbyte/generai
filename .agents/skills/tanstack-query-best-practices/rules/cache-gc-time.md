@@ -76,13 +76,13 @@ Timeline example (staleTime: 1min, gcTime: 5min):
 
 ## Recommended gcTime Values
 
-| Scenario | gcTime | Rationale |
-|----------|--------|-----------|
-| Frequently revisited routes | 15 - 30min | Instant navigation |
-| Detail pages (viewed once) | 2 - 5min | Memory efficient |
-| Large payloads | 1 - 2min | Prevent memory bloat |
-| Critical user data | 30min+ | Offline-like experience |
-| SSR hydration | >= 2s | Prevent hydration issues |
+| Scenario                    | gcTime     | Rationale                |
+| --------------------------- | ---------- | ------------------------ |
+| Frequently revisited routes | 15 - 30min | Instant navigation       |
+| Detail pages (viewed once)  | 2 - 5min   | Memory efficient         |
+| Large payloads              | 1 - 2min   | Prevent memory bloat     |
+| Critical user data          | 30min+     | Offline-like experience  |
+| SSR hydration               | >= 2s      | Prevent hydration issues |
 
 ## Context
 

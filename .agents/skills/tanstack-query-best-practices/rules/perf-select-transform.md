@@ -125,14 +125,14 @@ function TodoDetail({ id }: { id: number }) {
 
 ## When to Use Select
 
-| Scenario | Use Select? |
-|----------|-------------|
-| Filtering list data | Yes |
-| Sorting data | Yes |
-| Computing derived values | Yes |
-| Picking single item from list | Yes |
-| Heavy transformations | Yes (memoized) |
-| Simple data pass-through | No |
+| Scenario                            | Use Select?           |
+| ----------------------------------- | --------------------- |
+| Filtering list data                 | Yes                   |
+| Sorting data                        | Yes                   |
+| Computing derived values            | Yes                   |
+| Picking single item from list       | Yes                   |
+| Heavy transformations               | Yes (memoized)        |
+| Simple data pass-through            | No                    |
 | Transformation needs external state | Yes, with useCallback |
 
 ## Context

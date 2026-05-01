@@ -72,12 +72,14 @@ const { data: users } = useQuery({
 ## Serializable Types
 
 **Safe to use:**
+
 - Strings, numbers, booleans, null
 - Plain objects (no prototype methods)
 - Arrays of serializable values
 - undefined (stripped but handled)
 
 **Avoid:**
+
 - Functions
 - Class instances
 - Symbols

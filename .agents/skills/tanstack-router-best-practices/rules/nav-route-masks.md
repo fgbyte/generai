@@ -179,13 +179,13 @@ function PostModal() {
 
 ## Route Mask Behavior
 
-| Scenario | URL Shown | Actual Route |
-|----------|-----------|--------------|
-| Click masked link | Masked URL | Real route |
-| Share/copy URL | Real URL | Real route |
-| Direct navigation | Real URL | Real route |
-| Browser refresh | Depends on URL in bar | Matches URL |
-| Back button | Previous URL | Previous route |
+| Scenario          | URL Shown             | Actual Route   |
+| ----------------- | --------------------- | -------------- |
+| Click masked link | Masked URL            | Real route     |
+| Share/copy URL    | Real URL              | Real route     |
+| Direct navigation | Real URL              | Real route     |
+| Browser refresh   | Depends on URL in bar | Matches URL    |
+| Back button       | Previous URL          | Previous route |
 
 ## Context
 

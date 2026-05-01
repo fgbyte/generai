@@ -137,11 +137,11 @@ export const router = createRouter({
 
 ## ensureQueryData vs prefetchQuery vs fetchQuery
 
-| Method | Returns | Throws | Awaits | Use Case |
-|--------|---------|--------|--------|----------|
-| `ensureQueryData` | Data | Yes | Yes | Route loaders (recommended) |
-| `prefetchQuery` | void | No | Yes | Background prefetching |
-| `fetchQuery` | Data | Yes | Yes | When you need data immediately |
+| Method            | Returns | Throws | Awaits | Use Case                       |
+| ----------------- | ------- | ------ | ------ | ------------------------------ |
+| `ensureQueryData` | Data    | Yes    | Yes    | Route loaders (recommended)    |
+| `prefetchQuery`   | void    | No     | Yes    | Background prefetching         |
+| `fetchQuery`      | Data    | Yes    | Yes    | When you need data immediately |
 
 ## Context
 

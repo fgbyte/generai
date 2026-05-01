@@ -123,10 +123,10 @@ const createTodo = useMutation({
 
 ## When to Use Each Approach
 
-| Approach | Use When |
-|----------|----------|
-| Cache Manipulation | Update appears in multiple places, complex data structures |
-| UI Variables | Update only visible in one component, simpler implementation |
+| Approach           | Use When                                                     |
+| ------------------ | ------------------------------------------------------------ |
+| Cache Manipulation | Update appears in multiple places, complex data structures   |
+| UI Variables       | Update only visible in one component, simpler implementation |
 
 ## Context
 

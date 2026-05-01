@@ -94,12 +94,12 @@ const router = createRouter({
 
 ## Preload Strategies
 
-| Strategy | Behavior | Use Case |
-|----------|----------|----------|
-| `'intent'` | Preload on hover/focus | Default for most links |
-| `'render'` | Preload when Link mounts | Critical next pages |
-| `'viewport'` | Preload when Link enters viewport | Below-fold content |
-| `false` | No preloading | Heavy, rarely-visited pages |
+| Strategy     | Behavior                          | Use Case                    |
+| ------------ | --------------------------------- | --------------------------- |
+| `'intent'`   | Preload on hover/focus            | Default for most links      |
+| `'render'`   | Preload when Link mounts          | Critical next pages         |
+| `'viewport'` | Preload when Link enters viewport | Below-fold content          |
+| `false`      | No preloading                     | Heavy, rarely-visited pages |
 
 ## Good Example: With TanStack Query Integration
 

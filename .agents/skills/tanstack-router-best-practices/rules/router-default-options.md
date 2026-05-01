@@ -108,14 +108,14 @@ export function DefaultNotFound() {
 
 ## Router Options Reference
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `defaultPreload` | `false \| 'intent' \| 'render' \| 'viewport'` | `false` | When to preload routes |
-| `defaultPreloadStaleTime` | `number` | `30000` | How long preloaded data stays fresh (ms) |
-| `defaultErrorComponent` | `Component` | Built-in | Global error boundary |
-| `defaultNotFoundComponent` | `Component` | Built-in | Global 404 page |
-| `scrollRestoration` | `boolean` | `false` | Restore scroll on navigation |
-| `defaultStructuralSharing` | `boolean` | `true` | Optimize loader data re-renders |
+| Option                     | Type                                          | Default  | Description                              |
+| -------------------------- | --------------------------------------------- | -------- | ---------------------------------------- |
+| `defaultPreload`           | `false \| 'intent' \| 'render' \| 'viewport'` | `false`  | When to preload routes                   |
+| `defaultPreloadStaleTime`  | `number`                                      | `30000`  | How long preloaded data stays fresh (ms) |
+| `defaultErrorComponent`    | `Component`                                   | Built-in | Global error boundary                    |
+| `defaultNotFoundComponent` | `Component`                                   | Built-in | Global 404 page                          |
+| `scrollRestoration`        | `boolean`                                     | `false`  | Restore scroll on navigation             |
+| `defaultStructuralSharing` | `boolean`                                     | `true`   | Optimize loader data re-renders          |
 
 ## Good Example: Route-Level Overrides
 

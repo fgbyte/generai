@@ -113,14 +113,14 @@ function ProductList({ page }: { page: number }) {
 
 ## Comparison Table
 
-| Behavior | `initialData` | `placeholderData` |
-|----------|---------------|-------------------|
-| Persisted to cache | Yes | No |
-| `staleTime` applies | Yes | No (always fetches) |
-| `isPlaceholderData` | `false` | `true` |
-| Shown to other components | Yes (cached) | No |
-| Use case | SSR, complete known data | Preview, previous page |
-| Affects `dataUpdatedAt` | Yes (use `initialDataUpdatedAt`) | No |
+| Behavior                  | `initialData`                    | `placeholderData`      |
+| ------------------------- | -------------------------------- | ---------------------- |
+| Persisted to cache        | Yes                              | No                     |
+| `staleTime` applies       | Yes                              | No (always fetches)    |
+| `isPlaceholderData`       | `false`                          | `true`                 |
+| Shown to other components | Yes (cached)                     | No                     |
+| Use case                  | SSR, complete known data         | Preview, previous page |
+| Affects `dataUpdatedAt`   | Yes (use `initialDataUpdatedAt`) | No                     |
 
 ## Good Example: Combining Both
 

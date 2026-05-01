@@ -155,12 +155,12 @@ export const Route = createFileRoute('/posts/$postId')({
 
 ## Context vs. Loader Data
 
-| Context | Loader Data |
-|---------|-------------|
-| Available in beforeLoad, loader, and component | Only available in component |
-| Set at router creation or in beforeLoad | Returned from loader |
-| Good for services, clients, auth | Good for route-specific data |
-| Flows down to all children | Specific to route |
+| Context                                        | Loader Data                  |
+| ---------------------------------------------- | ---------------------------- |
+| Available in beforeLoad, loader, and component | Only available in component  |
+| Set at router creation or in beforeLoad        | Returned from loader         |
+| Good for services, clients, auth               | Good for route-specific data |
+| Flows down to all children                     | Specific to route            |
 
 ## Context
 

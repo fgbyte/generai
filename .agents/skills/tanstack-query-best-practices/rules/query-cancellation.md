@@ -153,13 +153,13 @@ const { data } = useQuery({
 
 ## When Queries Are Cancelled
 
-| Scenario | Cancelled? |
-|----------|------------|
-| Query key changes | Yes |
-| Component unmounts | Yes |
-| `queryClient.cancelQueries()` called | Yes |
-| Refetch triggered | Previous request cancelled |
-| `enabled` becomes false | Yes |
+| Scenario                             | Cancelled?                 |
+| ------------------------------------ | -------------------------- |
+| Query key changes                    | Yes                        |
+| Component unmounts                   | Yes                        |
+| `queryClient.cancelQueries()` called | Yes                        |
+| Refetch triggered                    | Previous request cancelled |
+| `enabled` becomes false              | Yes                        |
 
 ## Context
 
