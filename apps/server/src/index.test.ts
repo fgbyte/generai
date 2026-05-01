@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("@generai/env/server", () => ({
   env: {
     CORS_ORIGIN: "http://localhost:3000",
+    DATABASE_URL: "postgresql://test:test@localhost:5432/test",
   },
 }));
 

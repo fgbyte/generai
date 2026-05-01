@@ -1,6 +1,19 @@
 import { GoogleGenAI } from "@google/genai/web";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+let ai: GoogleGenAI | null = null;
+
+function getGeminiClient() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not configured");
+  }
+
+  if (!ai) {
+    ai = new GoogleGenAI({ apiKey });
+  }
+
+  return ai;
+}
 
 type ContentType = "thread" | "instagram" | "linkedin";
 
@@ -23,6 +36,8 @@ export async function generateContent(
   prompt: string,
   imageBase64?: string,
 ): Promise<GenerateContentResult> {
+  const ai = getGeminiClient();
+
   const systemPrompt = CONTENT_PROMPTS[contentType];
 
   const contents: Array<string | { inlineData: { data: string; mimeType: string } }> = [];
