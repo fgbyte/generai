@@ -39,5 +39,6 @@ export const server = await Worker("server", {
 
 console.log(`Web    -> ${web.url}`);
 console.log(`Server -> ${server.url}`);
+console.log(`Auth Docs -> ${server.url}api/auth/reference`);
 
 await app.finalize();
