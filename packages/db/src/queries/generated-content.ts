@@ -14,6 +14,7 @@ export const saveGeneratedContent = async (
   const [result] = await db
     .insert(generatedContent)
     .values({
+      id: crypto.randomUUID(),
       userId,
       content,
       prompt,

@@ -47,6 +47,7 @@ export const createOrUpdateSubscription = async (
   const [created] = await db
     .insert(subscriptions)
     .values({
+      id: crypto.randomUUID(),
       userId,
       stripeSubscriptionId,
       plan,
