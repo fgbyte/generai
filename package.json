@@ -35,8 +35,6 @@
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
     "dev:server": "turbo -F server dev",
-    "db:dev-up": "docker compose up -d",
-    "db:dev-down": "docker compose down",
     "db:studio": "turbo -F @generai/db db:studio",
     "db:generate": "turbo -F @generai/db db:generate",
     "db:migrate": "turbo -F @generai/db db:migrate",
