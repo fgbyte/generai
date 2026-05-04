@@ -10,6 +10,7 @@ vi.mock("cloudflare:workers", () => ({
     POSTMARK_SERVER_TOKEN: "test-token",
     POSTMARK_FROM_EMAIL: "test@test.com",
     GEMINI_API_KEY: "test-api-key",
+    NVIDIA_API_KEY: "test-nvidia-key",
     VITE_SERVER_URL: "http://localhost:3000",
   },
 }));
@@ -46,7 +47,7 @@ vi.mock("@generai/db/queries/generated-content", () => ({
   getGeneratedContentById: mockGetGeneratedContentById,
 }));
 
-vi.mock("../lib/gemini", () => ({
+vi.mock("../lib/langchain", () => ({
   generateContent: mockGenerateContent,
 }));
 

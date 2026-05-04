@@ -32,6 +32,7 @@ export const server = await Worker("server", {
     POSTMARK_SERVER_TOKEN: requireEnv("POSTMARK_SERVER_TOKEN"),
     POSTMARK_FROM_EMAIL: requireEnv("POSTMARK_FROM_EMAIL"),
     GEMINI_API_KEY: requireEnv("GEMINI_API_KEY"),
+    NVIDIA_API_KEY: requireEnv("NVIDIA_API_KEY"),
   },
   dev: {
     port: 3000,
