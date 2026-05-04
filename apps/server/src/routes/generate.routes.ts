@@ -86,9 +86,12 @@ export const generateRoutes = new Hono<HonoEnv>()
     return c.json({ points }, 200);
   })
 
-  .delete("/api/generate/history/:id", async (c) => {
+  .delete("/api/generate/history/", async (c) => {
     const user = c.get("user");
-    const id = c.req.param("id");
+    const id = c.req.query("id");
+    if (!id) {
+      return c.json({ error: "Missing id query parameter" }, 400);
+    }
 
     const item = await getGeneratedContentById(id);
 
