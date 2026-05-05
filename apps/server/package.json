@@ -19,7 +19,7 @@
     "@hono/zod-validator": "^0.7.6",
     "@langchain/core": "^1.1.44",
     "@langchain/openai": "^1.4.5",
-    "@scalar/hono-api-reference": "^0.10.9",
+    "@scalar/hono-api-reference": "^0.10.14",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "hono": "catalog:",
@@ -33,7 +33,7 @@
     "@vitest/ui": "catalog:",
     "alchemy": "catalog:",
     "jsdom": "catalog:",
-    "tsdown": "^0.16.5",
+    "tsdown": "^0.21.10",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "wrangler": "^4.54.0"
