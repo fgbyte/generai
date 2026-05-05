@@ -172,6 +172,7 @@ async function createPR(
     process.exit(1);
   }
   await $`git commit -m "chore: update catalog dependencies (${label})"`.quiet();
+  await $`git push -u origin ${branchName}`.quiet();
 
   const prTitle = `chore: update catalog dependencies (${label})`;
   const prBody = `## Summary
