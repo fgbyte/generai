@@ -3,18 +3,18 @@
  * Catalog Updater Script
  *
  * Updates catalog dependencies in root package.json by checking npm registry.
- * Detects patch/minor/major updates and creates a PR for changes.
+ * Detects patch/minor/major updates and creates separate PRs:
+ *   - PR 1: patch + minor updates (auto-merge if CI passes)
+ *   - PR 2: major updates (requires manual review)
  *
  * Usage:
- *   bun scripts/update-catalogs.ts [--dry-run]
+ * bun scripts/update-catalogs.ts [--dry-run]
  */
 
 import { $ } from "bun";
 
 interface NpmPackageInfo {
-  "dist-tags": {
-    latest: string;
-  };
+  "dist-tags": { latest: string };
   versions: Record<string, any>;
 }
 
@@ -36,8 +36,8 @@ console.log("================================\n");
 const packageJsonPath = "./package.json";
 const packageJsonText = await Bun.file(packageJsonPath).text();
 const packageJson = JSON.parse(packageJsonText) as any;
-const catalog = packageJson.workspaces?.catalog || {};
 
+const catalog = packageJson.workspaces?.catalog || {};
 if (Object.keys(catalog).length === 0) {
   console.log("❌ No catalog dependencies found in package.json");
   process.exit(1);
@@ -59,7 +59,6 @@ for (const [name, version] of Object.entries(catalog)) {
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
-
     const data = (await response.json()) as NpmPackageInfo;
     const latestVersion = data["dist-tags"].latest;
 
@@ -69,11 +68,9 @@ for (const [name, version] of Object.entries(catalog)) {
 
     // Determine update type
     let updateType: "patch" | "minor" | "major" | "none" = "none";
-
     if (currentSemver !== latestSemver) {
       const currentParts = currentSemver.split(".").map(Number);
       const latestParts = latestSemver.split(".").map(Number);
-
       if (latestParts[0] > currentParts[0]) {
         updateType = "major";
       } else if (latestParts[1] > currentParts[1]) {
@@ -94,7 +91,7 @@ for (const [name, version] of Object.entries(catalog)) {
   } catch (error) {
     const errorMsg = `Failed to check ${name}: ${error instanceof Error ? error.message : String(error)}`;
     errors.push(errorMsg);
-    console.log(`⚠️  ${errorMsg}`);
+    console.log(`⚠️ ${errorMsg}`);
   }
 }
 
@@ -111,6 +108,7 @@ if (updates.length === 0) {
 const patchUpdates = updates.filter((u) => u.updateType === "patch");
 const minorUpdates = updates.filter((u) => u.updateType === "minor");
 const majorUpdates = updates.filter((u) => u.updateType === "major");
+const safeUpdates = [...patchUpdates, ...minorUpdates];
 
 console.log(`\n🔵 Patch updates (${patchUpdates.length}):`);
 patchUpdates.forEach((u) => {
@@ -128,72 +126,108 @@ majorUpdates.forEach((u) => {
 });
 
 if (errors.length > 0) {
-  console.log(`\n⚠️  Errors (${errors.length}):`);
+  console.log(`\n⚠️ Errors (${errors.length}):`);
   errors.forEach((e) => console.log(`  ${e}`));
 }
 
-// Apply updates
-if (!dryRun) {
-  console.log("\n🔄 Applying updates...");
+// Helper: create a PR for a set of updates
+async function createPR(
+  prUpdates: CatalogEntry[],
+  label: "safe" | "major",
+): Promise<string | null> {
+  if (prUpdates.length === 0) return null;
 
-  // Update package.json
-  for (const update of updates) {
-    packageJson.workspaces.catalog[update.name] = update.latestVersion;
+  console.log(`\n📝 Creating PR for ${label}...`);
+
+  // Re-read package.json to start fresh
+  const freshPkg = JSON.parse(await Bun.file(packageJsonPath).text()) as any;
+
+  // Apply only this set of updates
+  for (const update of prUpdates) {
+    freshPkg.workspaces.catalog[update.name] = update.latestVersion;
   }
 
-  await Bun.write(packageJsonPath, JSON.stringify(packageJson, null, 2));
-  console.log("✅ Updated package.json");
+  await Bun.write(packageJsonPath, JSON.stringify(freshPkg, null, 2));
 
   // Run bun install to update bun.lock
   console.log("📦 Running bun install...");
   const installResult = await $`bun install`.quiet();
-
   if (installResult.exitCode !== 0) {
     console.log("❌ bun install failed");
     process.exit(1);
   }
-
   console.log("✅ Updated bun.lock");
 
-  // Create PR
-  console.log("\n📝 Creating pull request...");
-
-  const branchName = `chore/update-catalog-${Date.now()}`;
+  // Create branch and PR
+  const branchName = `chore/update-catalog-${label}-${Date.now()}`;
   await $`git checkout -b ${branchName}`.quiet();
   await $`git add package.json bun.lockb`.quiet();
-  await $`git commit -m "chore: update catalog dependencies"`.quiet();
+  await $`git commit -m "chore: update catalog dependencies (${label})"`.quiet();
 
-  const prTitle = "chore: update catalog dependencies";
+  const prTitle = `chore: update catalog dependencies (${label})`;
   const prBody = `## Summary
-
-Updates catalog dependencies to latest versions.
+Updates catalog dependencies (${label}) to latest versions.
 
 ### Changes
-
-${updates.map((u) => `- ${u.name}: ${u.currentVersion} → ${u.latestVersion}`).join("\n")}
+${prUpdates.map((u) => `- ${u.name}: ${u.currentVersion} → ${u.latestVersion}`).join("\n")}
 
 ### Update Types
-
-- Patch: ${patchUpdates.length}
-- Minor: ${minorUpdates.length}
-- Major: ${majorUpdates.length}
+${label === "safe" ? `- Patch: ${patchUpdates.length}\n- Minor: ${minorUpdates.length}` : `- Major: ${majorUpdates.length}`}
 
 ---
-
 Ultraworked with [Sisyphus](https://github.com/code-yeongyu/oh-my-openagent)
 Co-authored-by: Sisyphus <clio-agent@sisyphuslabs.ai>`;
 
-  const prResult = await $`gh pr create --title ${prTitle} --body ${prBody}`.quiet();
-
+  const prResult =
+    await $`gh pr create --title ${prTitle} --body ${prBody}`.quiet();
   if (prResult.exitCode !== 0) {
     console.log("❌ Failed to create PR");
     process.exit(1);
   }
+  const prUrl = prResult.text().trim().split("\n").at(-1)?.trim() ?? "";
+  if (!prUrl.startsWith("http")) {
+    console.log("❌ Could not parse PR URL from gh output");
+    process.exit(1);
+  }
+  console.log(`✅ Pull request created for ${label}: ${prUrl}`);
 
-  console.log("✅ Pull request created!");
+  if (label === "safe") {
+    console.log("⏳ Waiting for PR checks before merging safe updates...");
+    const checksResult = await $`gh pr checks --watch ${prUrl}`.quiet();
+    if (checksResult.exitCode !== 0) {
+      console.log("❌ Required checks did not pass for safe PR");
+      process.exit(1);
+    }
+    console.log("✅ Checks passed for safe PR");
+
+    console.log("🔀 Merging safe PR with squash...");
+    const mergeResult = await $`gh pr merge --squash ${prUrl}`.quiet();
+    if (mergeResult.exitCode !== 0) {
+      console.log("❌ Failed to merge safe PR");
+      process.exit(1);
+    }
+    console.log("✅ Safe PR merged with squash");
+  }
+
+  // Switch back to main for next PR
+  await $`git checkout main`.quiet();
+  return prUrl;
+}
+
+// Apply updates
+if (!dryRun) {
+  // Create PR for safe updates (patch + minor)
+  if (safeUpdates.length > 0) {
+    await createPR(safeUpdates, "safe");
+  }
+
+  // Create PR for major updates
+  if (majorUpdates.length > 0) {
+    await createPR(majorUpdates, "major");
+  }
 } else {
   console.log("\n🔍 Dry-run mode - no changes applied");
-  console.log("Run without --dry-run to apply updates and create PR");
+  console.log("Run without --dry-run to apply updates and create PRs");
 }
 
 console.log("\n✨ Done!");
