@@ -1,181 +1,151 @@
 # Dependency Automation
 
-This document explains how dependency updates work in this monorepo.
+This project uses two complementary flows:
 
-## Overview
+- Dependabot for regular workspace dependencies.
+- A custom catalog updater for Bun `workspaces.catalog` dependencies.
 
-We automate dependency updates using two complementary systems:
+This split is required because Bun catalog dependencies are not handled well by Dependabot.
 
-- **Dependabot** handles updates for all workspace packages
-- **Catalog Updater Script** handles root-level catalog dependencies
+## Files Involved
 
-This dual approach is necessary because of a limitation with Bun's catalog protocol.
+- `.github/dependabot.yml`
+- `.github/workflows/ci.yml`
+- `.github/workflows/dependabot-automerge.yml`
+- `.github/workflows/catalog-updater.yml`
+- `scripts/update-catalogs.ts`
 
-## Architecture
+## Desired Behavior
 
-```
-+------------------+     +-------------------+
-|   Dependabot     |     | Catalog Updater   |
-|   (npm ecosystem)|     |    (Script)       |
-+--------+---------+     +---------+---------+
-         |                           |
-         v                           v
-+------------------+     +-------------------+
-|  Workspace Apps  |     |  Root package.json|
-|  and Packages    |     |  (catalog deps)   |
-+--------+---------+     +---------+---------+
-         |                           |
-         +-------------+-------------+
-                       v
-              +------------------+
-              |   Auto-Merge     |
-              | (patch only)     |
-              +--------+---------+
-                       |
-                       v
-              +------------------+
-              | Lockfile Check   |
-              | (bun.lock)       |
-              +------------------+
-```
+- Patch + minor updates:
+  - PR is created
+  - `CI` workflow runs
+  - if CI passes, PR is squash-merged automatically
+- Major updates:
+  - PR is created
+  - left open for manual review
 
-## Dependabot Configuration
+## How The Flows Work
 
-Dependabot monitors all workspaces using the npm ecosystem. It creates PRs when updates are available.
+### 1) Dependabot flow
 
-Key settings:
+1. Dependabot opens PRs from `.github/dependabot.yml`.
+2. `CI` runs on every PR to `main`/`master`.
+3. `Dependabot Auto-Merge` enables `--auto --squash` for patch/minor Dependabot PRs.
+4. Major Dependabot PRs remain manual.
 
-- **Update frequency**: Daily at 6 AM UTC
-- **Ecosystem**: npm (not bun)
-- **Auto-merge**: Enabled for patch updates only
-- **Version prefix**: Preserved from original
+### 2) Catalog updater flow
 
-### Why npm Instead of Bun
+1. `Catalog Updater` workflow runs on schedule or manual dispatch.
+2. It executes `scripts/update-catalogs.ts`.
+3. Script checks npm latest versions for packages in `workspaces.catalog`.
+4. Script creates two branches/PRs:
+  - `safe`: patch + minor
+  - `major`: major only
+5. For `safe`, script waits for checks and merges with squash only after checks pass.
+6. `major` PR remains open for manual review.
 
-Dependabot's bun ecosystem support is limited. It does not understand the catalog protocol used in this project. Using npm ensures Dependabot correctly parses and updates versions.
+## Important GitHub Configuration
 
-## Catalog Updater Script
+Without this configuration, the workflow can fail with:
+`GitHub Actions is not permitted to create or approve pull requests`
+or safe PRs can be created without triggering CI.
 
-The script at `scripts/update-catalogs.ts` handles root-level catalog dependencies.
+### A) Actions repository settings
 
-### What It Does
+Go to:
+`Repo -> Settings -> Actions -> General`
 
-1. Reads the `catalog` field from root `package.json`
-2. Queries npm registry for each catalog package
-3. Compares current version with latest available
-4. Updates versions while preserving prefixes (^, ~, >=)
-5. Groups updates by type (patch/minor/major)
-6. Creates a PR with the changes
+Set:
 
-### Running the Script
+- `Workflow permissions` -> `Read and write permissions`
+- enable `Allow GitHub Actions to create and approve pull requests`
+
+### B) Repository secret for automation token
+
+Create repository secret:
+
+- Name: `AUTOMATION_GH_TOKEN`
+- Value: GitHub PAT used by `catalog-updater.yml`
+
+Where it is used:
+
+- `actions/checkout` token in `catalog-updater.yml`
+- `GH_TOKEN` env for `gh` commands in `catalog-updater.yml`
+
+This token is required so PRs created by the updater can trigger downstream workflows (CI).
+
+### C) Token scopes/permissions
+
+Option 1: Classic PAT
+
+- Scope: `repo`
+
+Option 2: Fine-grained PAT (recommended)
+
+- Repository access: only this repo
+- Permissions:
+  - `Contents`: Read and write
+  - `Pull requests`: Read and write
+  - `Workflows`: Read and write (or read if your org policy requires it)
+
+## Why `GITHUB_TOKEN` Was Not Enough
+
+Using the default `GITHUB_TOKEN` to create PRs can prevent expected follow-up workflow triggers in some automation chains. In practice this caused:
+
+- safe PR created
+- no checks reported
+- merge step timing out
+
+Using `AUTOMATION_GH_TOKEN` resolves this by creating PRs as a normal token identity, allowing CI to run as expected.
+
+## Operational Runbook
+
+### Manual test
+
+1. Trigger `Catalog Updater` from Actions UI (`workflow_dispatch`).
+2. Confirm it creates:
+  - one `safe` PR
+  - one `major` PR (if major updates exist)
+3. Confirm `CI` appears on `safe` PR.
+4. Confirm `safe` merges automatically after CI success.
+5. Confirm `major` remains open.
+
+### Local script dry run
 
 ```bash
-# Dry run (no changes)
 bun run scripts/update-catalogs.ts --dry-run
-
-# Actual update (creates PR)
-bun run scripts/update-catalogs.ts
 ```
-
-### Bun Catalog Limitation
-
-Dependabot cannot update Bun catalog dependencies. The catalog protocol is a Bun-specific feature that maps package names to versions in a central location. Dependabot's parser does not recognize this structure.
-
-This is why we use a custom script instead of relying solely on Dependabot.
-
-## Auto-Merge
-
-Patch updates are auto-merged to keep the codebase current with minimal friction.
-
-Conditions for auto-merge:
-
-- Update type is PATCH (x.y.Z where Z changes)
-- All status checks pass
-- No conflicts with base branch
-
-Minor and major updates require manual review.
-
-## Lockfile Verification
-
-Every dependency PR runs a lockfile check to ensure integrity.
-
-The workflow:
-
-1. Installs dependencies with `bun install`
-2. Checks that `bun.lock` is unchanged
-3. Fails if lockfile was modified unexpectedly
-
-This prevents partial or corrupted updates.
-
-## Team Workflow
-
-### Handling Dependabot PRs
-
-1. Review the PR description for affected packages
-2. Check changelog links provided by Dependabot
-3. For patch updates: Verify CI passes (auto-merge handles the rest)
-4. For minor/major updates: Review breaking changes, test locally, approve or request changes
-
-### Handling Catalog Updater PRs
-
-1. Review the PR summary showing all available updates
-2. Updates are grouped by type (patch/minor/major)
-3. Test locally if needed: `bun install && bun run dev`
-4. Approve and merge, or request changes
-
-### General Guidelines
-
-- Do not squash-merge dependency PRs (preserve history)
-- Monitor for PRs weekly to stay current
-- Address security updates promptly regardless of size
 
 ## Troubleshooting
 
-### PR Fails Lockfile Check
+### Error: `createPullRequest not permitted`
 
-**Symptom**: CI fails with "Lockfile mismatch" error.
+Fix:
 
-**Cause**: The update did not properly regenerate the lockfile.
+- enable Actions setting to allow create/approve PRs
+- verify `AUTOMATION_GH_TOKEN` secret exists and is used
 
-**Fix**: Run `bun install` locally and commit the updated `bun.lock`.
+### Error: `no checks reported on branch`
 
-### Dependabot Misses Catalog Updates
+Fix:
 
-**Symptom**: Root `package.json` catalog dependencies are not updated.
+- ensure `catalog-updater.yml` uses `AUTOMATION_GH_TOKEN`, not `GITHUB_TOKEN`
+- ensure `ci.yml` runs on `pull_request` for target branch
 
-**Cause**: This is expected. Dependabot does not support the catalog protocol.
+### Error about lockfile path (`bun.lockb` not found)
 
-**Fix**: Run the catalog updater script manually or wait for the scheduled workflow.
+Fix:
 
-### Script Fails to Create PR
+- script already supports both `bun.lock` and `bun.lockb`
+- verify repository lockfile naming if you fork to another project
 
-**Symptom**: Script runs but no PR appears.
+## Reuse In Other Projects
 
-**Cause**: Likely not authenticated with GitHub CLI.
+When copying this setup:
 
-**Fix**: Run `gh auth login` and retry.
-
-### npm Registry Errors
-
-**Symptom**: Script shows "Failed to fetch" for a package.
-
-**Cause**: Network issue or package name typo.
-
-**Fix**: Verify package exists on npm. Check network connectivity.
-
-### Version Prefix Lost
-
-**Symptom**: `^1.2.3` becomes `1.2.3` after update.
-
-**Cause**: Bug in the update logic.
-
-**Fix**: Report issue. Manually restore prefix and merge PR.
-
-## Summary
-
-| System         | Scope              | Auto-Merge    | Limitation         |
-| -------------- | ------------------ | ------------- | ------------------ |
-| Dependabot     | Workspace packages | Patch only    | No catalog support |
-| Catalog Script | Root catalog deps  | None (manual) | Custom solution    |
-
-Both systems work together to keep dependencies current while respecting the monorepo structure.
+1. Copy the same workflow/script pattern.
+2. Add `AUTOMATION_GH_TOKEN` secret in target repo.
+3. Enable Actions PR create/approve permission in target repo.
+4. Verify CI workflow triggers on PRs.
+5. Run one manual dispatch and validate safe/major behavior.
