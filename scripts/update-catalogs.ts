@@ -12,6 +12,7 @@
  */
 
 import { $ } from "bun";
+import { existsSync } from "node:fs";
 
 interface NpmPackageInfo {
   "dist-tags": { latest: string };
@@ -161,7 +162,15 @@ async function createPR(
   // Create branch and PR
   const branchName = `chore/update-catalog-${label}-${Date.now()}`;
   await $`git checkout -b ${branchName}`.quiet();
-  await $`git add package.json bun.lockb`.quiet();
+  await $`git add package.json`.quiet();
+  if (existsSync("bun.lock")) {
+    await $`git add bun.lock`.quiet();
+  } else if (existsSync("bun.lockb")) {
+    await $`git add bun.lockb`.quiet();
+  } else {
+    console.log("❌ No Bun lockfile found after bun install");
+    process.exit(1);
+  }
   await $`git commit -m "chore: update catalog dependencies (${label})"`.quiet();
 
   const prTitle = `chore: update catalog dependencies (${label})`;
