@@ -5,8 +5,8 @@ let textClient: ChatOpenAI | null = null;
 let visionClient: ChatOpenAI | null = null;
 
 const NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1";
-const TEXT_MODEL = "stepfun-ai/step-3.5-flash";
-const VISION_MODEL = "meta/llama-3.2-11b-vision-instruct";
+const TEXT_MODEL = "google/gemma-3n-e4b-it";
+const VISION_MODEL = "google/gemma-3n-e4b-it";
 
 function getNVIDIATextClient() {
   const apiKey = process.env.NVIDIA_API_KEY;
@@ -67,9 +67,9 @@ const CONTENT_PROMPTS: Record<ContentType, string> = {
 				4- End with a call to action or a question to encourage engagement.
 				5- Please, never say nothing like "Okay, here's the Twitter thread you requested about ..." start directly with the thread.
 				Keep the thread to a maximum of 5 tweets. The content should be clear, concise, and valuable.`,
-  instagram: `Describe the given Instagram image in detail, including key visual elements, mood, and context. Then, create an engaging caption that fits the tone of the image, using:
-					1- A clear and captivating message
-					2- Emojis to enhance expression (if appropriate)
+  instagram: `Describe the given Instagram image in detail, including key visual elements, mood, and context. Then, create an engaging CAPTION that fits the tone of the image, using:
+					1- A clear and captivating message NO MORE THAN 20 WORDS, no Caption word present).
+					2- Appropriate Emojis to enhance expression.
 					3- Relevant hashtags (maximum of 5)
 					4- The caption should encourage interaction (e.g., through a call to action, question, or relatable statement).
 					Tailor the tone to fit the theme of the image: inspirational, humorous, informative, or aesthetic.
