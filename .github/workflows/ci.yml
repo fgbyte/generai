@@ -7,38 +7,20 @@ on:
     branches: [main, master]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Lint
+      - name: Lint Code
         run: bun run check
 
-      - name: Build
+      - name: Build Project
         run: bun run build
 
-  passing-tests:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v1
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Lint
-        run: bun run check
-
-      - name: Build
-        run: bun run build
-
-      - name: Test
+      - name: Pass Tests
         run: bun run test
