@@ -4,51 +4,51 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 let textClient: ChatOpenAI | null = null;
 let visionClient: ChatOpenAI | null = null;
 
-const NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1";
-const TEXT_MODEL = "google/gemma-3n-e4b-it";
-const VISION_MODEL = "google/gemma-3n-e4b-it";
+function getEnvVar(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} is not configured`);
+  }
+  return value;
+}
 
 function getNVIDIATextClient() {
-  const apiKey = process.env.NVIDIA_API_KEY;
-  if (!apiKey) {
-    throw new Error("NVIDIA_API_KEY is not configured");
-  }
+  const apiKey = getEnvVar("AI_PROVIDER_API_KEY");
+  const baseUrl = getEnvVar("AI_PROVIDER_BASE_URL");
+  const model = getEnvVar("AI_TEXT_MODEL");
 
   if (!textClient) {
     textClient = new ChatOpenAI({
-      model: TEXT_MODEL,
+      model,
       apiKey,
       configuration: {
-        baseURL: NVIDIA_BASE_URL,
+        baseURL: baseUrl,
       },
       temperature: 0.7,
       maxTokens: 2048,
       streamUsage: false,
     });
   }
-
   return textClient;
 }
 
 function getNVIDIAVisionClient() {
-  const apiKey = process.env.NVIDIA_API_KEY;
-  if (!apiKey) {
-    throw new Error("NVIDIA_API_KEY is not configured");
-  }
+  const apiKey = getEnvVar("AI_PROVIDER_API_KEY");
+  const baseUrl = getEnvVar("AI_PROVIDER_BASE_URL");
+  const model = getEnvVar("AI_VISION_MODEL");
 
   if (!visionClient) {
     visionClient = new ChatOpenAI({
-      model: VISION_MODEL,
+      model,
       apiKey,
       configuration: {
-        baseURL: NVIDIA_BASE_URL,
+        baseURL: baseUrl,
       },
       temperature: 0.7,
       maxTokens: 2048,
       streamUsage: false,
     });
   }
-
   return visionClient;
 }
 

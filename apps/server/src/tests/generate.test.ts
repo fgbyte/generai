@@ -10,7 +10,10 @@ vi.mock("cloudflare:workers", () => ({
     POSTMARK_SERVER_TOKEN: "test-token",
     POSTMARK_FROM_EMAIL: "test@test.com",
     GEMINI_API_KEY: "test-api-key",
-    NVIDIA_API_KEY: "test-nvidia-key",
+    AI_PROVIDER_API_KEY: "test-nvidia-key",
+    AI_PROVIDER_BASE_URL: "https://integrate.api.nvidia.com/v1",
+    AI_TEXT_MODEL: "google/gemma-3n-e4b-it",
+    AI_VISION_MODEL: "google/gemma-3n-e4b-it",
     VITE_SERVER_URL: "http://localhost:3000",
   },
 }));
@@ -131,7 +134,11 @@ describe("generate routes", () => {
       });
 
       expect(mockGetUserPoints).toHaveBeenCalledWith("user_123");
-      expect(mockGenerateContent).toHaveBeenCalledWith("thread", "write a thread", undefined);
+      expect(mockGenerateContent).toHaveBeenCalledWith(
+        "thread",
+        "write a thread",
+        undefined,
+      );
       expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -5);
       expect(mockSaveGeneratedContent).toHaveBeenCalledWith(
         "user_123",
@@ -272,15 +279,19 @@ describe("generate routes", () => {
     });
   });
 
-  // ---- DELETE /api/generate/history/:id ----
-
-  describe("DELETE /api/generate/history/:id", () => {
+  // ---- DELETE /api/generate/history/ ----
+  describe("DELETE /api/generate/history/", () => {
     it("deletes content when user is the owner", async () => {
-      mockGetGeneratedContentById.mockResolvedValue({ id: "gc_123", userId: "user_123" });
+      mockGetGeneratedContentById.mockResolvedValue({
+        id: "gc_123",
+        userId: "user_123",
+      });
       mockDeleteGeneratedContent.mockResolvedValue({ id: "gc_123" });
 
-      const res = await makeRequest("DELETE", "/api/generate/history/gc_123");
-
+      const res = await makeRequest(
+        "DELETE",
+        "/api/generate/history/?id=gc_123",
+      );
       expect(res.status).toBe(200);
       const json = await res.json();
       expect(json.success).toBe(true);
@@ -288,10 +299,15 @@ describe("generate routes", () => {
     });
 
     it("returns 403 when user is not the owner", async () => {
-      mockGetGeneratedContentById.mockResolvedValue({ id: "gc_123", userId: "user_other" });
+      mockGetGeneratedContentById.mockResolvedValue({
+        id: "gc_123",
+        userId: "user_other",
+      });
 
-      const res = await makeRequest("DELETE", "/api/generate/history/gc_123");
-
+      const res = await makeRequest(
+        "DELETE",
+        "/api/generate/history/?id=gc_123",
+      );
       expect(res.status).toBe(403);
       const json = await res.json();
       expect(json.error).toBe("Forbidden");
@@ -301,8 +317,10 @@ describe("generate routes", () => {
     it("returns 404 when content is not found", async () => {
       mockGetGeneratedContentById.mockResolvedValue(null);
 
-      const res = await makeRequest("DELETE", "/api/generate/history/gc_nonexistent");
-
+      const res = await makeRequest(
+        "DELETE",
+        "/api/generate/history/?id=gc_nonexistent",
+      );
       expect(res.status).toBe(404);
       const json = await res.json();
       expect(json.error).toBe("Not found");
@@ -312,8 +330,10 @@ describe("generate routes", () => {
     it("returns 401 when not authenticated", async () => {
       mockGetSession.mockResolvedValue(null);
 
-      const res = await makeRequest("DELETE", "/api/generate/history/gc_123");
-
+      const res = await makeRequest(
+        "DELETE",
+        "/api/generate/history/?id=gc_123",
+      );
       expect(res.status).toBe(401);
     });
   });
