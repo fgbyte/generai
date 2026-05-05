@@ -24,6 +24,7 @@ jobs:
         run: bun run build
 
   passing-tests:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
