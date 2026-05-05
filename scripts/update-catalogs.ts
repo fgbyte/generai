@@ -26,6 +26,8 @@ interface CatalogEntry {
   updateType: "patch" | "minor" | "major" | "none";
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 // Parse command line arguments
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -203,6 +205,23 @@ Co-authored-by: Sisyphus <clio-agent@sisyphuslabs.ai>`;
 
   if (label === "safe") {
     console.log("⏳ Waiting for PR checks before merging safe updates...");
+    let checksDetected = false;
+    for (let attempt = 1; attempt <= 20; attempt++) {
+      const rollupResult =
+        await $`gh pr view ${prUrl} --json statusCheckRollup --jq '.statusCheckRollup | length'`.quiet();
+      const count = Number.parseInt(rollupResult.text().trim(), 10);
+      if (Number.isFinite(count) && count > 0) {
+        checksDetected = true;
+        break;
+      }
+      console.log(`   waiting for checks to appear (${attempt}/20)...`);
+      await sleep(15000);
+    }
+    if (!checksDetected) {
+      console.log("❌ Timed out waiting for checks to be reported on safe PR");
+      process.exit(1);
+    }
+
     const checksResult = await $`gh pr checks --watch ${prUrl}`.quiet();
     if (checksResult.exitCode !== 0) {
       console.log("❌ Required checks did not pass for safe PR");
