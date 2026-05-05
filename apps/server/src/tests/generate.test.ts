@@ -134,11 +134,7 @@ describe("generate routes", () => {
       });
 
       expect(mockGetUserPoints).toHaveBeenCalledWith("user_123");
-      expect(mockGenerateContent).toHaveBeenCalledWith(
-        "thread",
-        "write a thread",
-        undefined,
-      );
+      expect(mockGenerateContent).toHaveBeenCalledWith("thread", "write a thread", undefined);
       expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -5);
       expect(mockSaveGeneratedContent).toHaveBeenCalledWith(
         "user_123",
@@ -288,10 +284,7 @@ describe("generate routes", () => {
       });
       mockDeleteGeneratedContent.mockResolvedValue({ id: "gc_123" });
 
-      const res = await makeRequest(
-        "DELETE",
-        "/api/generate/history/?id=gc_123",
-      );
+      const res = await makeRequest("DELETE", "/api/generate/history/?id=gc_123");
       expect(res.status).toBe(200);
       const json = await res.json();
       expect(json.success).toBe(true);
@@ -304,10 +297,7 @@ describe("generate routes", () => {
         userId: "user_other",
       });
 
-      const res = await makeRequest(
-        "DELETE",
-        "/api/generate/history/?id=gc_123",
-      );
+      const res = await makeRequest("DELETE", "/api/generate/history/?id=gc_123");
       expect(res.status).toBe(403);
       const json = await res.json();
       expect(json.error).toBe("Forbidden");
@@ -317,10 +307,7 @@ describe("generate routes", () => {
     it("returns 404 when content is not found", async () => {
       mockGetGeneratedContentById.mockResolvedValue(null);
 
-      const res = await makeRequest(
-        "DELETE",
-        "/api/generate/history/?id=gc_nonexistent",
-      );
+      const res = await makeRequest("DELETE", "/api/generate/history/?id=gc_nonexistent");
       expect(res.status).toBe(404);
       const json = await res.json();
       expect(json.error).toBe("Not found");
@@ -330,10 +317,7 @@ describe("generate routes", () => {
     it("returns 401 when not authenticated", async () => {
       mockGetSession.mockResolvedValue(null);
 
-      const res = await makeRequest(
-        "DELETE",
-        "/api/generate/history/?id=gc_123",
-      );
+      const res = await makeRequest("DELETE", "/api/generate/history/?id=gc_123");
       expect(res.status).toBe(401);
     });
   });

@@ -14,6 +14,7 @@ https://your-worker.workers.dev   # Production
 All protected endpoints require a session cookie from Better Auth.
 
 **Login flow:**
+
 1. POST to `/api/auth/sign-in` with email/password
 2. Session cookie is set automatically
 3. Include cookie in subsequent requests
@@ -27,6 +28,7 @@ All protected endpoints require a session cookie from Better Auth.
 Generate AI content (requires auth + 5 points).
 
 **Request:**
+
 ```json
 {
   "contentType": "thread" | "instagram" | "linkedin",
@@ -36,6 +38,7 @@ Generate AI content (requires auth + 5 points).
 ```
 
 **Response:**
+
 ```json
 {
   "content": ["Generated line 1", "Generated line 2"],
@@ -51,6 +54,7 @@ Generate AI content (requires auth + 5 points).
 Get user's generated content history (requires auth).
 
 **Response:**
+
 ```json
 {
   "items": [
@@ -72,6 +76,7 @@ Get user's generated content history (requires auth).
 Get user's points balance (requires auth).
 
 **Response:**
+
 ```json
 {
   "points": 50
@@ -85,6 +90,7 @@ Get user's points balance (requires auth).
 Delete a generated content item (requires auth).
 
 **Response:**
+
 ```json
 {
   "success": true
@@ -98,6 +104,7 @@ Delete a generated content item (requires auth).
 Sign in with email/password.
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -114,6 +121,7 @@ Sign in with email/password.
 Sign up new user (email verification required).
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -131,6 +139,7 @@ Sign up new user (email verification required).
 Sign out (clears session).
 
 **Response:**
+
 ```json
 {
   "message": "Signed out successfully"
@@ -144,6 +153,7 @@ Sign out (clears session).
 Get current session info.
 
 **Response:**
+
 ```json
 {
   "session": {
@@ -168,6 +178,7 @@ Get current session info.
 Public endpoint (no auth).
 
 **Response:**
+
 ```json
 [
   { "id": 1, "name": "Alice" },

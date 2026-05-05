@@ -97,9 +97,7 @@ export async function generateContent(
   const model = needsVision ? getNVIDIAVisionClient() : getNVIDIATextClient();
 
   const systemPrompt = CONTENT_PROMPTS[contentType];
-  const messages: Array<SystemMessage | HumanMessage> = [
-    new SystemMessage(systemPrompt),
-  ];
+  const messages: Array<SystemMessage | HumanMessage> = [new SystemMessage(systemPrompt)];
 
   if (imageBase64 && contentType === "instagram") {
     messages.push(
