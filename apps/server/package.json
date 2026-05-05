@@ -6,8 +6,7 @@
     "build": "tsdown",
     "check-types": "tsc -b",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
-    "test": "bunx vitest run --config vitest.config.ts",
-    "test:db": "bunx vitest run --config vitest.config.ts"
+    "test": "bunx vitest run --config vitest.config.ts"
   },
   "dependencies": {
     "@generai/auth": "workspace:*",

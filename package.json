@@ -38,8 +38,7 @@
     "db:studio": "turbo -F @generai/db db:studio",
     "db:generate": "turbo -F @generai/db db:generate",
     "db:migrate": "turbo -F @generai/db db:migrate",
-    "test": "turbo run test",
-    "test:db": "bun run --cwd apps/server test:db",
+    "test": "bun run --cwd apps/server test",
     "test:server": "bun run --cwd apps/server test",
     "open-auth-docs": "open-cli http://localhost:3000/api/auth/reference",
     "check": "oxlint && oxfmt --write"
