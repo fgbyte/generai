@@ -40,8 +40,10 @@ This split is required because Bun catalog dependencies are not handled well by 
 2. It executes `scripts/update-catalogs.ts`.
 3. Script checks npm latest versions for packages in `workspaces.catalog`.
 4. Script creates two branches/PRs:
-  - `safe`: patch + minor
-  - `major`: major only
+
+- `safe`: patch + minor
+- `major`: major only
+
 5. For `safe`, script waits for checks and merges with squash only after checks pass.
 6. `major` PR remains open for manual review.
 
@@ -105,8 +107,10 @@ Using `AUTOMATION_GH_TOKEN` resolves this by creating PRs as a normal token iden
 
 1. Trigger `Catalog Updater` from Actions UI (`workflow_dispatch`).
 2. Confirm it creates:
-  - one `safe` PR
-  - one `major` PR (if major updates exist)
+
+- one `safe` PR
+- one `major` PR (if major updates exist)
+
 3. Confirm `CI` appears on `safe` PR.
 4. Confirm `safe` merges automatically after CI success.
 5. Confirm `major` remains open.

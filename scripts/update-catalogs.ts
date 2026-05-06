@@ -190,8 +190,7 @@ ${label === "safe" ? `- Patch: ${patchUpdates.length}\n- Minor: ${minorUpdates.l
 Ultraworked with [Sisyphus](https://github.com/code-yeongyu/oh-my-openagent)
 Co-authored-by: Sisyphus <clio-agent@sisyphuslabs.ai>`;
 
-  const prResult =
-    await $`gh pr create --title ${prTitle} --body ${prBody}`.quiet();
+  const prResult = await $`gh pr create --title ${prTitle} --body ${prBody}`.quiet();
   if (prResult.exitCode !== 0) {
     console.log("❌ Failed to create PR");
     process.exit(1);
