@@ -36,6 +36,7 @@ export const auth = betterAuth({
   plugins: [openAPI()], //Activate OpenAPI DOCS 👈
   emailVerification: {
     sendOnSignUp: true,
+    sendOnSignIn: false,
     sendVerificationEmail: async ({ user, url }) => {
       console.info("[auth] sending verification email", {
         email: user.email,
@@ -65,13 +66,12 @@ export const auth = betterAuth({
       }
     },
   },
-  // uncomment cookieCache setting when ready to deploy to Cloudflare using *.workers.dev domains
-  // session: {
-  //   cookieCache: {
-  //     enabled: true,
-  //     maxAge: 60,
-  //   },
-  // },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 5, // 5 minutes — matches client staleTime
+    },
+  },
   secret: env.BETTER_AUTH_SECRET, //sacadas de alchemy
   baseURL: env.BETTER_AUTH_URL, //sacadas de alchemy
   advanced: {
