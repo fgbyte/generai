@@ -42,7 +42,7 @@
   "devDependencies": {
     "@generai/config": "workspace:*",
     "@tanstack/react-router-devtools": "^1.166.13",
-    "@tanstack/router-cli": "^1.166.42",
+    "@tanstack/router-cli": "^1.166.43",
     "@tanstack/router-plugin": "^1.167.34",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
