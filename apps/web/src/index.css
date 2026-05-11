@@ -163,7 +163,7 @@
 
     /* Border Colors - Dark Mode */
     --color-hairline: #4d4f46;
-    --color-hairline-soft: #3a3b35;
+    --color-hairline-soft: #5a5b55;
     --color-on-dark: #ffffff;
 
     /* Semantic Colors - Dark Mode */
@@ -196,7 +196,7 @@
     --accent-foreground: var(--color-ink);
     --destructive: var(--color-accent-red);
     --border: var(--color-hairline);
-    --input: #5a5b55;
+    --input: var(--color-hairline-soft);
     --ring: var(--color-focus-ring);
     --chart-1: var(--color-accent-blue);
     --chart-2: var(--color-accent-green);
