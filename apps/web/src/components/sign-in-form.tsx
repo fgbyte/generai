@@ -10,11 +10,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export default function SignInForm({
-  onSwitchToSignUp,
-}: {
-  onSwitchToSignUp: () => void;
-}) {
+export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
   const navigate = useNavigate({
     from: "/",
   });
@@ -40,8 +36,7 @@ export default function SignInForm({
             toast.success("Sign in successful");
           },
           onError: (error) => {
-            const errorMessage =
-              error.error.message || error.error.statusText || "";
+            const errorMessage = error.error.message || error.error.statusText || "";
             if (
               errorMessage.toLowerCase().includes("email") &&
               errorMessage.toLowerCase().includes("verif")

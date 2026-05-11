@@ -102,12 +102,7 @@ import {
   saveGeneratedContent,
 } from "@generai/db/queries/generated-content";
 
-const saved = await saveGeneratedContent(
-  user.id,
-  content,
-  prompt,
-  "thread",
-);
+const saved = await saveGeneratedContent(user.id, content, prompt, "thread");
 
 const history = await getGeneratedContentHistory(user.id, 20);
 ```
@@ -131,10 +126,7 @@ const subscription = await getSubscriptionByStripeId(stripeSubscriptionId);
 ```
 
 ```ts
-import {
-  getUserPoints,
-  updateUserPoints,
-} from "@generai/db/queries/users";
+import { getUserPoints, updateUserPoints } from "@generai/db/queries/users";
 
 const points = await getUserPoints(user.id);
 const updatedUser = await updateUserPoints(user.id, -5);

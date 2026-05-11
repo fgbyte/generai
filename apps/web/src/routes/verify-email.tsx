@@ -1,20 +1,10 @@
-import {
-  createFileRoute,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export const Route = createFileRoute("/verify-email")({
   validateSearch: (search) => ({
@@ -73,8 +63,8 @@ function RouteComponent() {
             {email ? (
               <>
                 We've sent a verification link to{" "}
-                <span className="font-medium text-foreground">{email}</span>.
-                Please click the link to verify your account before signing in.
+                <span className="font-medium text-foreground">{email}</span>. Please click the link
+                to verify your account before signing in.
               </>
             ) : (
               "We've sent a verification link to your email address. Please click the link to verify your account before signing in."
@@ -96,11 +86,7 @@ function RouteComponent() {
                   : "Resend verification email"}
             </Button>
           )}
-          <Button
-            variant="ghost"
-            className="w-full"
-            onClick={() => navigate({ to: "/login" })}
-          >
+          <Button variant="ghost" className="w-full" onClick={() => navigate({ to: "/login" })}>
             Back to Sign In
           </Button>
         </CardFooter>
