@@ -10,7 +10,11 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
+export default function SignInForm({
+  onSwitchToSignUp,
+}: {
+  onSwitchToSignUp: () => void;
+}) {
   const navigate = useNavigate({
     from: "/",
   });
@@ -22,6 +26,7 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
       password: "",
     },
     onSubmit: async ({ value }) => {
+      const userEmail = value.email;
       await authClient.signIn.email(
         {
           email: value.email,
@@ -30,12 +35,21 @@ export default function SignInForm({ onSwitchToSignUp }: { onSwitchToSignUp: () 
         {
           onSuccess: () => {
             navigate({
-              to: "/todos",
+              to: "/dashboard",
             });
             toast.success("Sign in successful");
           },
           onError: (error) => {
-            toast.error(error.error.message || error.error.statusText);
+            const errorMessage =
+              error.error.message || error.error.statusText || "";
+            if (
+              errorMessage.toLowerCase().includes("email") &&
+              errorMessage.toLowerCase().includes("verif")
+            ) {
+              navigate({ to: "/verify-email", search: { email: userEmail } });
+            } else {
+              toast.error(errorMessage);
+            }
           },
         },
       );

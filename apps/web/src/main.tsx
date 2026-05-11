@@ -5,7 +5,14 @@ import ReactDOM from "react-dom/client";
 import Loader from "./components/loader";
 import { routeTree } from "./routeTree.gen";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes — prevents aggressive refetching
+      refetchOnWindowFocus: false, // disable refetch on window focus
+    },
+  },
+});
 
 const router = createRouter({
   routeTree,
