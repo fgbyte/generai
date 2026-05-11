@@ -54,7 +54,7 @@
     "@types/node": "catalog:",
     "open-cli": "^9.0.0",
     "oxfmt": "^0.48.0",
-    "oxlint": "^1.34.0",
+    "oxlint": "^1.63.0",
     "turbo": "^2.6.3",
     "typescript": "catalog:"
   },
