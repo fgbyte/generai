@@ -14,7 +14,7 @@ export const web = await Vite("web", {
     VITE_SERVER_URL: requireEnv("VITE_SERVER_URL"),
   },
   dev: {
-    command: "bun run vite dev",
+    command: "bun run dev",
     domain: "localhost:3001",
   },
 });
