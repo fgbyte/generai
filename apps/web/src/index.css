@@ -196,7 +196,7 @@
     --accent-foreground: var(--color-ink);
     --destructive: var(--color-accent-red);
     --border: var(--color-hairline);
-    --input: var(--color-hairline-soft);
+    --input: #5a5b55;
     --ring: var(--color-focus-ring);
     --chart-1: var(--color-accent-blue);
     --chart-2: var(--color-accent-green);
