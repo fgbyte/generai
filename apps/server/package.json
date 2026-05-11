@@ -35,6 +35,6 @@
     "tsdown": "^0.16.5",
     "typescript": "catalog:",
     "vitest": "catalog:",
-    "wrangler": "^4.88.0"
+    "wrangler": "^4.90.0"
   }
 }
