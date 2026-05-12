@@ -11,6 +11,12 @@
       "sourceType": "github",
       "computedHash": "24bad73932f309cec73a5a9171b838f59050990a634d8590c2d2c204507e64f9"
     },
+    "playwriter": {
+      "source": "remorses/playwriter",
+      "sourceType": "github",
+      "skillPath": "skills/playwriter/SKILL.md",
+      "computedHash": "66d155971014bc728ee8b44f15a5ed600b69de6e1a1bb5e7e45c97cdeadd4f58"
+    },
     "tanstack-query-best-practices": {
       "source": "deckardger/tanstack-agent-skills",
       "sourceType": "github",
