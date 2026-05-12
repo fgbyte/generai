@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 permissions:
+  actions: read
   contents: write
   pull-requests: write
   checks: read
@@ -18,9 +19,42 @@ jobs:
         uses: dependabot/fetch-metadata@v2
         id: metadata
 
-      - name: Enable auto-merge with squash for patch/minor updates
+      - name: Wait for CI to pass
         if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
-        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          run_id=""
+
+          for _ in {1..60}; do
+            run_id="$(gh run list \
+              --repo "$REPO" \
+              --workflow "CI" \
+              --commit "$HEAD_SHA" \
+              --json databaseId,event \
+              --jq '.[] | select(.event == "pull_request") | .databaseId' \
+              | head -n 1)"
+
+            if [ -n "$run_id" ]; then
+              break
+            fi
+
+            echo "Waiting for CI run for $HEAD_SHA..."
+            sleep 10
+          done
+
+          if [ -z "$run_id" ]; then
+            echo "No CI run found for $HEAD_SHA."
+            exit 1
+          fi
+
+          gh run watch "$run_id" --repo "$REPO" --exit-status --interval 10
+
+      - name: Merge patch/minor updates after CI passes
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
