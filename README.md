@@ -120,6 +120,15 @@ See [ENVIRONMENTS.md](./packages/infra/ENVIRONMENTS.md) for details.
 
 - Format and lint fix: `bun run check`
 
+## Dependency Automation
+
+Dependency updates are automated with Dependabot, a Bun catalog updater, CI gating, and branch protection. This is a safety-critical setup: `main` must be protected and `CI / ci` must be required before enabling dependency automerge.
+
+See:
+
+- [Dependency Automation](./docs/dependency-automation.md)
+- [Dependency Automation Checklist](./docs/DEPENDENCY_AUTOMATION_CHECKLIST.md)
+
 ## Project Structure
 
 ```
