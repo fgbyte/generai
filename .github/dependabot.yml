@@ -1,14 +1,18 @@
 version: 2
 updates:
   # Root package.json (for devDependencies not using catalog)
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
     groups:
       dev-dependencies:
         patterns:
@@ -18,14 +22,18 @@ updates:
           - "patch"
 
   # Web app
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/apps/web"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
     groups:
       react:
         patterns:
@@ -50,14 +58,18 @@ updates:
           - "patch"
 
   # Server app
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/apps/server"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
     groups:
       hono:
         patterns:
@@ -81,23 +93,31 @@ updates:
           - "patch"
 
   # Packages
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/packages/auth"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/packages/db"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
     groups:
       drizzle:
         patterns:
@@ -107,38 +127,54 @@ updates:
           - "minor"
           - "patch"
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/packages/mail"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/packages/infra"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/packages/env"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directory: "/packages/config"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
     open-pull-requests-limit: 10
-    versioning-strategy: increase
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-minor-days: 3
+      semver-patch-days: 1
