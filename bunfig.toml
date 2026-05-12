@@ -1,0 +1,6 @@
+[install]
+# Ejemplo: solo instalar versiones publicadas hace al menos 1 día (86400 segundos)
+minimumReleaseAge = 86400
+
+# Opcional: paquetes que excluyes del filtro (confías en ellos)
+# minimumReleaseAgeExcludes = ["@types/node", "typescript", "bun-types"]
