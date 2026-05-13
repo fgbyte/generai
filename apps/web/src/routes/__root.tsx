@@ -1,4 +1,9 @@
-import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import {
+  HeadContent,
+  Outlet,
+  createRootRouteWithContext,
+  useRouterState,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import Header from "@/components/header";
@@ -31,6 +36,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+  const showHeader = pathname !== "/" && pathname !== "/verify-email";
+
   return (
     <>
       <HeadContent />
@@ -42,7 +52,7 @@ function RootComponent() {
         storageKey="vite-ui-theme"
       >
         <div className="flex flex-col min-h-svh">
-          <Header />
+          {showHeader ? <Header /> : null}
           <Outlet />
         </div>
         <Toaster richColors />
