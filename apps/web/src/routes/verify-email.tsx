@@ -99,7 +99,7 @@ function RouteComponent() {
         <Button
           variant="ghost"
           className="w-full text-link-teal hover:underline"
-          onClick={() => navigate({ to: "/login" })}
+          onClick={() => navigate({ to: "/" })}
         >
           Back to Sign In
         </Button>
