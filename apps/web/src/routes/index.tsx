@@ -47,7 +47,7 @@ function HomeComponent() {
             <h1 className="mx-auto max-w-[680px] text-4xl font-bold leading-tight tracking-normal sm:text-5xl">
               Social Media Made Simple
             </h1>
-            <p className="mx-auto mt-4 max-w-sm text-base leading-relaxed text-white/80">
+            <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-white/80">
               GenerAI empowers you to craft captivating social media posts and
               streamline your workflow in seconds
             </p>
