@@ -1,282 +1,575 @@
+/*
+  FONT LOADING REQUIRED
+  ─────────────────────
+  This theme uses the following custom fonts. Add to your HTML <head>:
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+*/
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@font-face {
-    font-family: "Karma";
-    src: url("/src/assets/fonts/Karma-Light.ttf") format("truetype");
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Karma";
-    src: url("/src/assets/fonts/Karma-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Karma";
-    src: url("/src/assets/fonts/Karma-Medium.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Karma";
-    src: url("/src/assets/fonts/Karma-SemiBold.ttf") format("truetype");
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Karma";
-    src: url("/src/assets/fonts/Karma-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
+/* ── Dark mode custom variant ── */
 @custom-variant dark (&:is(.dark *));
 
-:root {
-    /* Brand & Accent Colors */
-    --color-primary: #f7a501;
-    --color-primary-pressed: #dd9001;
-    --color-primary-active: #b17816;
-    --color-on-primary: #ffffff;
+/* ═══ 1. THEME TOKENS ═══════════════════════════════════════
+   Auto-generates Tailwind utilities from every variable here.
+   Design system: Generai Luxe — Glassmorphism / Midnight Studio
+   ════════════════════════════════════════════════════════════ */
+@theme {
 
-    /* Text Colors */
-    --color-ink: #23251d;
-    --color-body: #4d4f46;
-    --color-charcoal: #33342d;
-    --color-mute: #6c6e63;
-    --color-ash: #9b9c92;
-    --color-stone: #b6b7af;
+  /* ── Colors ────────────────────────────────────────────── */
+  --color-black:              #000000;
+  --color-white:              #ffffff;
 
-    /* Surface Colors */
-    --color-canvas: #eeefe9;
-    --color-surface-soft: #e5e7e0;
-    --color-surface-card: #ffffff;
-    --color-surface-doc: #fcfcfa;
-    --color-surface-dark: #23251d;
+  /* Glassmorphism surfaces */
+  --color-surface-deep:       rgba(28, 28, 30, 0.9);
+  --color-surface-material:   rgba(28, 28, 30, 0.6);
+  --color-surface-thick:      rgba(44, 44, 46, 0.8);
+  --color-surface-form:       rgba(118, 118, 128, 0.24);
 
-    /* Border Colors */
-    --color-hairline: #bfc1b7;
-    --color-hairline-soft: #dcdfd2;
-    --color-on-dark: #ffffff;
+  /* Glass border */
+  --color-border-glass:       rgba(255, 255, 255, 0.15);
 
-    /* Semantic Colors */
-    --color-link-blue: #1d4ed8;
-    --color-link-teal: #1078a3;
-    --color-accent-blue: #2c84e0;
-    --color-accent-blue-soft: #dceaf6;
-    --color-accent-red: #cd4239;
-    --color-accent-red-soft: #f7d6d3;
-    --color-accent-green: #2c8c66;
-    --color-accent-green-soft: #d9eddf;
-    --color-accent-purple: #7c44a6;
-    --color-accent-purple-soft: #e7d8ee;
-    --color-focus-ring: rgba(59, 130, 246, 0.5);
+  /* Typography colors */
+  --color-text-dim:           rgba(255, 255, 255, 0.5);
+  --color-text-muted:         rgba(255, 255, 255, 0.3);
 
-    /* Spacing - PostHog Scale */
-    --spacing-xxs: 2px;
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 12px;
-    --spacing-lg: 16px;
-    --spacing-xl: 24px;
-    --spacing-xxl: 32px;
-    --spacing-section: 80px;
+  /* Brand accents — inferred from prose */
+  --color-primary:            #8B5CF6;   /* Custom Violet — active states, primary actions */
+  --color-primary-hover:      #7C3AED;
+  --color-primary-active:     #6D28D9;
+  --color-primary-disabled:   rgba(139, 92, 246, 0.4);
+  --color-on-primary:         #ffffff;
 
-    /* Border Radius - PostHog Scale */
-    --radius-none: 0px;
-    --radius-xs: 2px;
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
-    --radius-full: 9999px;
+  --color-secondary:          #F59E0B;   /* Custom Gold — balances, premium features */
+  --color-on-secondary:       #000000;
 
-    /* Semantic Mappings for shadcn/ui */
-    --background: var(--color-canvas);
-    --foreground: var(--color-ink);
-    --card: var(--color-surface-card);
-    --card-foreground: var(--color-ink);
-    --popover: var(--color-surface-card);
-    --popover-foreground: var(--color-ink);
-    --primary: var(--color-primary);
-    --primary-foreground: var(--color-on-primary);
-    --secondary: var(--color-surface-soft);
-    --secondary-foreground: var(--color-ink);
-    --muted: var(--color-surface-soft);
-    --muted-foreground: var(--color-mute);
-    --accent: var(--color-surface-soft);
-    --accent-foreground: var(--color-ink);
-    --destructive: var(--color-accent-red);
-    --border: var(--color-hairline);
-    --input: var(--color-hairline-soft);
-    --ring: var(--color-focus-ring);
-    --chart-1: var(--color-accent-blue);
-    --chart-2: var(--color-accent-green);
-    --chart-3: var(--color-accent-purple);
-    --chart-4: var(--color-primary);
-    --chart-5: var(--color-accent-red);
-    --sidebar: var(--color-surface-card);
-    --sidebar-foreground: var(--color-ink);
-    --sidebar-primary: var(--color-primary);
-    --sidebar-primary-foreground: var(--color-on-primary);
-    --sidebar-accent: var(--color-surface-soft);
-    --sidebar-accent-foreground: var(--color-ink);
-    --sidebar-border: var(--color-hairline);
-    --sidebar-ring: var(--color-focus-ring);
+  /* Semantic aliases for shadcn */
+  --color-neutral:            #000000;   /* True black base */
+  --color-surface:            rgba(28, 28, 30, 0.6);
+  --color-tertiary:           #8B5CF6;   /* CTA / action color = violet */
+  --color-on-tertiary:        #ffffff;
+  --color-tertiary-container: rgba(139, 92, 246, 0.15);
+  --color-border:             rgba(255, 255, 255, 0.15);
+  --color-foreground:         #ffffff;
+  --color-error:              #dc2626;   /* synthesized — no error token in DESIGN.md */
 
-    /* Base Radius */
-    --radius: 0.5rem;
+  /* ── Font Families ─────────────────────────────────────── */
+  --font-body:    "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+  /* ── Type Scale ────────────────────────────────────────── */
+  --text-display-xl:          2.125rem;  /* 34px */
+  --text-display-xl--line-height: 1.206; /* 41px / 34px */
+
+  --text-headline-md:         1.25rem;   /* 20px */
+  --text-headline-md--line-height: 1.2;  /* 24px / 20px */
+
+  --text-body-md:             1.0625rem; /* 17px */
+  --text-body-md--line-height: 1.294;    /* 22px / 17px */
+
+  --text-button-md:           1.0625rem; /* 17px */
+  --text-button-md--line-height: 1.294;  /* 22px / 17px */
+
+  --text-mono-label:          0.75rem;   /* 12px */
+
+  --text-caption-xs:          0.75rem;   /* 12px */
+  --text-caption-xs--line-height: 1.333; /* 16px / 12px */
+
+  --text-nav-label:           0.625rem;  /* 10px */
+  --text-nav-label--line-height: 1.2;    /* 12px / 10px */
+
+  /* ── Font Weights ──────────────────────────────────────── */
+  --font-weight-normal:       400;
+  --font-weight-medium:       500;
+  --font-weight-semibold:     600;
+  --font-weight-bold:         700;
+
+  /* ── Letter Spacing ────────────────────────────────────── */
+  --tracking-tight-display:   -0.024em;  /* -0.4px / 17px approx for display */
+  --tracking-tight-body:      -0.024em;  /* -0.41px / 17px for body-md */
+  --tracking-wide-label:      0.042em;   /* 0.5px / 12px for mono-label */
+
+  /* ── Spacing ───────────────────────────────────────────── */
+  --spacing-xxs:              0.125rem;  /* 2px */
+  --spacing-xs:               0.25rem;   /* 4px */
+  --spacing-sm:               0.5rem;    /* 8px */
+  --spacing-md:               0.75rem;   /* 12px */
+  --spacing-lg:               1rem;      /* 16px */
+  --spacing-xl:               1.25rem;   /* 20px */
+  --spacing-xxl:              2rem;      /* 32px */
+  --spacing-section:          5rem;      /* 80px */
+
+  /* ── Border Radius ─────────────────────────────────────── */
+  --radius-sm:                0.25rem;   /* 4px */
+  --radius-default:           0.5rem;    /* 8px */
+  --radius-md:                0.75rem;   /* 12px */
+  --radius-lg:                1rem;      /* 16px */
+  --radius-xl:                1.5rem;    /* 24px (maps to DESIGN.md 20px for cards — using closest) */
+  --radius-full:              9999px;
+
+  /* ── Shadows — Material stacking (glassmorphism) ───────── */
+  --shadow-glass-card:        0 0 0 0.5px rgba(255, 255, 255, 0.15),
+                              inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  --shadow-glass-nav:         0 -1px 0 rgba(255, 255, 255, 0.15),
+                              inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  --shadow-focus-ring:        0 0 0 2px rgba(139, 92, 246, 0.6);
+
+  /* ── Container ─────────────────────────────────────────── */
+  --container-max:            576px;
+
+  /* ── Animations ────────────────────────────────────────── */
+  --animate-tap-press:        tap-press 100ms ease-out;
+
+  @keyframes tap-press {
+    from { transform: scale(1); }
+    to   { transform: scale(0.98); }
+  }
 }
 
-.dark {
-    /* Brand & Accent Colors - Dark Mode */
-    --color-primary: #f7a501;
-    --color-primary-pressed: #dd9001;
-    --color-primary-active: #b17816;
-    --color-on-primary: #23251d;
-
-    /* Text Colors - Dark Mode */
-    --color-ink: #ffffff;
-    --color-body: #d4d6cc;
-    --color-charcoal: #e0e2d8;
-    --color-mute: #9b9c92;
-    --color-ash: #6c6e63;
-    --color-stone: #4d4f46;
-
-    /* Surface Colors - Dark Mode */
-    --color-canvas: #23251d;
-    --color-surface-soft: #33342d;
-    --color-surface-card: #2a2b24;
-    --color-surface-doc: #2d2e27;
-    --color-surface-dark: #181916;
-
-    /* Border Colors - Dark Mode */
-    --color-hairline: #4d4f46;
-    --color-hairline-soft: #5a5b55;
-    --color-on-dark: #ffffff;
-
-    /* Semantic Colors - Dark Mode */
-    --color-link-blue: #60a5fa;
-    --color-link-teal: #38bdf8;
-    --color-accent-blue: #60a5fa;
-    --color-accent-blue-soft: #1e3a5f;
-    --color-accent-red: #f87171;
-    --color-accent-red-soft: #5c2a2a;
-    --color-accent-green: #4ade80;
-    --color-accent-green-soft: #1a3d2a;
-    --color-accent-purple: #c084fc;
-    --color-accent-purple-soft: #3b2a4d;
-    --color-focus-ring: rgba(59, 130, 246, 0.5);
-
-    /* Semantic Mappings - Dark Mode */
-    --background: var(--color-canvas);
-    --foreground: var(--color-ink);
-    --card: var(--color-surface-card);
-    --card-foreground: var(--color-ink);
-    --popover: var(--color-surface-card);
-    --popover-foreground: var(--color-ink);
-    --primary: var(--color-primary);
-    --primary-foreground: var(--color-on-primary);
-    --secondary: var(--color-surface-soft);
-    --secondary-foreground: var(--color-ink);
-    --muted: var(--color-surface-soft);
-    --muted-foreground: var(--color-mute);
-    --accent: var(--color-surface-soft);
-    --accent-foreground: var(--color-ink);
-    --destructive: var(--color-accent-red);
-    --border: var(--color-hairline);
-    --input: var(--color-hairline-soft);
-    --ring: var(--color-focus-ring);
-    --chart-1: var(--color-accent-blue);
-    --chart-2: var(--color-accent-green);
-    --chart-3: var(--color-accent-purple);
-    --chart-4: var(--color-primary);
-    --chart-5: var(--color-accent-red);
-    --sidebar: var(--color-surface-card);
-    --sidebar-foreground: var(--color-ink);
-    --sidebar-primary: var(--color-primary);
-    --sidebar-primary-foreground: var(--color-on-primary);
-    --sidebar-accent: var(--color-surface-soft);
-    --sidebar-accent-foreground: var(--color-ink);
-    --sidebar-border: var(--color-hairline);
-    --sidebar-ring: var(--color-focus-ring);
-}
-
-@theme inline {
-    /* Font Families */
-    --font-sans:
-        "IBM Plex Sans Variable", "IBM Plex Sans", ui-sans-serif, system-ui,
-        sans-serif;
-    --font-mono: "Source Code Pro", ui-monospace, "JetBrains Mono", monospace;
-    --font-karma: "Karma", serif;
-    --font-display:
-        "IBM Plex Sans Variable", "IBM Plex Sans", ui-sans-serif, system-ui,
-        sans-serif;
-
-    /* Radius - PostHog scale values (fixed, no calc) */
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
-    --radius-xl: 12px;
-    --radius-2xl: 16px;
-    --radius-3xl: 24px;
-    --radius-4xl: 32px;
-
-    /* Semantic Color Mappings (required for shadcn) */
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-}
-
+/* ═══ 2. DARK MODE PRIMITIVES ═══════════════════════════════
+   This design is dark-first. Light mode is a synthesized inversion.
+   ════════════════════════════════════════════════════════════ */
 @layer base {
-    * {
-        @apply border-border outline-ring/50;
-    }
+  :root {
+    /* Dark mode (default) — all values as designed */
+    --bg-base:                #000000;
+    --bg-surface-deep:        rgba(28, 28, 30, 0.9);
+    --bg-surface-material:    rgba(28, 28, 30, 0.6);
+    --bg-surface-thick:       rgba(44, 44, 46, 0.8);
+    --bg-surface-form:        rgba(118, 118, 128, 0.24);
+    --border-glass:           rgba(255, 255, 255, 0.15);
+    --text-primary:           #ffffff;
+    --text-secondary:         rgba(255, 255, 255, 0.5);
+    --text-muted:             rgba(255, 255, 255, 0.3);
+    --accent-primary:         #8B5CF6;
+    --accent-secondary:       #F59E0B;
+  }
 
-    body {
-        @apply font-sans bg-background text-foreground;
-    }
+  /* Light mode — synthesized inversion for accessibility */
+  .light,
+  [data-theme="light"] {
+    --bg-base:                #F5F5F7;
+    --bg-surface-deep:        rgba(255, 255, 255, 0.9);
+    --bg-surface-material:    rgba(255, 255, 255, 0.7);
+    --bg-surface-thick:       rgba(245, 245, 247, 0.85);
+    --bg-surface-form:        rgba(0, 0, 0, 0.06);
+    --border-glass:           rgba(0, 0, 0, 0.12);
+    --text-primary:           #1A1A1A;
+    --text-secondary:         rgba(0, 0, 0, 0.55);
+    --text-muted:             rgba(0, 0, 0, 0.35);
+    --accent-primary:         #7C3AED;
+    --accent-secondary:       #D97706;
+  }
+}
 
-    html {
-        @apply font-sans;
-    }
+/* ═══ 3. SHADCN/UI COMPATIBILITY LAYER ══════════════════════
+   shadcn reads these exact variable names from :root.
+   They alias @theme tokens — no values are duplicated.
+   ══════════════════════════════════════════════════════════ */
+@layer base {
+  :root {
+    /* Core — dark-first design */
+    --background:             #000000;
+    --foreground:             #ffffff;
+
+    /* Card — glass material */
+    --card:                   rgba(28, 28, 30, 0.6);
+    --card-foreground:        #ffffff;
+
+    /* Popover */
+    --popover:                rgba(28, 28, 30, 0.9);
+    --popover-foreground:     #ffffff;
+
+    /* Primary = CTA/action color (violet) */
+    --primary:                #8B5CF6;
+    --primary-foreground:     #ffffff;
+
+    /* Secondary */
+    --secondary:              rgba(28, 28, 30, 0.6);
+    --secondary-foreground:   #ffffff;
+
+    /* Muted */
+    --muted:                  rgba(28, 28, 30, 0.9);
+    --muted-foreground:       rgba(255, 255, 255, 0.5);
+
+    /* Accent */
+    --accent:                 rgba(139, 92, 246, 0.15);
+    --accent-foreground:      #ffffff;
+
+    /* Destructive — synthesized, no error token in DESIGN.md */
+    --destructive:            #dc2626;
+    --destructive-foreground: #ffffff;
+
+    /* Border / Input / Ring */
+    --border:                 rgba(255, 255, 255, 0.15);
+    --input:                  rgba(118, 118, 128, 0.24);
+    --ring:                   #8B5CF6;
+
+    /* Radius — shadcn scales from this single value */
+    --radius:                 0.75rem;
+  }
+
+  /* Light mode shadcn overrides */
+  .light,
+  [data-theme="light"] {
+    --background:             #F5F5F7;
+    --foreground:             #1A1A1A;
+    --card:                   rgba(255, 255, 255, 0.7);
+    --card-foreground:        #1A1A1A;
+    --popover:                rgba(255, 255, 255, 0.9);
+    --popover-foreground:     #1A1A1A;
+    --muted:                  rgba(245, 245, 247, 0.5);
+    --muted-foreground:       rgba(0, 0, 0, 0.55);
+    --border:                 rgba(0, 0, 0, 0.12);
+    --input:                  rgba(0, 0, 0, 0.06);
+  }
+}
+
+/* ═══ 4. BASE RESETS ════════════════════════════════════════ */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    color: var(--text-primary);
+    background-color: #000000;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: #000000;
+  }
+
+  /* Typography scale */
+  h1, .text-display-xl {
+    font-size: var(--text-display-xl);
+    line-height: var(--text-display-xl--line-height);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-tight-display);
+    font-family: var(--font-body);
+  }
+
+  h2, .text-headline-md {
+    font-size: var(--text-headline-md);
+    line-height: var(--text-headline-md--line-height);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-body);
+  }
+
+  h3 {
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-body);
+  }
+
+  p {
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    font-weight: var(--font-weight-normal);
+    font-family: var(--font-body);
+  }
+
+  /* Mono labels — uppercase with generous tracking */
+  .text-mono-label {
+    font-size: var(--text-mono-label);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-wide-label);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+  }
+
+  /* Caption */
+  .text-caption-xs {
+    font-size: var(--text-caption-xs);
+    line-height: var(--text-caption-xs--line-height);
+    font-weight: var(--font-weight-normal);
+    font-family: var(--font-body);
+  }
+
+  /* Nav label */
+  .text-nav-label {
+    font-size: var(--text-nav-label);
+    line-height: var(--text-nav-label--line-height);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-body);
+  }
+
+  /* Links */
+  a {
+    color: var(--accent-primary);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--primary-hover, #7C3AED);
+  }
+
+  /* Focus visible */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Safe area for fixed bottom nav */
+  .safe-bottom {
+    padding-bottom: var(--spacing-section);
+  }
+}
+
+/* ═══ 5. COMPONENT TOKENS ═══════════════════════════════════
+   Semantic classes derived from DESIGN.md component descriptions.
+   All values reference @theme tokens — no hardcoded hex.
+   ════════════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── Primary Button ──────────────────────────────────────
+     Solid violet background, white text, no shadow.
+     Subtle opacity change on tap (active:scale-[0.98]).
+     ──────────────────────────────────────────────────────── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    background-color: var(--color-primary);
+    color: var(--color-on-primary, #ffffff);
+    border: none;
+    border-radius: var(--radius-md);
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
+    min-height: 3rem;          /* 48px touch target */
+    font-family: var(--font-body);
+    font-size: var(--text-button-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-button-md--line-height);
+    cursor: pointer;
+    transition: background-color 150ms ease, opacity 100ms ease, transform 100ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-primary:hover {
+    background-color: var(--color-primary-hover, color-mix(in oklab, var(--color-primary) 85%, black));
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  .btn-primary:disabled,
+  .btn-primary[aria-disabled="true"] {
+    background-color: var(--color-primary-disabled);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ── Secondary / Glass Button ────────────────────────────
+     white/10 background with border-glass stroke.
+     ──────────────────────────────────────────────────────── */
+  .btn-glass {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 0.5px solid var(--color-border-glass);
+    border-radius: var(--radius-md);
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
+    min-height: 3rem;          /* 48px touch target */
+    font-family: var(--font-body);
+    font-size: var(--text-button-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-button-md--line-height);
+    cursor: pointer;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: background-color 150ms ease, transform 100ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-glass:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  .btn-glass:active {
+    transform: scale(0.98);
+  }
+
+  /* ── Input Fields ────────────────────────────────────────
+     surface-form background, no border until focused.
+     2px violet ring on focus.
+     ──────────────────────────────────────────────────────── */
+  .input-glass {
+    width: 100%;
+    background-color: var(--color-surface-form);
+    color: var(--text-primary);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding-block: 0.75rem;
+    padding-inline: 1rem;
+    min-height: 3.25rem;       /* 52px touch target */
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+    -webkit-appearance: none;
+  }
+  .input-glass::placeholder {
+    color: var(--color-text-muted);
+  }
+  .input-glass:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+    background-color: rgba(118, 118, 128, 0.3);
+  }
+
+  /* ── Glass Card ──────────────────────────────────────────
+     surface-material with 20px blur, border-glass inner stroke.
+     ──────────────────────────────────────────────────────── */
+  .card-glass {
+    background-color: var(--color-surface-material);
+    border: 0.5px solid var(--color-border-glass);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-glass-card);
+  }
+
+  /* ── List Item / Link ────────────────────────────────────
+     surface-material background, chevron-right trailing icon.
+     ──────────────────────────────────────────────────────── */
+  .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    background-color: var(--color-surface-material);
+    border: 0.5px solid var(--color-border-glass);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    cursor: pointer;
+    transition: background-color 150ms ease, transform 100ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .list-item:hover {
+    background-color: var(--color-surface-deep);
+  }
+  .list-item:active {
+    transform: scale(0.98);
+  }
+  .list-item .trailing-icon {
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+  }
+
+  /* ── Banner / Pro-Tip ────────────────────────────────────
+     Violet tinted background, 20px icon, caption-xs text.
+     ──────────────────────────────────────────────────────── */
+  .banner-protip {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    background-color: var(--color-tertiary-container, rgba(139, 92, 246, 0.1));
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+  }
+  .banner-protip .banner-icon {
+    width: 1.25rem;   /* 20px */
+    height: 1.25rem;
+    flex-shrink: 0;
+    color: var(--color-primary);
+  }
+  .banner-protip .banner-text {
+    font-size: var(--text-caption-xs);
+    line-height: var(--text-caption-xs--line-height);
+    font-weight: var(--font-weight-normal);
+    font-family: var(--font-body);
+    color: var(--text-secondary);
+  }
+
+  /* ── Navigation Bar ──────────────────────────────────────
+     Fixed position, surface-thick with 30px blur.
+     Active state: violet color + fill icon variation.
+     ──────────────────────────────────────────────────────── */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: var(--color-surface-thick);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: var(--shadow-glass-nav);
+    padding-block: var(--spacing-sm);
+    padding-bottom: max(var(--spacing-sm), env(safe-area-inset-bottom));
+    border-top: 0.5px solid var(--color-border-glass);
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xxs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    color: var(--color-text-dim);
+    cursor: pointer;
+    transition: color 150ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-item.active {
+    color: var(--color-primary);
+  }
+  .nav-item:active {
+    transform: scale(0.95);
+  }
+  .nav-label {
+    font-size: var(--text-nav-label);
+    line-height: var(--text-nav-label--line-height);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-body);
+  }
+}
+
+/* ═══ 6. MAX-W OVERRIDES ════════════════════════════════════
+   ⚠️ MANDATORY: Tailwind v4 reserves xs/sm/md/lg/xl/2xl as
+   responsive BREAKPOINTS, not container widths. When @theme
+   defines ANY --container-* token, you MUST emit overrides.
+   ════════════════════════════════════════════════════════════ */
+@utility max-w-xs {
+    max-width: var(--container-xs) !important;
+}
+@utility max-w-sm {
+    max-width: var(--container-sm) !important;
+}
+@utility max-w-md {
+    max-width: var(--container-md) !important;
+}
+@utility max-w-lg {
+    max-width: var(--container-lg) !important;
+}
+@utility max-w-xl {
+    max-width: var(--container-xl) !important;
+}
+@utility max-w-2xl {
+    max-width: var(--container-2xl) !important;
+}
+@utility max-w-container {
+    max-width: var(--container-max) !important;
 }
