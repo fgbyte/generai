@@ -39,7 +39,10 @@ function RootComponent() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
-  const showHeader = pathname !== "/" && pathname !== "/verify-email";
+  const showHeader =
+    pathname !== "/" &&
+    pathname !== "/verify-email" &&
+    !pathname.startsWith("/dashboard");
 
   return (
     <>
