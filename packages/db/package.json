@@ -29,6 +29,6 @@
     "@types/ws": "^8.18.1",
     "drizzle-kit": "^0.31.10",
     "typescript": "catalog:",
-    "ws": "^8.20.0"
+    "ws": "^8.20.1"
   }
 }
