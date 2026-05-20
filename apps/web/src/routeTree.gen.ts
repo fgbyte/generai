@@ -14,6 +14,7 @@ import { Route as TodosRouteImport } from './routes/todos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
+import { Route as DashboardHistoryRouteImport } from './routes/dashboard/history'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -40,11 +41,17 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   path: '/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
+  id: '/dashboard/history',
+  path: '/dashboard/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -60,6 +68,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -69,15 +78,23 @@ export interface FileRouteTypes {
     | '/'
     | '/todos'
     | '/verify-email'
+    | '/dashboard/history'
     | '/demo/tanstack-query'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/todos' | '/verify-email' | '/demo/tanstack-query' | '/dashboard'
+  to:
+    | '/'
+    | '/todos'
+    | '/verify-email'
+    | '/dashboard/history'
+    | '/demo/tanstack-query'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/todos'
     | '/verify-email'
+    | '/dashboard/history'
     | '/demo/tanstack-query'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -86,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TodosRoute: typeof TodosRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  DashboardHistoryRoute: typeof DashboardHistoryRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
@@ -127,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/history': {
+      id: '/dashboard/history'
+      path: '/dashboard/history'
+      fullPath: '/dashboard/history'
+      preLoaderRoute: typeof DashboardHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -134,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TodosRoute: TodosRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  DashboardHistoryRoute: DashboardHistoryRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
