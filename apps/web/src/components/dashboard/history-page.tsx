@@ -23,6 +23,8 @@ interface HistoryItem {
   createdAt: string;
 }
 
+const HISTORY_MOCK_ENDPOINT = "/mock/api/generate/history.json";
+
 const CONTENT_TYPE_CONFIG: Record<
   string,
   { label: string; icon: React.ReactNode; points: number }
@@ -104,9 +106,9 @@ function ActivityCard({ item }: { item: HistoryItem }) {
   };
 
   return (
-    <div className="list-item active:scale-[0.99] transition-transform cursor-pointer gap-lg">
+    <div className="list-item">
       {/* Icon */}
-      <div className="w-10 h-10 rounded-lg bg-surface-form flex items-center justify-center flex-shrink-0">
+      <div className="w-10 h-10 rounded-lg bg-surface-form flex items-center justify-center flex-shrink-0 self-start">
         <span className="text-white">{config.icon}</span>
       </div>
 
@@ -164,9 +166,7 @@ export function HistoryPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["generate", "history"],
     queryFn: async () => {
-      const res = await fetch("/api/generate/history", {
-        credentials: "include",
-      });
+      const res = await fetch(HISTORY_MOCK_ENDPOINT);
       if (!res.ok) throw new Error("Failed to fetch history");
       return res.json() as Promise<{ items: HistoryItem[] }>;
     },
