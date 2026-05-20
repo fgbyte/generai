@@ -51,6 +51,17 @@ export function StudioPage() {
             />
           </div>
 
+          {/* Instagram Upload */}
+          {contentType === "instagram" && (
+            <Button
+              variant="outline"
+              className="w-full border-dashed border-white/20 text-white/60 hover:bg-white/5 hover:text-white py-md rounded-lg gap-2"
+            >
+              <Upload className="size-5" />
+              Upload Image
+            </Button>
+          )}
+
           {/* Prompt Textarea */}
           <div className="flex flex-col gap-sm">
             <Label className="text-mono-label text-text-dim pl-xs">
