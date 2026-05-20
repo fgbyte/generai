@@ -9,15 +9,16 @@ import { CustomSelect } from "@/components/custom-select";
 import { PointsBalanceCard } from "@/components/dashboard/points-balance-card";
 import { ProTipBanner } from "@/components/dashboard/pro-tip-banner";
 import { TopAppBar } from "@/components/top-app-bar";
+import { Instagram, Linkedin, Twitter, Upload } from "lucide-react";
 
 const CONTENT_TYPES = [
-  { value: "twitter", label: "Twitter Thread Format" },
-  { value: "linkedin", label: "LinkedIn Post" },
-  { value: "blog", label: "Short Blog Post" },
+  { value: "thread", icon: <Twitter />, label: "Thread Format" },
+  { value: "linkedin", icon: <Linkedin />, label: "LinkedIn Post" },
+  { value: "instagram", icon: <Instagram />, label: "Instagram Caption" },
 ];
 
 export function StudioPage() {
-  const [contentType, setContentType] = useState("twitter");
+  const [contentType, setContentType] = useState("instagram");
   const [prompt, setPrompt] = useState("");
 
   return (
@@ -27,7 +28,7 @@ export function StudioPage() {
       <main className="max-w-container mx-auto px-lg pt-[100px] flex flex-col gap-lg relative z-10 pb-xxl">
         {/* Points Card */}
         <PointsBalanceCard
-          balance={5000}
+          balance={5000} //get-points
           onGetMore={() => {
             /* TODO: navigate to points purchase */
           }}

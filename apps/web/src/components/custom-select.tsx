@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 interface CustomSelectProps {
   value: string;
   onChange: (v: string) => void;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; icon?: React.ReactNode }[];
   className?: string;
 }
 
@@ -44,7 +44,10 @@ export function CustomSelect({
           className,
         )}
       >
-        <span>{selected?.label}</span>
+        <span className="flex items-center gap-2">
+          {selected?.icon}
+          {selected?.label}
+        </span>
         <ChevronDown
           className={cn(
             "size-5 text-white/40 transition-transform",
@@ -76,7 +79,10 @@ export function CustomSelect({
                 opt.value === value && "bg-white/10",
               )}
             >
-              {opt.label}
+              <span className="flex items-center gap-2">
+                {opt.icon}
+                {opt.label}
+              </span>
             </button>
           ))}
         </div>
