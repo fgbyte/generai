@@ -1,4 +1,4 @@
-import { Sparkles, History, Globe, Settings } from "lucide-react";
+import { Sparkles, History, Calendar, Settings } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
 
 import { cn } from "@/lib/utils";
@@ -27,22 +27,22 @@ const defaultItems: NavItem[] = [
   {
     icon: <Sparkles className="!size-[28px]" />,
     label: "Studio",
-    href: "/dashboard/",
+    href: "/app",
   },
   {
     icon: <History className="!size-[28px]" />,
     label: "History",
-    href: "/dashboard/history",
+    href: "/app/history",
   },
   {
-    icon: <Globe className="!size-[28px]" />,
-    label: "Social",
-    href: "/dashboard/social",
+    icon: <Calendar className="!size-[28px]" />,
+    label: "Calendar",
+    href: "/app/calendar",
   },
   {
     icon: <Settings className="!size-[28px]" />,
     label: "Settings",
-    href: "/dashboard/settings",
+    href: "/app/settings",
   },
 ];
 
@@ -70,9 +70,7 @@ export function BottomNavBar({
           className={cn(
             "flex flex-col items-center justify-center",
             "active:opacity-70 transition-opacity",
-            item.active
-              ? "text-primary"
-              : "text-text-dim hover:text-white/80",
+            item.active ? "text-primary" : "text-text-dim hover:text-white/80",
           )}
         >
           {item.icon}

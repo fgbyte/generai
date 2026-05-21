@@ -4,11 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ActivityHistoryLink } from "@/components/dashboard/activity-history-link";
-import { BottomNavBar } from "@/components/bottom-nav-bar";
+
 import { CustomSelect } from "@/components/custom-select";
 import { PointsBalanceCard } from "@/components/dashboard/points-balance-card";
 import { ProTipBanner } from "@/components/dashboard/pro-tip-banner";
-import { TopAppBar } from "@/components/top-app-bar";
 import { Instagram, Linkedin, Twitter, Upload } from "lucide-react";
 
 const CONTENT_TYPES = [
@@ -23,8 +22,6 @@ export function StudioPage() {
 
   return (
     <div className="font-body-md text-body-md pb-section min-h-screen bg-black text-white">
-      <TopAppBar />
-
       <main className="max-w-container mx-auto px-lg pt-[100px] flex flex-col gap-lg relative z-10 pb-xxl">
         {/* Points Card */}
         <PointsBalanceCard
@@ -87,8 +84,6 @@ export function StudioPage() {
           </Button>
         </section>
       </main>
-
-      <BottomNavBar />
     </div>
   );
 }

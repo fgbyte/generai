@@ -12,8 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { BottomNavBar } from "@/components/bottom-nav-bar";
-import { TopAppBar } from "@/components/top-app-bar";
 
 interface HistoryItem {
   id: string;
@@ -177,8 +175,6 @@ export function HistoryPage() {
 
   return (
     <div className="font-body-md text-body-md pb-section min-h-screen bg-black text-white">
-      <TopAppBar />
-
       <main className="max-w-container mx-auto px-lg pt-[100px] flex flex-col gap-lg relative z-10 pb-xxl">
         {/* Header */}
         <div className="mb-xl flex justify-between items-end">
@@ -226,8 +222,6 @@ export function HistoryPage() {
           </div>
         )}
       </main>
-
-      <BottomNavBar />
     </div>
   );
 }
