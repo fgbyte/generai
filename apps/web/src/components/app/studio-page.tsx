@@ -3,11 +3,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ActivityHistoryLink } from "@/components/dashboard/activity-history-link";
+import { ActivityHistoryLink } from "@/components/app/activity-history-link";
 
 import { CustomSelect } from "@/components/custom-select";
-import { PointsBalanceCard } from "@/components/dashboard/points-balance-card";
-import { ProTipBanner } from "@/components/dashboard/pro-tip-banner";
+import { PointsBalanceCard } from "@/components/app/points-balance-card";
+import { ProTipBanner } from "@/components/app/pro-tip-banner";
 import { Instagram, Linkedin, Twitter, Upload } from "lucide-react";
 
 const CONTENT_TYPES = [
