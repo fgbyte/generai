@@ -9,14 +9,14 @@ interface ActivityHistoryLinkProps {
 }
 
 export function ActivityHistoryLink({
-  href = "/dashboard/history",
+  href = "/app/history",
   className,
 }: ActivityHistoryLinkProps) {
   return (
     <Link
       to={href}
       className={cn(
-        "bg-surface-material backdrop-blur-[20px] backdrop-saturate-[150%]",
+        "bg-surface-material backdrop-blur-[20px] backdrop-saturate-150",
         "border border-border-glass/50",
         "rounded-lg px-lg py-md",
         "flex justify-between items-center",

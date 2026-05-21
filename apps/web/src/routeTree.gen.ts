@@ -15,6 +15,7 @@ import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
+import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
 import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
@@ -47,6 +48,11 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   path: '/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppHistoryIndexRoute = AppHistoryIndexRouteImport.update({
   id: '/history/',
   path: '/history/',
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app/': typeof AppIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app': typeof AppIndexRoute
   '/app/history': typeof AppHistoryIndexRoute
+  '/app/settings': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app/': typeof AppIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/app/'
     | '/app/history/'
+    | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/app'
     | '/app/history'
+    | '/app/settings'
   id:
     | '__root__'
     | '/'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/demo/tanstack-query'
     | '/app/'
     | '/app/history/'
+    | '/app/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -161,6 +173,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/settings/': {
+      id: '/app/settings/'
+      path: '/settings'
+      fullPath: '/app/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/history/': {
       id: '/app/history/'
       path: '/history'
@@ -174,11 +193,13 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppHistoryIndexRoute: typeof AppHistoryIndexRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppHistoryIndexRoute: AppHistoryIndexRoute,
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
