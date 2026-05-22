@@ -10,7 +10,7 @@ function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?
   return (
     <button
       type="button"
-      className="group cursor-pointer flex w-full items-center gap-lg justify-between border-none bg-transparent px-lg py-md text-left text-white transition-[background-color,transform] duration-150 active:scale-[0.992] active:bg-white/2.5"
+      className="group cursor-pointer flex w-full items-center gap-lg justify-between border-none bg-transparent px-xl py-lg text-left text-white transition-[background-color,transform] duration-150 active:scale-[0.992] active:bg-white/2.5"
       onClick={onClick}
     >
       {children}
@@ -70,7 +70,7 @@ export function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-black font-body-md text-body-md text-white">
-      <main className="max-w-container mx-auto px-lg pt-25 flex flex-col gap-lg relative z-10 pb-25">
+      <main className="max-w-container mx-auto px-xl pt-20 flex flex-col gap-lg relative z-10 pb-25">
         <section className="flex flex-col gap-md">
           <SectionHeader>Account</SectionHeader>
           <Card className={cardClassName}>
@@ -178,7 +178,7 @@ export function SettingsPage() {
           <SectionHeader>App Settings</SectionHeader>
           <Card className={cardClassName}>
             <CardContent className="p-0">
-              <div className="flex w-full items-center justify-between gap-4 px-lg py-md hover:bg-white/[0.025]">
+              <div className="flex w-full items-center justify-between gap-4 px-xl py-lg hover:bg-white/[0.025]">
                 <div className="flex items-center gap-4">
                   <div className={appIconClassName}>
                     <Bell className="size-[17px] text-custom-violet" />
