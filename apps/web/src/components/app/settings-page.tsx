@@ -1,17 +1,17 @@
 import { useState } from "react";
 import {
-  Bell,
+  // Bell,
   ChevronRight,
   Coins,
-  Globe,
+  // Globe,
   LogOut,
-  Moon,
-  Sparkles,
+  // Moon,
+  // Sparkles,
 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 // import { cn } from "@/lib/utils";
