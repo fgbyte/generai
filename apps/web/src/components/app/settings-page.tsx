@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
-  // Bell,
+  Bell,
   ChevronRight,
   Coins,
-  // Globe,
+  Globe,
   LogOut,
-  // Moon,
+  Moon,
   Sparkles,
 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
