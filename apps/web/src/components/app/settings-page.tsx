@@ -1,30 +1,16 @@
 import { useState } from "react";
-import {
-  Bell,
-  ChevronRight,
-  Coins,
-  Globe,
-  LogOut,
-  Moon,
-  Sparkles,
-} from "lucide-react";
+import { Bell, ChevronRight, Coins, Globe, LogOut, Moon, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-function SettingRow({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
+function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button
       type="button"
-      className="group flex w-full items-center gap-lg justify-between border-none bg-transparent px-xl py-[1.35rem] text-left text-white transition-[background-color,transform] duration-150 active:scale-[0.992] active:bg-white/2.5"
+      className="group cursor-pointer flex w-full items-center gap-lg justify-between border-none bg-transparent px-lg py-md text-left text-white transition-[background-color,transform] duration-150 active:scale-[0.992] active:bg-white/2.5"
       onClick={onClick}
     >
       {children}
@@ -83,9 +69,9 @@ export function SettingsPage() {
   const [notifications, setNotifications] = useState(true);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_center,rgba(139,92,246,0.08),transparent_28%),#000] font-body-md text-body-md text-white">
-      <main className="relative z-10 mx-auto flex min-h-screen max-w-container flex-col gap-8 px-5 pt-20 pb-22 sm:px-lg sm:py-22">
-        <section className="flex flex-col gap-3">
+    <div className="min-h-screen bg-black font-body-md text-body-md text-white">
+      <main className="max-w-container mx-auto px-lg pt-25 flex flex-col gap-lg relative z-10 pb-25">
+        <section className="flex flex-col gap-md">
           <SectionHeader>Account</SectionHeader>
           <Card className={cardClassName}>
             <CardContent className="p-0">
@@ -97,9 +83,7 @@ export function SettingsPage() {
                   <div className="text-headline-md font-headline-md tracking-[-0.03em] text-white">
                     Julian Sterling
                   </div>
-                  <div className="mt-1 text-caption-xs text-white/42">
-                    j.sterling@generai.luxe
-                  </div>
+                  <div className="mt-1 text-caption-xs text-white/42">j.sterling@generai.luxe</div>
                 </div>
                 <ChevronRight className={chevronClassName} />
               </SettingRow>
@@ -107,16 +91,16 @@ export function SettingsPage() {
           </Card>
         </section>
 
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-md">
           <SectionHeader>Studio Preferences</SectionHeader>
           <Card className={cardClassName}>
             <CardContent className="p-0">
               <SettingRow>
                 <div className="min-w-0 flex-1">
-                  <div className="text-body-md font-medium tracking-[-0.03em] text-white">
+                  <div className="text-body-md font-body-md tracking-[-0.03em] text-white">
                     Default AI Tone
                   </div>
-                  <div className="mt-1 text-[0.875rem] leading-tight font-medium text-[#8d70ff]">
+                  <div className="mt-1 text-[0.875rem] leading-tight font-body-md text-[#8d70ff]">
                     Creative
                   </div>
                 </div>
@@ -125,10 +109,10 @@ export function SettingsPage() {
               <Separator className="bg-white/9" />
               <SettingRow>
                 <div className="min-w-0 flex-1">
-                  <div className="text-body-md font-medium tracking-[-0.03em] text-white">
+                  <div className="text-body-md font-body-md tracking-[-0.03em] text-white">
                     Default Platform
                   </div>
-                  <div className="mt-1 text-[0.875rem] leading-tight font-medium text-white/46">
+                  <div className="mt-1 text-[0.875rem] leading-tight font-body-md text-white/46">
                     Twitter (X)
                   </div>
                 </div>
@@ -138,7 +122,7 @@ export function SettingsPage() {
           </Card>
         </section>
 
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-md">
           <SectionHeader>Subscription</SectionHeader>
           <div className="overflow-hidden rounded-[1.5rem] border border-[rgba(143,113,255,0.18)] bg-[radial-gradient(circle_at_top_right,rgba(128,91,255,0.18),transparent_30%),linear-gradient(180deg,rgba(30,24,42,0.96),rgba(20,17,28,0.98))] px-xl pt-[1.35rem] pb-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_50px_rgba(0,0,0,0.32)] backdrop-blur-[18px]">
             <div className="flex items-start justify-between gap-lg">
@@ -152,8 +136,7 @@ export function SettingsPage() {
                   </span>
                 </div>
                 <p className="max-w-[16rem] text-caption-xs leading-[1.45] text-white/58">
-                  Access to GPT-4o, unlimited image generation, and priority
-                  rendering.
+                  Access to GPT-4o, unlimited image generation, and priority rendering.
                 </p>
               </div>
               <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-[rgba(158,126,255,0.16)] bg-[radial-gradient(circle_at_35%_35%,rgba(125,92,255,0.28),rgba(125,92,255,0.08)_55%,transparent_70%),rgba(255,255,255,0.02)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
@@ -166,7 +149,7 @@ export function SettingsPage() {
           </div>
         </section>
 
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-md">
           <SectionHeader>Rewards</SectionHeader>
           <div className="flex items-center justify-between gap-4 rounded-[1.5rem] border border-white/10 bg-linear-to-b from-[rgba(24,24,26,0.96)] to-[rgba(16,16,18,0.98)] px-xl py-[1.1rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[18px]">
             <div className="flex items-center gap-4">
@@ -174,10 +157,10 @@ export function SettingsPage() {
                 <Coins className="size-7 text-secondary" />
               </div>
               <div>
-                <div className="text-body-md font-medium tracking-[-0.03em] text-white">
+                <div className="text-body-md font-body-md tracking-[-0.03em] text-white">
                   Generai Points
                 </div>
-                <div className="mt-1 text-[0.875rem] leading-tight font-medium italic text-white/46">
+                <div className="mt-1 text-[0.875rem] leading-tight font-body-md italic text-white/46">
                   Next drop in 4 days
                 </div>
               </div>
@@ -186,30 +169,25 @@ export function SettingsPage() {
               <div className="text-headline-md font-headline-md tracking-[-0.04em] text-secondary">
                 5,000
               </div>
-              <div className="mt-1 text-caption-xs text-white/46">
-                Remaining
-              </div>
+              <div className="mt-1 text-caption-xs text-white/46">Remaining</div>
             </div>
           </div>
         </section>
 
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-md">
           <SectionHeader>App Settings</SectionHeader>
           <Card className={cardClassName}>
             <CardContent className="p-0">
-              <div className="flex w-full items-center justify-between gap-4 px-xl py-[1.18rem] hover:bg-white/[0.025]">
+              <div className="flex w-full items-center justify-between gap-4 px-lg py-md hover:bg-white/[0.025]">
                 <div className="flex items-center gap-4">
                   <div className={appIconClassName}>
                     <Bell className="size-[17px] text-custom-violet" />
                   </div>
-                  <span className="text-body-md font-medium tracking-[-0.03em] text-white">
+                  <span className="text-body-md font-body-md tracking-[-0.03em] text-white">
                     Notifications
                   </span>
                 </div>
-                <IosToggle
-                  checked={notifications}
-                  onChange={setNotifications}
-                />
+                <IosToggle checked={notifications} onChange={setNotifications} />
               </div>
 
               <Separator className="bg-white/9" />
@@ -219,12 +197,12 @@ export function SettingsPage() {
                   <div className={appIconClassName}>
                     <Moon className="size-[17px] text-custom-violet" />
                   </div>
-                  <span className="text-body-md font-medium tracking-[-0.03em] text-white">
+                  <span className="text-body-md font-body-md tracking-[-0.03em] text-white">
                     Appearance
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[0.875rem] leading-tight font-medium text-white/46">
+                  <span className="text-[0.875rem] leading-tight font-body-md text-white/46">
                     Dark
                   </span>
                   <ChevronRight className={chevronClassName} />
@@ -238,12 +216,12 @@ export function SettingsPage() {
                   <div className={appIconClassName}>
                     <Globe className="size-[17px] text-custom-violet" />
                   </div>
-                  <span className="text-body-md font-medium tracking-[-0.03em] text-white">
+                  <span className="text-body-md font-body-md tracking-[-0.03em] text-white">
                     Language
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[0.875rem] leading-tight font-medium text-white/46">
+                  <span className="text-[0.875rem] leading-tight font-body-md text-white/46">
                     English
                   </span>
                   <ChevronRight className={chevronClassName} />
@@ -252,21 +230,19 @@ export function SettingsPage() {
 
               <Separator className="bg-white/9" />
 
-              <div className="flex items-center justify-center gap-[0.65rem] px-xl py-[1.2rem] transition-[background-color,transform] duration-150 hover:bg-[#ff5a52]/5 active:scale-[0.992]">
+              <div className="flex cursor-pointer items-center justify-center gap-[0.65rem] px-xl py-[1.2rem] transition-[background-color,transform] duration-150 hover:bg-[#ff5a52]/5 active:scale-[0.992]">
                 <LogOut className="size-5 text-[#ff5a52]" />
-                <span className="font-body-md text-body-md text-[#ff5a52]">
-                  Sign Out
-                </span>
+                <span className="font-body-md text-body-md text-[#ff5a52]">Sign Out</span>
               </div>
             </CardContent>
           </Card>
         </section>
 
-        <div className="mt-1 pb-5 text-center opacity-90">
+        <div className="mt-md text-center opacity-90">
           <p className="font-mono-label text-[10px] uppercase tracking-[0.28em] text-white/60">
             Generai Luxe v2.4.0
           </p>
-          <p className="mt-[0.45rem] text-[10px] font-medium text-white/42">
+          <p className="mt-[0.45rem] text-[10px] font-body-md text-white/42">
             Made for the creators of tomorrow.
           </p>
         </div>

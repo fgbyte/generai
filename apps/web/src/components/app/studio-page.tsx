@@ -38,14 +38,8 @@ export function StudioPage() {
         <section className="mt-md flex flex-col gap-lg">
           {/* Content Type Select */}
           <div className="flex flex-col gap-sm">
-            <Label className="text-mono-label text-text-dim pl-xs">
-              Content Type
-            </Label>
-            <CustomSelect
-              value={contentType}
-              onChange={setContentType}
-              options={CONTENT_TYPES}
-            />
+            <Label className="text-mono-label text-text-dim pl-xs">Content Type</Label>
+            <CustomSelect value={contentType} onChange={setContentType} options={CONTENT_TYPES} />
           </div>
 
           {/* Instagram Upload */}
@@ -61,9 +55,7 @@ export function StudioPage() {
 
           {/* Prompt Textarea */}
           <div className="flex flex-col gap-sm">
-            <Label className="text-mono-label text-text-dim pl-xs">
-              Prompt
-            </Label>
+            <Label className="text-mono-label text-text-dim pl-xs">Prompt</Label>
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -73,10 +65,7 @@ export function StudioPage() {
           </div>
 
           {/* Pro Tip Banner */}
-          <ProTipBanner
-            tip="Specificity matters."
-            highlight='"under 280 characters"'
-          />
+          <ProTipBanner tip="Specificity matters." highlight='"under 280 characters"' />
 
           {/* Primary Action */}
           <Button className="btn-primary mt-[1.2rem] h-[3.0625rem] w-full rounded-[1rem] border-none bg-linear-to-r from-[#7c5ce6] to-[#8f67ff] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_28px_rgba(102,63,219,0.35)] transition-colors duration-150 hover:from-[#7656df] hover:to-[#8a63fa] text-sm sm:test-md">

@@ -46,10 +46,7 @@ const defaultItems: NavItem[] = [
   },
 ];
 
-export function BottomNavBar({
-  items = defaultItems,
-  className,
-}: BottomNavBarProps) {
+export function BottomNavBar({ items = defaultItems, className }: BottomNavBarProps) {
   const navItems = useActiveNav(items);
 
   return (

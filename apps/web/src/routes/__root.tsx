@@ -40,9 +40,7 @@ function RootComponent() {
     select: (state) => state.location.pathname,
   });
   const showHeader =
-    pathname !== "/" &&
-    pathname !== "/verify-email" &&
-    !pathname.startsWith("/dashboard");
+    pathname !== "/" && pathname !== "/verify-email" && !pathname.startsWith("/dashboard");
 
   return (
     <>

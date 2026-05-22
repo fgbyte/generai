@@ -10,12 +10,7 @@ interface CustomSelectProps {
   className?: string;
 }
 
-export function CustomSelect({
-  value,
-  onChange,
-  options,
-  className,
-}: CustomSelectProps) {
+export function CustomSelect({ value, onChange, options, className }: CustomSelectProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -49,10 +44,7 @@ export function CustomSelect({
           {selected?.label}
         </span>
         <ChevronDown
-          className={cn(
-            "size-5 text-white/40 transition-transform",
-            open && "rotate-180",
-          )}
+          className={cn("size-5 text-white/40 transition-transform", open && "rotate-180")}
           aria-hidden="true"
         />
       </button>

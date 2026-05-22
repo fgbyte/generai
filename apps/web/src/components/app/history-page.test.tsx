@@ -87,8 +87,6 @@ describe("HistoryPage", () => {
     renderHistoryPage();
 
     expect(await screen.findByText("No Activity Yet")).toBeInTheDocument();
-    expect(
-      screen.getByText(/Your generated content will appear here/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Your generated content will appear here/i)).toBeInTheDocument();
   });
 });

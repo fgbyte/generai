@@ -1,11 +1,7 @@
 import heroImageUrl from "@/assets/generai-login-hero.jpg";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
-import {
-  createFileRoute,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { Loader2, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -83,9 +79,8 @@ function RouteComponent() {
                 {email ? (
                   <>
                     We've sent a verification link to{" "}
-                    <span className="font-semibold text-white">{email}</span>.
-                    Please click the link to verify your account before signing
-                    in.
+                    <span className="font-semibold text-white">{email}</span>. Please click the link
+                    to verify your account before signing in.
                   </>
                 ) : (
                   "We've sent a verification link to your email address. Please click the link to verify your account before signing in."

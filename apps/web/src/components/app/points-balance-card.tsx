@@ -9,11 +9,7 @@ interface PointsBalanceCardProps {
   className?: string;
 }
 
-export function PointsBalanceCard({
-  balance,
-  onGetMore,
-  className,
-}: PointsBalanceCardProps) {
+export function PointsBalanceCard({ balance, onGetMore, className }: PointsBalanceCardProps) {
   return (
     <section
       className={cn(

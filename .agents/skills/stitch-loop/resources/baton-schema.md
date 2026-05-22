@@ -15,9 +15,9 @@ page: <filename-without-extension>
 
 ### Frontmatter (YAML)
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `page` | string | Yes | Output filename (without `.html` extension) |
+| Field  | Type   | Required | Description                                 |
+| ------ | ------ | -------- | ------------------------------------------- |
+| `page` | string | Yes      | Output filename (without `.html` extension) |
 
 ### Body (Markdown)
 
@@ -33,9 +33,11 @@ The body contains the full Stitch prompt, which must include:
 ---
 page: achievements
 ---
+
 A competitive, gamified achievements page with terminal aesthetics.
 
 **DESIGN SYSTEM (REQUIRED):**
+
 - Platform: Web, Desktop-first
 - Theme: Dark, minimal, data-focused
 - Background: Deep charcoal/near-black (#0f1419)
@@ -45,6 +47,7 @@ A competitive, gamified achievements page with terminal aesthetics.
 - Layout: Centered content, max-width container
 
 **Page Structure:**
+
 1. Header with title "Achievements" and navigation
 2. Badge grid showing locked/unlocked states with icons
 3. Progress section with milestone bars
