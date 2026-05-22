@@ -1,23 +1,31 @@
 # generai
 
-This project is a modified version of [Better Fullstack](https://github.com/Marve10s/Better-Fullstack), a modern TypeScript stack that combines React, TanStack Router, Hono, and more.
+<div align="center">
 
-⚠️ **Note**: This is not the original template. It has been modified and optimized, so it may differ from the original Better Fullstack template.
+[![CI](https://img.shields.io/github/actions/workflow/status/YOUR_ORG/generai/ci.yml?style=flat-square)](https://github.com/YOUR_ORG/generai/actions)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/types-TypeScript-3178C6?style=flat-square)](https://www.typescriptlang.org)
+[![Built with Turborepo](https://img.shields.io/badge/built%20with-Turborepo-ef4444?style=flat-square)](https://turbo.build)
+[![Bun](https://img.shields.io/badge/runtime-Bun-%23f9f9f9?style=flat-square)](https://bun.sh)
+
+</div>
+
+Generai is an AI‑powered content‑generation platform that helps users create engaging social‑media posts and captions, and schedule them to be published on specific dates across various social networks.
 
 ## Features
 
-- **TypeScript** - For type safety and improved developer experience
-- **TanStack Router** - File-based routing with full type safety
-- **TailwindCSS** - CSS framework
-- **shadcn/ui** - UI components
-- **Hono** - Lightweight, performant server framework
-- **workers** - Runtime environment
-- **Drizzle** - TypeScript-first ORM
-- **PostgreSQL** - Database engine
-- **Authentication** - Better Auth
-- **Turborepo** - Optimized monorepo build system
-- **Oxlint** - Oxlint + Oxfmt (linting & formatting)
-- **TanStack Query** - Async state management & data fetching
+| Feature                   | Description                                                       |
+| ------------------------- | ----------------------------------------------------------------- |
+| ⚛️ **React + TanStack Router** | Type-safe file-based routing with full type safety              |
+| 🎨 **Tailwind CSS v4 + shadcn/ui** | Modern utility-first CSS with production‑ready components |
+| ⚡ **Hono**               | Lightweight, performant server framework for Cloudflare Workers    |
+| 🗄️ **Drizzle ORM + PostgreSQL** | TypeScript-first ORM with migrations and type-safe queries     |
+| 🔐 **Better Auth**        | Full authentication (email/password, OAuth, session management)    |
+| 📧 **Postmark**           | Transactional email delivery                                      |
+| 📦 **Turborepo**          | Optimized monorepo build system with smart caching                 |
+| 🔍 **Oxlint + Oxfmt**     | Fast linting and formatting (no ESLint/Prettier)                   |
+| 🔄 **TanStack Query**     | Async state management and server data synchronization             |
+| ☁️ **Cloudflare Workers** | Edge-deployed server runtime via Alchemy                          |
 
 ## Environment Variables
 
@@ -114,20 +122,7 @@ Each stage creates isolated Workers:
 - `generai-web-staging` / `generai-server-staging`
 - `generai-web-production` / `generai-server-production`
 
-See [ENVIRONMENTS.md](./packages/infra/ENVIRONMENTS.md) for details.
-
-## Git Hooks and Formatting
-
-- Format and lint fix: `bun run check`
-
-## Dependency Automation
-
-Dependency updates are automated with Dependabot, a Bun catalog updater, CI gating, and branch protection. This is a safety-critical setup: `main` must be protected and `CI / ci` must be required before enabling dependency automerge.
-
-See:
-
-- [Dependency Automation](./docs/dependency-automation.md)
-- [Dependency Automation Checklist](./docs/DEPENDENCY_AUTOMATION_CHECKLIST.md)
+See [ENVIRONMENTS.md](./docs/ENVIRONMENTS.md) for details.
 
 ## Project Structure
 
@@ -164,3 +159,43 @@ generai/
 - `bun run destroy:dev`: Destroy development
 - `bun run destroy:staging`: Destroy staging
 - `bun run destroy:prod`: Destroy production
+
+## Git Hooks and Formatting
+
+- Format and lint fix: `bun run check`
+
+## Dependency Automation
+
+Dependency updates are automated with Dependabot, a Bun catalog updater, CI gating, and branch protection. This is a safety-critical setup: `main` must be protected and `CI / ci` must be required before enabling dependency automerge.
+
+See:
+
+- [Dependency Automation](./docs/dependency-automation.md)
+- [Dependency Automation Checklist](./docs/DEPENDENCY_AUTOMATION_CHECKLIST.md)
+
+---
+
+## Contributing
+
+We welcome contributions from the community! Whether you're fixing a bug, adding a feature, or improving documentation, your help is appreciated.
+
+Please read our [Contributing Guide](./docs/CONTRIBUTING.md) for:
+
+- Development setup and workflow
+- Coding conventions (TypeScript, Oxlint, Drizzle, etc.)
+- Commit message guidelines (Conventional Commits)
+- Pull request process and checklist
+
+This project is governed by a [Code of Conduct](./docs/CODE_OF_CONDUCT.md). By participating, you agree to uphold its standards.
+
+### Quick Links
+
+- [Contributing Guide](./docs/CONTRIBUTING.md)
+- [Code of Conduct](./docs/CODE_OF_CONDUCT.md)
+- [Security Policy](./docs/SECURITY.md)
+- [Report a Bug](.github/ISSUE_TEMPLATE/bug_report.md)
+- [Request a Feature](.github/ISSUE_TEMPLATE/feature_request.md)
+
+## License
+
+Distributed under the **MIT License**. See [LICENSE](./LICENSE) for more information.

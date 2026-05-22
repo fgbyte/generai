@@ -1,6 +1,18 @@
 {
   "name": "generai",
-  "private": true,
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "author": "fgbyte",
+  "description": "AI-powered social media content generation platform with multi-platform scheduling",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fgbyte/generai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fgbyte/generai/issues"
+  },
+  "homepage": "https://github.com/fgbyte/generai#readme",
   "workspaces": {
     "packages": [
       "apps/*",
