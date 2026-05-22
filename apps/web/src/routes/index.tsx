@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
 
     if (session?.data) {
       throw redirect({
-        to: "/dashboard",
+        to: "/app",
       });
     }
   },
@@ -48,13 +48,15 @@ function HomeComponent() {
               Social Media Made Simple
             </h1>
             <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-white/80">
-              GenerAI empowers you to craft captivating social media posts and streamline your
-              workflow in seconds
+              GenerAI empowers you to craft captivating social media posts and
+              streamline your workflow in seconds
             </p>
           </header>
         )}
 
-        <div className={authMode ? "mb-2 w-full max-w-md" : "mb-6 w-full max-w-md"}>
+        <div
+          className={authMode ? "mb-2 w-full max-w-md" : "mb-6 w-full max-w-md"}
+        >
           {authMode ? (
             <AuthPanel mode={authMode} onBack={() => setAuthMode(null)} />
           ) : (
@@ -104,11 +106,17 @@ function AuthPanel({ mode, onBack }: { mode: AuthMode; onBack: () => void }) {
         >
           <ArrowLeft className="size-5" />
         </button>
-        <h2 className="text-lg font-bold">{mode === "sign-in" ? "Sign in" : "Sign Up"}</h2>
+        <h2 className="text-lg font-bold">
+          {mode === "sign-in" ? "Sign in" : "Sign Up"}
+        </h2>
         <span className="size-10" />
       </div>
 
-      {mode === "sign-in" ? <InlineSignInForm /> : <InlineSignUpForm onSignedUp={onBack} />}
+      {mode === "sign-in" ? (
+        <InlineSignInForm />
+      ) : (
+        <InlineSignUpForm onSignedUp={onBack} />
+      )}
     </div>
   );
 }
@@ -132,10 +140,11 @@ function InlineSignInForm() {
         {
           onSuccess: () => {
             toast.success("Sign in successful");
-            navigate({ to: "/dashboard" });
+            navigate({ to: "/app" });
           },
           onError: (error) => {
-            const errorMessage = error.error.message || error.error.statusText || "";
+            const errorMessage =
+              error.error.message || error.error.statusText || "";
 
             if (
               errorMessage.toLowerCase().includes("email") &&
