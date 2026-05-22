@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![CI](https://img.shields.io/github/actions/workflow/status/YOUR_ORG/generai/ci.yml?style=flat-square)](https://github.com/YOUR_ORG/generai/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/fgbyte/generai/ci.yml?style=flat-square)](https://github.com/fgbyte/generai/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/types-TypeScript-3178C6?style=flat-square)](https://www.typescriptlang.org)
 [![Built with Turborepo](https://img.shields.io/badge/built%20with-Turborepo-ef4444?style=flat-square)](https://turbo.build)
