@@ -1,4 +1,11 @@
-import { AtSign, BriefcaseBusiness, Camera, ChevronRight, Filter, Sparkles } from "lucide-react";
+import {
+  AtSign,
+  BriefcaseBusiness,
+  Camera,
+  ChevronRight,
+  Filter,
+  Sparkles,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
@@ -42,7 +49,11 @@ function formatDateGroup(dateStr: string): string {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterday = new Date(today.getTime() - 86400000);
-  const itemDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const itemDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
 
   if (itemDate.getTime() === today.getTime()) return "TODAY";
   if (itemDate.getTime() === yesterday.getTime()) return "YESTERDAY";
@@ -58,7 +69,11 @@ function formatTime(dateStr: string): string {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterday = new Date(today.getTime() - 86400000);
-  const itemDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const itemDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
 
   const time = date.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -98,8 +113,13 @@ function ActivityCard({ item }: { item: HistoryItem }) {
       {/* Content */}
       <div className="flex-grow min-w-0">
         <div className="flex justify-between items-start mb-xxs">
-          <span className="text-white font-headline-md text-[15px]">{config.label}</span>
-          <Badge variant="secondary" className="text-[10px] font-bold">
+          <span className="text-white font-headline-md text-[15px]">
+            {config.label}
+          </span>
+          <Badge
+            variant="secondary"
+            className="bg-secondary/12 text-secondary text-[10px] font-bold"
+          >
             {config.points} pts
           </Badge>
         </div>
@@ -118,7 +138,11 @@ function ActivityCard({ item }: { item: HistoryItem }) {
 }
 
 function DateHeader({ label }: { label: string }) {
-  return <p className="text-text-muted font-mono-label text-mono-label mt-xl px-xs">{label}</p>;
+  return (
+    <p className="text-text-muted font-mono-label text-mono-label mt-xl px-xs">
+      {label}
+    </p>
+  );
 }
 
 function EmptyState() {
@@ -128,9 +152,12 @@ function EmptyState() {
       <div className="w-12 h-12 rounded-full bg-surface-form flex items-center justify-center mb-md">
         <Sparkles className="size-6 text-text-muted" />
       </div>
-      <h3 className="font-headline-md text-headline-md text-white mb-sm">No Activity Yet</h3>
+      <h3 className="font-headline-md text-headline-md text-white mb-sm">
+        No Activity Yet
+      </h3>
       <p className="text-text-dim text-body-md max-w-xs">
-        Your generated content will appear here. Head to the Studio to create your first post!
+        Your generated content will appear here. Head to the Studio to create
+        your first post!
       </p>
     </div>
   );
@@ -155,7 +182,9 @@ export function HistoryPage() {
         {/* Header */}
         <div className="mb-xl flex justify-between items-end">
           <div>
-            <p className="text-primary font-mono-label text-mono-label mb-xs">ACTIVITY</p>
+            <p className="text-primary font-mono-label text-mono-label mb-xs">
+              ACTIVITY
+            </p>
             <h2 className="font-display-xl text-display-xl">History</h2>
           </div>
           <Button
@@ -178,17 +207,21 @@ export function HistoryPage() {
           <EmptyState />
         ) : (
           <div className="space-y-md">
-            {Array.from(grouped.entries()).map(([dateLabel, dateItems], groupIndex) => (
-              <div key={dateLabel}>
-                {groupIndex > 0 && <Separator className="my-md bg-border-glass/30" />}
-                <DateHeader label={dateLabel} />
-                <div className="space-y-sm mt-sm">
-                  {dateItems.map((item) => (
-                    <ActivityCard key={item.id} item={item} />
-                  ))}
+            {Array.from(grouped.entries()).map(
+              ([dateLabel, dateItems], groupIndex) => (
+                <div key={dateLabel}>
+                  {groupIndex > 0 && (
+                    <Separator className="my-md bg-border-glass/30" />
+                  )}
+                  <DateHeader label={dateLabel} />
+                  <div className="space-y-sm mt-sm">
+                    {dateItems.map((item) => (
+                      <ActivityCard key={item.id} item={item} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         )}
       </main>

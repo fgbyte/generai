@@ -1,12 +1,28 @@
 import { useState } from "react";
-import { Bell, ChevronRight, Coins, Globe, LogOut, Moon, Sparkles } from "lucide-react";
+import {
+  Bell,
+  ChevronRight,
+  Coins,
+  Globe,
+  LogOut,
+  Moon,
+  Sparkles,
+} from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { authClient } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 
-function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+function SettingRow({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
   return (
     <button
       type="button"
@@ -26,35 +42,35 @@ function SectionHeader({ children }: { children: string }) {
   );
 }
 
-function IosToggle({
-  checked,
-  onChange,
-}: {
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onChange(!checked)}
-      className={cn(
-        "relative inline-flex h-8 w-[3.25rem] shrink-0 rounded-full border border-transparent p-0 transition-[background-color,box-shadow] duration-200",
-        checked
-          ? "bg-linear-to-b from-primary to-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_0_1px_rgba(59,130,246,0.28)]"
-          : "bg-white/14 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]",
-      )}
-    >
-      <span
-        className={cn(
-          "pointer-events-none absolute top-[2px] block h-[1.625rem] w-[1.625rem] rounded-full bg-linear-to-b from-white to-white/95 shadow-[0_2px_8px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.78)] transition-transform duration-200 ease-out",
-          checked ? "translate-x-[26px]" : "translate-x-[3px]",
-        )}
-      />
-    </button>
-  );
-}
+// function IosToggle({
+//   checked,
+//   onChange,
+// }: {
+//   checked: boolean;
+//   onChange: (checked: boolean) => void;
+// }) {
+//   return (
+//     <button
+//       type="button"
+//       role="switch"
+//       aria-checked={checked}
+//       onClick={() => onChange(!checked)}
+//       className={cn(
+//         "relative inline-flex h-8 w-[3.25rem] shrink-0 rounded-full border border-transparent p-0 transition-[background-color,box-shadow] duration-200",
+//         checked
+//           ? "bg-linear-to-b from-primary to-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_0_1px_rgba(59,130,246,0.28)]"
+//           : "bg-white/14 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]",
+//       )}
+//     >
+//       <span
+//         className={cn(
+//           "pointer-events-none absolute top-[2px] block h-[1.625rem] w-[1.625rem] rounded-full bg-linear-to-b from-white to-white/95 shadow-[0_2px_8px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.78)] transition-transform duration-200 ease-out",
+//           checked ? "translate-x-[26px]" : "translate-x-[3px]",
+//         )}
+//       />
+//     </button>
+//   );
+// }
 
 const cardClassName =
   "overflow-hidden rounded-[1.5rem] border border-white/10 bg-linear-to-b from-[rgba(24,24,26,0.96)] to-[rgba(16,16,18,0.98)] py-0 ring-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_50px_rgba(0,0,0,0.35)] backdrop-blur-[18px]";
@@ -62,15 +78,29 @@ const cardClassName =
 const chevronClassName =
   "size-5 shrink-0 text-white/26 transition-[transform,color] duration-150 group-hover:translate-x-[2px] group-hover:text-white/42 group-active:translate-x-[2px]";
 
-const appIconClassName =
-  "flex size-10 shrink-0 items-center justify-center rounded-[0.95rem] border border-[rgba(124,58,237,0.18)] bg-[radial-gradient(circle_at_25%_25%,rgba(139,92,246,0.22),transparent_70%),rgba(88,49,183,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]";
+// const appIconClassName =
+//   "flex size-10 shrink-0 items-center justify-center rounded-[0.95rem] border border-[rgba(124,58,237,0.18)] bg-[radial-gradient(circle_at_25%_25%,rgba(139,92,246,0.22),transparent_70%),rgba(88,49,183,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]";
 
 export function SettingsPage() {
-  const [notifications, setNotifications] = useState(true);
+  // const [notifications, setNotifications] = useState(true);
+  const navigate = useNavigate();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          navigate({ to: "/" });
+        },
+      },
+    });
+    setIsSigningOut(false);
+  };
 
   return (
     <div className="min-h-screen bg-black font-body-md text-body-md text-white">
-      <main className="max-w-container mx-auto px-xl pt-20 flex flex-col gap-lg relative z-10 pb-25">
+      <main className="max-w-container mx-auto px-xl pt-20 flex flex-col gap-xl relative z-10 pb-25">
         <section className="flex flex-col gap-md">
           <SectionHeader>Account</SectionHeader>
           <Card className={cardClassName}>
@@ -83,7 +113,9 @@ export function SettingsPage() {
                   <div className="text-headline-md font-headline-md tracking-[-0.03em] text-white">
                     Julian Sterling
                   </div>
-                  <div className="mt-1 text-caption-xs text-white/42">j.sterling@generai.luxe</div>
+                  <div className="mt-1 text-caption-xs text-white/42">
+                    j.sterling@generai.luxe
+                  </div>
                 </div>
                 <ChevronRight className={chevronClassName} />
               </SettingRow>
@@ -122,7 +154,8 @@ export function SettingsPage() {
           </Card>
         </section>
 
-        <section className="flex flex-col gap-md">
+        {/*Subscription Section*/}
+        {/*<section className="flex flex-col gap-md">
           <SectionHeader>Subscription</SectionHeader>
           <div className="overflow-hidden rounded-[1.5rem] border border-[rgba(143,113,255,0.18)] bg-[radial-gradient(circle_at_top_right,rgba(128,91,255,0.18),transparent_30%),linear-gradient(180deg,rgba(30,24,42,0.96),rgba(20,17,28,0.98))] px-xl pt-[1.35rem] pb-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_50px_rgba(0,0,0,0.32)] backdrop-blur-[18px]">
             <div className="flex items-start justify-between gap-lg">
@@ -136,7 +169,8 @@ export function SettingsPage() {
                   </span>
                 </div>
                 <p className="max-w-[16rem] text-caption-xs leading-[1.45] text-white/58">
-                  Access to GPT-4o, unlimited image generation, and priority rendering.
+                  Access to GPT-4o, unlimited image generation, and priority
+                  rendering.
                 </p>
               </div>
               <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-[rgba(158,126,255,0.16)] bg-[radial-gradient(circle_at_35%_35%,rgba(125,92,255,0.28),rgba(125,92,255,0.08)_55%,transparent_70%),rgba(255,255,255,0.02)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
@@ -147,7 +181,7 @@ export function SettingsPage() {
               Manage Subscription
             </Button>
           </div>
-        </section>
+        </section>*/}
 
         <section className="flex flex-col gap-md">
           <SectionHeader>Rewards</SectionHeader>
@@ -169,16 +203,19 @@ export function SettingsPage() {
               <div className="text-headline-md font-headline-md tracking-[-0.04em] text-secondary">
                 5,000
               </div>
-              <div className="mt-1 text-caption-xs text-white/46">Remaining</div>
+              <div className="mt-1 text-caption-xs text-white/46">
+                Remaining
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="flex flex-col gap-md">
-          <SectionHeader>App Settings</SectionHeader>
+        <section className="flex flex-col gap-md mt-10">
+          {/*<SectionHeader>App Settings</SectionHeader>*/}
           <Card className={cardClassName}>
             <CardContent className="p-0">
-              <div className="flex w-full items-center justify-between gap-4 px-xl py-lg hover:bg-white/[0.025]">
+              {/*Notifications / Appearance / Language*/}
+              {/*<div className="flex w-full items-center justify-between gap-4 px-xl py-lg hover:bg-white/[0.025]">
                 <div className="flex items-center gap-4">
                   <div className={appIconClassName}>
                     <Bell className="size-[17px] text-custom-violet" />
@@ -187,7 +224,10 @@ export function SettingsPage() {
                     Notifications
                   </span>
                 </div>
-                <IosToggle checked={notifications} onChange={setNotifications} />
+                <IosToggle
+                  checked={notifications}
+                  onChange={setNotifications}
+                />
               </div>
 
               <Separator className="bg-white/9" />
@@ -226,14 +266,21 @@ export function SettingsPage() {
                   </span>
                   <ChevronRight className={chevronClassName} />
                 </div>
-              </SettingRow>
+              </SettingRow>*/}
 
               <Separator className="bg-white/9" />
 
-              <div className="flex cursor-pointer items-center justify-center gap-[0.65rem] px-xl py-[1.2rem] transition-[background-color,transform] duration-150 hover:bg-[#ff5a52]/5 active:scale-[0.992]">
+              <button
+                type="button"
+                onClick={handleSignOut}
+                disabled={isSigningOut}
+                className="flex w-full cursor-pointer items-center justify-center gap-[0.65rem] px-xl py-[1.2rem] border-none bg-transparent transition-[background-color,transform] duration-150 hover:bg-[#ff5a52]/5 active:scale-[0.992] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 <LogOut className="size-5 text-[#ff5a52]" />
-                <span className="font-body-md text-body-md text-[#ff5a52]">Sign Out</span>
-              </div>
+                <span className="font-body-md text-body-md text-[#ff5a52]">
+                  {isSigningOut ? "Signing out..." : "Sign Out"}
+                </span>
+              </button>
             </CardContent>
           </Card>
         </section>
