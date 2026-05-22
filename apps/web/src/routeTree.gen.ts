@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as TodosRouteImport } from './routes/todos'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
+import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
+import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -25,69 +28,105 @@ const TodosRoute = TodosRouteImport.update({
   path: '/todos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
-  getParentRoute: () => rootRouteImport,
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   id: '/demo/tanstack-query',
   path: '/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppHistoryIndexRoute = AppHistoryIndexRouteImport.update({
+  id: '/history/',
+  path: '/history/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/dashboard/': typeof DashboardIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/app/history/': typeof AppHistoryIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/dashboard': typeof DashboardIndexRoute
+  '/app': typeof AppIndexRoute
+  '/app/history': typeof AppHistoryIndexRoute
+  '/app/settings': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/dashboard/': typeof DashboardIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/app/history/': typeof AppHistoryIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/todos'
     | '/verify-email'
     | '/demo/tanstack-query'
-    | '/dashboard/'
+    | '/app/'
+    | '/app/history/'
+    | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/todos' | '/verify-email' | '/demo/tanstack-query' | '/dashboard'
-  id:
-    | '__root__'
+  to:
     | '/'
     | '/todos'
     | '/verify-email'
     | '/demo/tanstack-query'
-    | '/dashboard/'
+    | '/app'
+    | '/app/history'
+    | '/app/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/todos'
+    | '/verify-email'
+    | '/demo/tanstack-query'
+    | '/app/'
+    | '/app/history/'
+    | '/app/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   TodosRoute: typeof TodosRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -106,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TodosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -113,12 +159,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/demo/tanstack-query': {
       id: '/demo/tanstack-query'
@@ -127,15 +173,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/settings/': {
+      id: '/app/settings/'
+      path: '/settings'
+      fullPath: '/app/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/history/': {
+      id: '/app/history/'
+      path: '/history'
+      fullPath: '/app/history/'
+      preLoaderRoute: typeof AppHistoryIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppHistoryIndexRoute: typeof AppHistoryIndexRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppHistoryIndexRoute: AppHistoryIndexRoute,
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   TodosRoute: TodosRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

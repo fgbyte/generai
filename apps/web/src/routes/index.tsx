@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
 
     if (session?.data) {
       throw redirect({
-        to: "/dashboard",
+        to: "/app",
       });
     }
   },
@@ -140,7 +140,7 @@ function InlineSignInForm() {
         {
           onSuccess: () => {
             toast.success("Sign in successful");
-            navigate({ to: "/dashboard" });
+            navigate({ to: "/app" });
           },
           onError: (error) => {
             const errorMessage =

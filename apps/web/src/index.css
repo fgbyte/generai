@@ -20,313 +20,259 @@
    Design system: Generai Luxe — Glassmorphism / Midnight Studio
    ════════════════════════════════════════════════════════════ */
 @theme {
+    /* ── Colors ────────────────────────────────────────────── */
+    --color-black: #000000;
+    --color-white: #ffffff;
 
-  /* ── Colors ────────────────────────────────────────────── */
-  --color-black:              #000000;
-  --color-white:              #ffffff;
+    /* Glassmorphism surfaces */
+    --color-surface-deep: rgba(28, 28, 30, 0.9);
+    --color-surface-material: rgba(55, 55, 55, 0.5);
+    --color-surface-thick: rgba(44, 44, 46, 0.8);
+    --color-surface-form: rgba(118, 118, 128, 0.24);
 
-  /* Glassmorphism surfaces */
-  --color-surface-deep:       rgba(28, 28, 30, 0.9);
-  --color-surface-material:   rgba(28, 28, 30, 0.6);
-  --color-surface-thick:      rgba(44, 44, 46, 0.8);
-  --color-surface-form:       rgba(118, 118, 128, 0.24);
+    /* Glass border */
+    --color-border-glass: rgba(255, 255, 255, 0.15);
 
-  /* Glass border */
-  --color-border-glass:       rgba(255, 255, 255, 0.15);
+    /* Typography colors */
+    --color-text-dim: rgba(255, 255, 255, 0.5);
+    --color-text-muted: rgba(255, 255, 255, 0.3);
 
-  /* Typography colors */
-  --color-text-dim:           rgba(255, 255, 255, 0.5);
-  --color-text-muted:         rgba(255, 255, 255, 0.3);
+    /* Brand accents — inferred from prose */
+    --color-primary: #5e5ce6; /* Custom Violet — active states, primary actions */
+    --color-primary-hover: #7c3aed;
+    --color-primary-active: #6d28d9;
+    --color-primary-disabled: rgba(139, 92, 246, 0.4);
+    --color-on-primary: #ffffff;
 
-  /* Brand accents — inferred from prose */
-  --color-primary:            #8B5CF6;   /* Custom Violet — active states, primary actions */
-  --color-primary-hover:      #7C3AED;
-  --color-primary-active:     #6D28D9;
-  --color-primary-disabled:   rgba(139, 92, 246, 0.4);
-  --color-on-primary:         #ffffff;
+    --color-secondary: #ffd60a; /* Custom Gold — balances, premium features */
+    --color-on-secondary: #000000;
 
-  --color-secondary:          #F59E0B;   /* Custom Gold — balances, premium features */
-  --color-on-secondary:       #000000;
+    /* Semantic aliases for shadcn */
+    --color-neutral: #000000; /* True black base */
+    --color-surface: rgba(28, 28, 30, 0.6);
+    --color-tertiary: #5e5ce6; /* CTA / action color = violet */
+    --color-on-tertiary: #ffffff;
+    --color-tertiary-container: rgba(139, 92, 246, 0.15);
+    --color-border: rgba(255, 255, 255, 0.15);
+    --color-foreground: #ffffff;
+    --color-error: #dc2626; /* synthesized — no error token in DESIGN.md */
 
-  /* Semantic aliases for shadcn */
-  --color-neutral:            #000000;   /* True black base */
-  --color-surface:            rgba(28, 28, 30, 0.6);
-  --color-tertiary:           #8B5CF6;   /* CTA / action color = violet */
-  --color-on-tertiary:        #ffffff;
-  --color-tertiary-container: rgba(139, 92, 246, 0.15);
-  --color-border:             rgba(255, 255, 255, 0.15);
-  --color-foreground:         #ffffff;
-  --color-error:              #dc2626;   /* synthesized — no error token in DESIGN.md */
+    /* ── Font Families ─────────────────────────────────────── */
+    --font-body: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
 
-  /* ── Font Families ─────────────────────────────────────── */
-  --font-body:    "Hanken Grotesk", system-ui, -apple-system, sans-serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+    /* ── Type Scale ────────────────────────────────────────── */
+    --text-display-xl: 2.125rem; /* 34px */
+    --text-display-xl--line-height: 1.206; /* 41px / 34px */
 
-  /* ── Type Scale ────────────────────────────────────────── */
-  --text-display-xl:          2.125rem;  /* 34px */
-  --text-display-xl--line-height: 1.206; /* 41px / 34px */
+    --text-headline-md: 1.25rem; /* 20px */
+    --text-headline-md--line-height: 1.2; /* 24px / 20px */
 
-  --text-headline-md:         1.25rem;   /* 20px */
-  --text-headline-md--line-height: 1.2;  /* 24px / 20px */
+    --text-body-md: 1.0625rem; /* 17px */
+    --text-body-md--line-height: 1.294; /* 22px / 17px */
 
-  --text-body-md:             1.0625rem; /* 17px */
-  --text-body-md--line-height: 1.294;    /* 22px / 17px */
+    --text-button-md: 1.0625rem; /* 17px */
+    --text-button-md--line-height: 1.294; /* 22px / 17px */
 
-  --text-button-md:           1.0625rem; /* 17px */
-  --text-button-md--line-height: 1.294;  /* 22px / 17px */
+    --text-mono-label: 0.75rem; /* 12px */
 
-  --text-mono-label:          0.75rem;   /* 12px */
+    --text-caption-xs: 0.75rem; /* 12px */
+    --text-caption-xs--line-height: 1.333; /* 16px / 12px */
 
-  --text-caption-xs:          0.75rem;   /* 12px */
-  --text-caption-xs--line-height: 1.333; /* 16px / 12px */
+    --text-nav-label: 0.625rem; /* 10px */
+    --text-nav-label--line-height: 1.2; /* 12px / 10px */
 
-  --text-nav-label:           0.625rem;  /* 10px */
-  --text-nav-label--line-height: 1.2;    /* 12px / 10px */
+    /* ── Font Weights ──────────────────────────────────────── */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
 
-  /* ── Font Weights ──────────────────────────────────────── */
-  --font-weight-normal:       400;
-  --font-weight-medium:       500;
-  --font-weight-semibold:     600;
-  --font-weight-bold:         700;
+    /* ── Letter Spacing ────────────────────────────────────── */
+    --tracking-tight-display: -0.024em; /* -0.4px / 17px approx for display */
+    --tracking-tight-body: -0.024em; /* -0.41px / 17px for body-md */
+    --tracking-wide-label: 0.042em; /* 0.5px / 12px for mono-label */
 
-  /* ── Letter Spacing ────────────────────────────────────── */
-  --tracking-tight-display:   -0.024em;  /* -0.4px / 17px approx for display */
-  --tracking-tight-body:      -0.024em;  /* -0.41px / 17px for body-md */
-  --tracking-wide-label:      0.042em;   /* 0.5px / 12px for mono-label */
+    /* ── Spacing ───────────────────────────────────────────── */
+    --spacing-xxs: 0.125rem; /* 2px */
+    --spacing-xs: 0.25rem; /* 4px */
+    --spacing-sm: 0.5rem; /* 8px */
+    --spacing-md: 0.75rem; /* 12px */
+    --spacing-lg: 1rem; /* 16px */
+    --spacing-xl: 1.25rem; /* 20px */
+    --spacing-xxl: 2rem; /* 32px */
+    --spacing-section: 5rem; /* 80px */
 
-  /* ── Spacing ───────────────────────────────────────────── */
-  --spacing-xxs:              0.125rem;  /* 2px */
-  --spacing-xs:               0.25rem;   /* 4px */
-  --spacing-sm:               0.5rem;    /* 8px */
-  --spacing-md:               0.75rem;   /* 12px */
-  --spacing-lg:               1rem;      /* 16px */
-  --spacing-xl:               1.25rem;   /* 20px */
-  --spacing-xxl:              2rem;      /* 32px */
-  --spacing-section:          5rem;      /* 80px */
+    /* ── Border Radius ─────────────────────────────────────── */
+    --radius-sm: 0.25rem; /* 4px */
+    --radius-default: 0.5rem; /* 8px */
+    --radius-md: 0.75rem; /* 12px */
+    --radius-lg: 1rem; /* 16px */
+    --radius-xl: 1.5rem; /* 24px (maps to DESIGN.md 20px for cards — using closest) */
+    --radius-full: 9999px;
 
-  /* ── Border Radius ─────────────────────────────────────── */
-  --radius-sm:                0.25rem;   /* 4px */
-  --radius-default:           0.5rem;    /* 8px */
-  --radius-md:                0.75rem;   /* 12px */
-  --radius-lg:                1rem;      /* 16px */
-  --radius-xl:                1.5rem;    /* 24px (maps to DESIGN.md 20px for cards — using closest) */
-  --radius-full:              9999px;
+    /* ── Shadows — Material stacking (glassmorphism) ───────── */
+    --shadow-glass-card:
+        0 0 0 0.5px rgba(255, 255, 255, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    --shadow-glass-nav:
+        0 -1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    --shadow-focus-ring: 0 0 0 2px rgba(139, 92, 246, 0.6);
 
-  /* ── Shadows — Material stacking (glassmorphism) ───────── */
-  --shadow-glass-card:        0 0 0 0.5px rgba(255, 255, 255, 0.15),
-                              inset 0 1px 1px rgba(255, 255, 255, 0.05);
-  --shadow-glass-nav:         0 -1px 0 rgba(255, 255, 255, 0.15),
-                              inset 0 1px 1px rgba(255, 255, 255, 0.05);
-  --shadow-focus-ring:        0 0 0 2px rgba(139, 92, 246, 0.6);
+    /* ── Container ─────────────────────────────────────────── */
+    --container-max: 576px;
 
-  /* ── Container ─────────────────────────────────────────── */
-  --container-max:            576px;
+    /* ── Animations ────────────────────────────────────────── */
+    --animate-tap-press: tap-press 100ms ease-out;
 
-  /* ── Animations ────────────────────────────────────────── */
-  --animate-tap-press:        tap-press 100ms ease-out;
-
-  @keyframes tap-press {
-    from { transform: scale(1); }
-    to   { transform: scale(0.98); }
-  }
+    @keyframes tap-press {
+        from {
+            transform: scale(1);
+        }
+        to {
+            transform: scale(0.98);
+        }
+    }
 }
 
 /* ═══ 2. DARK MODE PRIMITIVES ═══════════════════════════════
    This design is dark-first. Light mode is a synthesized inversion.
    ════════════════════════════════════════════════════════════ */
 @layer base {
-  :root {
-    /* Dark mode (default) — all values as designed */
-    --bg-base:                #000000;
-    --bg-surface-deep:        rgba(28, 28, 30, 0.9);
-    --bg-surface-material:    rgba(28, 28, 30, 0.6);
-    --bg-surface-thick:       rgba(44, 44, 46, 0.8);
-    --bg-surface-form:        rgba(118, 118, 128, 0.24);
-    --border-glass:           rgba(255, 255, 255, 0.15);
-    --text-primary:           #ffffff;
-    --text-secondary:         rgba(255, 255, 255, 0.5);
-    --text-muted:             rgba(255, 255, 255, 0.3);
-    --accent-primary:         #8B5CF6;
-    --accent-secondary:       #F59E0B;
-  }
+    :root {
+        /* Dark mode (default) — all values as designed */
+        --bg-base: var(--color-neutral);
+        --bg-surface-deep: var(--color-surface-deep);
+        --bg-surface-material: var(--color-surface-material);
+        --bg-surface-thick: var(--color-surface-deep);
+        --bg-surface-form: var(--color-surface-form);
+        --border-glass: var(--color-border-glass);
+        --text-primary: var(--color-on-primary);
+        --text-secondary: var(--color-text-dim);
+        --text-muted: var(--color-text-muted);
+        --accent-primary: var(--color-primary);
+        --accent-secondary: var(--color-secondary);
+    }
 
-  /* Light mode — synthesized inversion for accessibility */
-  .light,
-  [data-theme="light"] {
-    --bg-base:                #F5F5F7;
-    --bg-surface-deep:        rgba(255, 255, 255, 0.9);
-    --bg-surface-material:    rgba(255, 255, 255, 0.7);
-    --bg-surface-thick:       rgba(245, 245, 247, 0.85);
-    --bg-surface-form:        rgba(0, 0, 0, 0.06);
-    --border-glass:           rgba(0, 0, 0, 0.12);
-    --text-primary:           #1A1A1A;
-    --text-secondary:         rgba(0, 0, 0, 0.55);
-    --text-muted:             rgba(0, 0, 0, 0.35);
-    --accent-primary:         #7C3AED;
-    --accent-secondary:       #D97706;
-  }
-}
-
-/* ═══ 3. SHADCN/UI COMPATIBILITY LAYER ══════════════════════
-   shadcn reads these exact variable names from :root.
-   They alias @theme tokens — no values are duplicated.
-   ══════════════════════════════════════════════════════════ */
-@layer base {
-  :root {
-    /* Core — dark-first design */
-    --background:             #000000;
-    --foreground:             #ffffff;
-
-    /* Card — glass material */
-    --card:                   rgba(28, 28, 30, 0.6);
-    --card-foreground:        #ffffff;
-
-    /* Popover */
-    --popover:                rgba(28, 28, 30, 0.9);
-    --popover-foreground:     #ffffff;
-
-    /* Primary = CTA/action color (violet) */
-    --primary:                #8B5CF6;
-    --primary-foreground:     #ffffff;
-
-    /* Secondary */
-    --secondary:              rgba(28, 28, 30, 0.6);
-    --secondary-foreground:   #ffffff;
-
-    /* Muted */
-    --muted:                  rgba(28, 28, 30, 0.9);
-    --muted-foreground:       rgba(255, 255, 255, 0.5);
-
-    /* Accent */
-    --accent:                 rgba(139, 92, 246, 0.15);
-    --accent-foreground:      #ffffff;
-
-    /* Destructive — synthesized, no error token in DESIGN.md */
-    --destructive:            #dc2626;
-    --destructive-foreground: #ffffff;
-
-    /* Border / Input / Ring */
-    --border:                 rgba(255, 255, 255, 0.15);
-    --input:                  rgba(118, 118, 128, 0.24);
-    --ring:                   #8B5CF6;
-
-    /* Radius — shadcn scales from this single value */
-    --radius:                 0.75rem;
-  }
-
-  /* Light mode shadcn overrides */
-  .light,
-  [data-theme="light"] {
-    --background:             #F5F5F7;
-    --foreground:             #1A1A1A;
-    --card:                   rgba(255, 255, 255, 0.7);
-    --card-foreground:        #1A1A1A;
-    --popover:                rgba(255, 255, 255, 0.9);
-    --popover-foreground:     #1A1A1A;
-    --muted:                  rgba(245, 245, 247, 0.5);
-    --muted-foreground:       rgba(0, 0, 0, 0.55);
-    --border:                 rgba(0, 0, 0, 0.12);
-    --input:                  rgba(0, 0, 0, 0.06);
-  }
+    /* Light mode — synthesized inversion for accessibility */
+    .light,
+    [data-theme="light"] {
+        --bg-base: #f5f5f7;
+        --bg-surface-deep: rgba(255, 255, 255, 0.9);
+        --bg-surface-material: rgba(255, 255, 255, 0.7);
+        --bg-surface-thick: rgba(245, 245, 247, 0.85);
+        --bg-surface-form: rgba(0, 0, 0, 0.06);
+        --border-glass: rgba(0, 0, 0, 0.12);
+        --text-primary: #1a1a1a;
+        --text-secondary: rgba(0, 0, 0, 0.55);
+        --text-muted: rgba(0, 0, 0, 0.35);
+        --accent-primary: var(--color-primary);
+        --accent-secondary: var(--color-secondary);
+    }
 }
 
 /* ═══ 4. BASE RESETS ════════════════════════════════════════ */
 @layer base {
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
 
-  html {
-    font-family: var(--font-body);
-    font-size: var(--text-body-md);
-    line-height: var(--text-body-md--line-height);
-    color: var(--text-primary);
-    background-color: #000000;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-  }
+    html {
+        font-family: var(--font-body);
+        font-size: var(--text-body-md);
+        line-height: var(--text-body-md--line-height);
+        color: var(--text-primary);
+        background-color: #000000;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+    }
 
-  body {
-    margin: 0;
-    min-height: 100dvh;
-    background-color: #000000;
-  }
+    body {
+        margin: 0;
+        min-height: 100dvh;
+        background-color: #000000;
+    }
 
-  /* Typography scale */
-  h1, .text-display-xl {
-    font-size: var(--text-display-xl);
-    line-height: var(--text-display-xl--line-height);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: var(--tracking-tight-display);
-    font-family: var(--font-body);
-  }
+    /* Typography scale */
+    h1,
+    .text-display-xl {
+        font-size: var(--text-display-xl);
+        line-height: var(--text-display-xl--line-height);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: var(--tracking-tight-display);
+        font-family: var(--font-body);
+    }
 
-  h2, .text-headline-md {
-    font-size: var(--text-headline-md);
-    line-height: var(--text-headline-md--line-height);
-    font-weight: var(--font-weight-semibold);
-    font-family: var(--font-body);
-  }
+    h2,
+    .text-headline-md {
+        font-size: var(--text-headline-md);
+        line-height: var(--text-headline-md--line-height);
+        font-weight: var(--font-weight-semibold);
+        font-family: var(--font-body);
+    }
 
-  h3 {
-    font-size: var(--text-body-md);
-    line-height: var(--text-body-md--line-height);
-    font-weight: var(--font-weight-semibold);
-    font-family: var(--font-body);
-  }
+    h3 {
+        font-size: var(--text-body-md);
+        line-height: var(--text-body-md--line-height);
+        font-weight: var(--font-weight-semibold);
+        font-family: var(--font-body);
+    }
 
-  p {
-    font-size: var(--text-body-md);
-    line-height: var(--text-body-md--line-height);
-    font-weight: var(--font-weight-normal);
-    font-family: var(--font-body);
-  }
+    p {
+        font-size: var(--text-body-md);
+        line-height: var(--text-body-md--line-height);
+        font-weight: var(--font-weight-normal);
+        font-family: var(--font-body);
+    }
 
-  /* Mono labels — uppercase with generous tracking */
-  .text-mono-label {
-    font-size: var(--text-mono-label);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--tracking-wide-label);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-  }
+    /* Mono labels — uppercase with generous tracking */
+    .text-mono-label {
+        font-size: var(--text-mono-label);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: var(--tracking-wide-label);
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+    }
 
-  /* Caption */
-  .text-caption-xs {
-    font-size: var(--text-caption-xs);
-    line-height: var(--text-caption-xs--line-height);
-    font-weight: var(--font-weight-normal);
-    font-family: var(--font-body);
-  }
+    /* Caption */
+    .text-caption-xs {
+        font-size: var(--text-caption-xs);
+        line-height: var(--text-caption-xs--line-height);
+        font-weight: var(--font-weight-normal);
+        font-family: var(--font-body);
+    }
 
-  /* Nav label */
-  .text-nav-label {
-    font-size: var(--text-nav-label);
-    line-height: var(--text-nav-label--line-height);
-    font-weight: var(--font-weight-medium);
-    font-family: var(--font-body);
-  }
+    /* Nav label */
+    .text-nav-label {
+        font-size: var(--text-nav-label);
+        line-height: var(--text-nav-label--line-height);
+        font-weight: var(--font-weight-medium);
+        font-family: var(--font-body);
+    }
 
-  /* Links */
-  a {
-    color: var(--accent-primary);
-    text-decoration: none;
-  }
-  a:hover {
-    color: var(--primary-hover, #7C3AED);
-  }
+    /* Links */
+    a {
+        color: var(--accent-primary);
+        text-decoration: none;
+    }
+    a:hover {
+        color: var(--primary-hover, #7c3aed);
+    }
 
-  /* Focus visible */
-  :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
+    /* Focus visible */
+    :focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+    }
 
-  /* Safe area for fixed bottom nav */
-  .safe-bottom {
-    padding-bottom: var(--spacing-section);
-  }
+    /* Safe area for fixed bottom nav */
+    .safe-bottom {
+        padding-bottom: var(--spacing-section);
+    }
 }
 
 /* ═══ 5. COMPONENT TOKENS ═══════════════════════════════════
@@ -334,217 +280,114 @@
    All values reference @theme tokens — no hardcoded hex.
    ════════════════════════════════════════════════════════════ */
 @layer components {
-
-  /* ── Primary Button ──────────────────────────────────────
+    /* ── Primary Button ──────────────────────────────────────
      Solid violet background, white text, no shadow.
      Subtle opacity change on tap (active:scale-[0.98]).
      ──────────────────────────────────────────────────────── */
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    background-color: var(--color-primary);
-    color: var(--color-on-primary, #ffffff);
-    border: none;
-    border-radius: var(--radius-md);
-    padding-block: 0.75rem;
-    padding-inline: 1.25rem;
-    min-height: 3rem;          /* 48px touch target */
-    font-family: var(--font-body);
-    font-size: var(--text-button-md);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--text-button-md--line-height);
-    cursor: pointer;
-    transition: background-color 150ms ease, opacity 100ms ease, transform 100ms ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn-primary:hover {
-    background-color: var(--color-primary-hover, color-mix(in oklab, var(--color-primary) 85%, black));
-  }
-  .btn-primary:active {
-    transform: scale(0.98);
-    opacity: 0.9;
-  }
-  .btn-primary:disabled,
-  .btn-primary[aria-disabled="true"] {
-    background-color: var(--color-primary-disabled);
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        background-color: var(--color-primary);
+        color: var(--color-on-primary, #ffffff);
+        border: none;
+        border-radius: var(--radius-md);
+        padding-block: 0.75rem;
+        padding-inline: 1.25rem;
+        min-height: 3rem; /* 48px touch target */
+        font-family: var(--font-body);
+        font-size: var(--text-button-md);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--text-button-md--line-height);
+        cursor: pointer;
+        transition:
+            background-color 150ms ease,
+            opacity 100ms ease,
+            transform 100ms ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary:hover {
+        background-color: var(
+            --color-primary-hover,
+            color-mix(in oklab, var(--color-primary) 85%, black)
+        );
+    }
+    .btn-primary:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    .btn-primary:disabled,
+    .btn-primary[aria-disabled="true"] {
+        background-color: var(--color-primary-disabled);
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
 
-  /* ── Secondary / Glass Button ────────────────────────────
+    /* ── Secondary / Glass Button ────────────────────────────
      white/10 background with border-glass stroke.
      ──────────────────────────────────────────────────────── */
-  .btn-glass {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--text-primary);
-    border: 0.5px solid var(--color-border-glass);
-    border-radius: var(--radius-md);
-    padding-block: 0.75rem;
-    padding-inline: 1.25rem;
-    min-height: 3rem;          /* 48px touch target */
-    font-family: var(--font-body);
-    font-size: var(--text-button-md);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--text-button-md--line-height);
-    cursor: pointer;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    transition: background-color 150ms ease, transform 100ms ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn-glass:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-  }
-  .btn-glass:active {
-    transform: scale(0.98);
-  }
+    .btn-glass {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border: 0.5px solid var(--color-border-glass);
+        border-radius: var(--radius-md);
+        padding-block: 0.75rem;
+        padding-inline: 1.25rem;
+        min-height: 3rem; /* 48px touch target */
+        font-family: var(--font-body);
+        font-size: var(--text-button-md);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--text-button-md--line-height);
+        cursor: pointer;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        transition:
+            background-color 150ms ease,
+            transform 100ms ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn-glass:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+    .btn-glass:active {
+        transform: scale(0.98);
+    }
 
-  /* ── Input Fields ────────────────────────────────────────
-     surface-form background, no border until focused.
-     2px violet ring on focus.
-     ──────────────────────────────────────────────────────── */
-  .input-glass {
-    width: 100%;
-    background-color: var(--color-surface-form);
-    color: var(--text-primary);
-    border: 1px solid transparent;
-    border-radius: var(--radius-md);
-    padding-block: 0.75rem;
-    padding-inline: 1rem;
-    min-height: 3.25rem;       /* 52px touch target */
-    font-family: var(--font-body);
-    font-size: var(--text-body-md);
-    line-height: var(--text-body-md--line-height);
-    transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
-    -webkit-appearance: none;
-  }
-  .input-glass::placeholder {
-    color: var(--color-text-muted);
-  }
-  .input-glass:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
-    background-color: rgba(118, 118, 128, 0.3);
-  }
-
-  /* ── Glass Card ──────────────────────────────────────────
-     surface-material with 20px blur, border-glass inner stroke.
-     ──────────────────────────────────────────────────────── */
-  .card-glass {
-    background-color: var(--color-surface-material);
-    border: 0.5px solid var(--color-border-glass);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-lg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-glass-card);
-  }
-
-  /* ── List Item / Link ────────────────────────────────────
+    /* ── List Item / Link ────────────────────────────────────
      surface-material background, chevron-right trailing icon.
      ──────────────────────────────────────────────────────── */
-  .list-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-lg);
-    background-color: var(--color-surface-material);
-    border: 0.5px solid var(--color-border-glass);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    cursor: pointer;
-    transition: background-color 150ms ease, transform 100ms ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .list-item:hover {
-    background-color: var(--color-surface-deep);
-  }
-  .list-item:active {
-    transform: scale(0.98);
-  }
-  .list-item .trailing-icon {
-    color: var(--color-text-dim);
-    flex-shrink: 0;
-  }
-
-  /* ── Banner / Pro-Tip ────────────────────────────────────
-     Violet tinted background, 20px icon, caption-xs text.
-     ──────────────────────────────────────────────────────── */
-  .banner-protip {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-sm);
-    background-color: var(--color-tertiary-container, rgba(139, 92, 246, 0.1));
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
-  }
-  .banner-protip .banner-icon {
-    width: 1.25rem;   /* 20px */
-    height: 1.25rem;
-    flex-shrink: 0;
-    color: var(--color-primary);
-  }
-  .banner-protip .banner-text {
-    font-size: var(--text-caption-xs);
-    line-height: var(--text-caption-xs--line-height);
-    font-weight: var(--font-weight-normal);
-    font-family: var(--font-body);
-    color: var(--text-secondary);
-  }
-
-  /* ── Navigation Bar ──────────────────────────────────────
-     Fixed position, surface-thick with 30px blur.
-     Active state: violet color + fill icon variation.
-     ──────────────────────────────────────────────────────── */
-  .nav-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background-color: var(--color-surface-thick);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    box-shadow: var(--shadow-glass-nav);
-    padding-block: var(--spacing-sm);
-    padding-bottom: max(var(--spacing-sm), env(safe-area-inset-bottom));
-    border-top: 0.5px solid var(--color-border-glass);
-  }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-xxs);
-    padding: var(--spacing-xs) var(--spacing-md);
-    color: var(--color-text-dim);
-    cursor: pointer;
-    transition: color 150ms ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .nav-item.active {
-    color: var(--color-primary);
-  }
-  .nav-item:active {
-    transform: scale(0.95);
-  }
-  .nav-label {
-    font-size: var(--text-nav-label);
-    line-height: var(--text-nav-label--line-height);
-    font-weight: var(--font-weight-medium);
-    font-family: var(--font-body);
-  }
+    .list-item {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--spacing-lg);
+        background-color: var(--color-surface-material);
+        border: 0.5px solid var(--color-border-glass);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-lg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        cursor: pointer;
+        transition:
+            background-color 150ms ease,
+            transform 100ms ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .list-item:hover {
+        background-color: var(--color-surface-deep);
+    }
+    .list-item:active {
+        transform: scale(0.98);
+    }
+    .list-item .trailing-icon {
+        color: var(--color-text-dim);
+        flex-shrink: 0;
+    }
 }
 
 /* ═══ 6. MAX-W OVERRIDES ════════════════════════════════════

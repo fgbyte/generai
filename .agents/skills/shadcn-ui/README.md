@@ -27,11 +27,13 @@ Build a dashboard layout with sidebar navigation using shadcn/ui blocks
 ## What is shadcn/ui?
 
 shadcn/ui is a collection of beautifully designed, accessible, and customizable components built with:
+
 - **Radix UI or Base UI**: Unstyled, accessible component primitives
 - **Tailwind CSS**: Utility-first styling framework
 - **TypeScript**: Full type safety
 
 **Key Difference**: Unlike traditional component libraries, shadcn/ui copies components directly into your project. This gives you:
+
 - Full control over the code
 - No version lock-in
 - Complete customization freedom
@@ -61,26 +63,31 @@ skills/shadcn-ui/
 When activated, the agent follows this workflow:
 
 ### 1. **Discovery & Planning**
+
 - Lists available components using shadcn MCP tools
 - Identifies required dependencies
 - Plans component composition strategy
 
 ### 2. **Setup & Configuration**
+
 - Verifies or initializes `components.json`
 - Checks Tailwind CSS configuration
 - Validates import aliases and paths
 
 ### 3. **Component Integration**
+
 - Retrieves component source code
 - Installs via CLI or manual integration
 - Handles dependency installation
 
 ### 4. **Customization**
+
 - Applies theme customization
 - Creates component variants
 - Extends components with custom logic
 
 ### 5. **Quality Assurance**
+
 - Validates TypeScript types
 - Checks accessibility compliance
 - Verifies responsive behavior
@@ -88,6 +95,7 @@ When activated, the agent follows this workflow:
 ## Prerequisites
 
 Your project should have:
+
 - **React 18+**
 - **Tailwind CSS 3.0+**
 - **TypeScript** (recommended)
@@ -133,9 +141,10 @@ shadcn/ui provides 50+ components including:
 **Data Display**: Table, Badge, Avatar, Progress, Skeleton  
 **Overlays**: Dialog, Sheet, Popover, Tooltip, Dropdown Menu  
 **Navigation**: Navigation Menu, Tabs, Breadcrumb, Pagination  
-**Feedback**: Alert, Alert Dialog, Toast, Command  
+**Feedback**: Alert, Alert Dialog, Toast, Command
 
 Plus complete **Blocks** like:
+
 - Authentication forms
 - Dashboard layouts
 - Calendar interfaces
@@ -145,7 +154,9 @@ Plus complete **Blocks** like:
 ## Customization Approach
 
 ### Theme-Level Customization
+
 Modify CSS variables in `globals.css`:
+
 ```css
 :root {
   --primary: 221.2 83.2% 53.3%;
@@ -155,21 +166,22 @@ Modify CSS variables in `globals.css`:
 ```
 
 ### Component-Level Customization
+
 Components use `class-variance-authority` for variants:
+
 ```typescript
-const buttonVariants = cva(
-  "base-classes",
-  {
-    variants: {
-      variant: { default: "...", destructive: "..." },
-      size: { default: "...", sm: "..." },
-    }
-  }
-)
+const buttonVariants = cva("base-classes", {
+  variants: {
+    variant: { default: "...", destructive: "..." },
+    size: { default: "...", sm: "..." },
+  },
+});
 ```
 
 ### Composition
+
 Create higher-level components:
+
 ```typescript
 // Compose existing components
 export function FeatureCard({ title, description, icon }) {
@@ -211,7 +223,9 @@ This skill leverages shadcn MCP server capabilities:
 ## Troubleshooting
 
 ### "Module not found" errors
+
 Check your `tsconfig.json` includes path aliases:
+
 ```json
 {
   "compilerOptions": {
@@ -223,11 +237,13 @@ Check your `tsconfig.json` includes path aliases:
 ```
 
 ### Styles not applying
+
 - Import `globals.css` in your root layout
 - Verify Tailwind config includes component paths
 - Check CSS variable definitions match component expectations
 
 ### TypeScript errors
+
 - Ensure all Radix UI peer dependencies are installed
 - Run `npm install` after adding components via CLI
 - Check that React types are up to date

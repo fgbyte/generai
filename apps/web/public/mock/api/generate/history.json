@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "gc_1001",
+      "content": "Launch thread for the new AI writing assistant.",
+      "prompt": "Write a Twitter thread announcing our AI writing assistant with a strong hook, three product benefits, and a clear CTA.",
+      "contentType": "thread",
+      "createdAt": "2026-05-20T14:20:00.000Z"
+    },
+    {
+      "id": "gc_1002",
+      "content": "Instagram caption for a studio behind-the-scenes post.",
+      "prompt": "Create an Instagram caption for a behind-the-scenes photo of our content team planning a campaign, warm tone, light CTA.",
+      "contentType": "instagram",
+      "createdAt": "2026-05-20T10:05:00.000Z"
+    },
+    {
+      "id": "gc_1003",
+      "content": "LinkedIn update about product traction and customer learning.",
+      "prompt": "Write a LinkedIn post sharing that we reached our first 100 active users and what we learned from onboarding calls.",
+      "contentType": "linkedin",
+      "createdAt": "2026-05-19T17:45:00.000Z"
+    },
+    {
+      "id": "gc_1004",
+      "content": "Thread on building consistent content systems.",
+      "prompt": "Write a Twitter thread about building a repeatable content system for startup founders with practical steps.",
+      "contentType": "thread",
+      "createdAt": "2026-05-18T09:30:00.000Z"
+    }
+  ]
+}
