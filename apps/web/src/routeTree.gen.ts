@@ -17,6 +17,8 @@ import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
 import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
 import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
+import { Route as AppCalendarIndexRouteImport } from './routes/app/calendar/index'
+import { Route as AppAutomateIndexRouteImport } from './routes/app/automate/index'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -58,6 +60,16 @@ const AppHistoryIndexRoute = AppHistoryIndexRouteImport.update({
   path: '/history/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppCalendarIndexRoute = AppCalendarIndexRouteImport.update({
+  id: '/calendar/',
+  path: '/calendar/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAutomateIndexRoute = AppAutomateIndexRouteImport.update({
+  id: '/automate/',
+  path: '/automate/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +78,8 @@ export interface FileRoutesByFullPath {
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app/': typeof AppIndexRoute
+  '/app/automate/': typeof AppAutomateIndexRoute
+  '/app/calendar/': typeof AppCalendarIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
   '/app/settings/': typeof AppSettingsIndexRoute
 }
@@ -75,6 +89,8 @@ export interface FileRoutesByTo {
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app': typeof AppIndexRoute
+  '/app/automate': typeof AppAutomateIndexRoute
+  '/app/calendar': typeof AppCalendarIndexRoute
   '/app/history': typeof AppHistoryIndexRoute
   '/app/settings': typeof AppSettingsIndexRoute
 }
@@ -86,6 +102,8 @@ export interface FileRoutesById {
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app/': typeof AppIndexRoute
+  '/app/automate/': typeof AppAutomateIndexRoute
+  '/app/calendar/': typeof AppCalendarIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
   '/app/settings/': typeof AppSettingsIndexRoute
 }
@@ -98,6 +116,8 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/demo/tanstack-query'
     | '/app/'
+    | '/app/automate/'
+    | '/app/calendar/'
     | '/app/history/'
     | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -107,6 +127,8 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/demo/tanstack-query'
     | '/app'
+    | '/app/automate'
+    | '/app/calendar'
     | '/app/history'
     | '/app/settings'
   id:
@@ -117,6 +139,8 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/demo/tanstack-query'
     | '/app/'
+    | '/app/automate/'
+    | '/app/calendar/'
     | '/app/history/'
     | '/app/settings/'
   fileRoutesById: FileRoutesById
@@ -187,17 +211,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHistoryIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/calendar/': {
+      id: '/app/calendar/'
+      path: '/calendar'
+      fullPath: '/app/calendar/'
+      preLoaderRoute: typeof AppCalendarIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/automate/': {
+      id: '/app/automate/'
+      path: '/automate'
+      fullPath: '/app/automate/'
+      preLoaderRoute: typeof AppAutomateIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
 interface AppRouteRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
+  AppAutomateIndexRoute: typeof AppAutomateIndexRoute
+  AppCalendarIndexRoute: typeof AppCalendarIndexRoute
   AppHistoryIndexRoute: typeof AppHistoryIndexRoute
   AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppIndexRoute: AppIndexRoute,
+  AppAutomateIndexRoute: AppAutomateIndexRoute,
+  AppCalendarIndexRoute: AppCalendarIndexRoute,
   AppHistoryIndexRoute: AppHistoryIndexRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
