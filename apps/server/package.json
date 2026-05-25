@@ -16,7 +16,7 @@
     "@google/genai": "^1.52.0",
     "@hono/zod-openapi": "^1.4.0",
     "@hono/zod-validator": "^0.8.0",
-    "@langchain/core": "^1.1.46",
+    "@langchain/core": "^1.1.48",
     "@langchain/openai": "^1.4.5",
     "@scalar/hono-api-reference": "^0.10.16",
     "better-auth": "catalog:",
