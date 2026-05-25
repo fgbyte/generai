@@ -4,7 +4,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
 import {
   X,
   Instagram as InstagramIcon,
@@ -34,7 +33,9 @@ function TopAppBar() {
         type="button"
         className="flex items-center justify-center rounded-lg p-2 transition-all hover:bg-white/10 active:scale-[0.98]"
       >
-        <X className="size-5 text-white" />
+        <Link to="/app">
+          <X className="size-5 text-white" />
+        </Link>
       </button>
 
       <h1 className="font-headline-md text-headline-md text-white">
@@ -42,7 +43,7 @@ function TopAppBar() {
       </h1>
 
       <Link
-        to="/app/automate/drafts"
+        to="/app/history"
         className="text-body-md text-text-dim transition-opacity hover:opacity-80"
       >
         Drafts
@@ -53,6 +54,12 @@ function TopAppBar() {
 
 function InstagramPreview() {
   const [liked, setLiked] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [images, setImages] = useState([heroImageUrl]);
+
+  const addImage = () => {
+    setImages((prev) => [...prev, heroImageUrl]);
+  };
 
   return (
     <Card className="overflow-hidden border border-border-glass/30 bg-surface-material/60">
@@ -79,22 +86,21 @@ function InstagramPreview() {
         {/* Post Image */}
         <div className="relative aspect-square w-full">
           <img
-            src={heroImageUrl}
+            src={images[currentImageIndex]}
             alt="AI Generated Artwork"
             className="size-full object-cover"
           />
-          <button
-            type="button"
-            className="absolute text-white bottom-3 right-3 flex items-center gap-1.5 rounded-full border border-border-glass/50 bg-surface-thick/70 px-3 py-1.5 text-caption-xs backdrop-blur-md transition-colors hover:bg-surface-thick/90"
-          >
-            <Send className="size-4" />
-            Edit Design
-          </button>
+          {images.length > 1 && (
+            <div className="absolute text-white bottom-3 right-3 flex items-center gap-1.5 rounded-full border border-border-glass/50 bg-surface-thick/70 px-3 py-1.5 text-caption-xs backdrop-blur-md">
+              {currentImageIndex + 1}/{images.length}
+            </div>
+          )}
         </div>
 
         {/* Add more images */}
         <div className="px-4">
           <Button
+            onClick={addImage}
             variant="outline"
             className="w-full gap-1.5 rounded-xl border-white/20 bg-surface-material/30 py-3 text-sm text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:text-white"
           >
@@ -267,7 +273,7 @@ function AutomatePage() {
   const [notification, setNotification] = useState(true);
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-black pb-section">
+    <div className="relative flex min-h-screen flex-col bg-black pb-section mb-5">
       <TopAppBar />
 
       <main className="mx-auto flex w-full max-w-container flex-col gap-6 px-6 pt-20 pb-6">
@@ -301,9 +307,12 @@ function AutomatePage() {
 
       {/* Sticky Footer Action */}
       <div className="bottom-0 left-0 right-0 border-t border-border-glass/20 bg-black/80 px-6 py-4 backdrop-blur-3xl">
-        <Button className="btn-primary h-[52px] w-full rounded-xl text-base shadow-lg shadow-primary/20">
+        <Link
+          to="/app/calendar"
+          className="btn-primary mt-[1.2rem] h-[3.0625rem] w-full rounded-[1rem] border-none bg-linear-to-r from-[#7c5ce6] to-[#8f67ff] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_28px_rgba(102,63,219,0.35)] transition-colors duration-150 hover:from-[#7656df] hover:to-[#8a63fa] text-sm sm:test-md"
+        >
           Schedule Content
-        </Button>
+        </Link>
       </div>
     </div>
   );
