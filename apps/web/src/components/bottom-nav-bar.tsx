@@ -59,6 +59,7 @@ export function BottomNavBar({ items = defaultItems, className }: BottomNavBarPr
         "px-lg pt-sm pb-6",
         className,
       )}
+      style={{ minHeight: "var(--bottom-nav-height)" }}
     >
       {navItems.map((item) => (
         <Link

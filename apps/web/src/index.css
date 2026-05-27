@@ -101,7 +101,8 @@
     --spacing-lg: 1rem; /* 16px */
     --spacing-xl: 1.25rem; /* 20px */
     --spacing-xxl: 2rem; /* 32px */
-    --spacing-section: 5rem; /* 80px */
+    --bottom-nav-height: 80px; /* pt-sm(8) + icon(28) + mt-1(4) + text(16) + pb-6(24) */
+    --spacing-section: var(--bottom-nav-height); /* matches BottomNavBar height */
 
     /* ── Border Radius ─────────────────────────────────────── */
     --radius-sm: 0.25rem; /* 4px */

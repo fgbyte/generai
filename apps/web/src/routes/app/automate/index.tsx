@@ -585,10 +585,10 @@ function AutomatePage() {
   );
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-black pb-section mb-5">
+    <div className="relative flex flex-col bg-black mb-5">
       <TopAppBar />
 
-      <main className="mx-auto flex w-full max-w-container flex-col gap-6 px-lg pb-6">
+      <main className="mx-auto flex w-full max-w-container flex-col gap-6 px-lg">
         <PlatformSelector />
 
         <InstagramPreview caption={caption} />

@@ -99,8 +99,8 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black font-body-md text-body-md text-white">
-      <main className="max-w-container mx-auto px-xl flex flex-col gap-xl relative z-10 pb-25">
+    <div className="bg-black font-body-md text-body-md text-white">
+      <main className="max-w-container mx-auto px-xl flex flex-col gap-xl relative z-10">
         <section className="flex flex-col gap-md">
           <SectionHeader>Account</SectionHeader>
           <Card className={cardClassName}>

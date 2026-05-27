@@ -23,8 +23,8 @@ export function StudioPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="font-body-md text-body-md pb-section min-h-screen bg-black text-white">
-      <main className="max-w-container mx-auto px-lg flex flex-col gap-lg relative z-10 pb-xxl">
+    <div className="font-body-md text-body-md min-h-screen bg-black text-white">
+      <main className="max-w-container mx-auto px-lg flex flex-col gap-lg relative z-10">
         {/* Points Card */}
         <PointsBalanceCard
           balance={5000} //get-points query

@@ -172,7 +172,7 @@ export function CalendarPage() {
   const [selectedDay, setSelectedDay] = useState(2); // Wed (index 2)
 
   return (
-    <div className="pb-section min-h-screen bg-black text-white">
+    <div className="bg-black text-white">
       <main className="max-w-container mx-auto px-lg space-y-8">
         {/* Header Section */}
         <div className="flex items-center justify-between">
