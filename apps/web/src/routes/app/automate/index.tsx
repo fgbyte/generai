@@ -24,6 +24,7 @@ import {
   Pencil,
   Calendar,
   CopyIcon,
+  Check,
 } from "lucide-react";
 
 import heroImageUrl from "@/assets/generai-login-hero.jpg";
@@ -282,7 +283,11 @@ function CaptionEditor() {
             aria-label="Copy caption"
             className="absolute top-2 right-2 p-2 rounded-lg bg-surface-thick border border-border-glass text-text-dim hover:text-white active:scale-95 transition-all z-10"
           >
-            <CopyIcon className="size-4" />
+            {copied ? (
+              <Check className="size-4" />
+            ) : (
+              <CopyIcon className="size-4" />
+            )}
           </button>
           <textarea
             value={caption}
