@@ -10,7 +10,9 @@ function RouteComponent() {
   return (
     <div>
       <TopAppBar />
-      <Outlet />
+      <div className="pt-30">
+        <Outlet />
+      </div>
       <BottomNavBar />
     </div>
   );
