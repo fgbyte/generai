@@ -9,7 +9,7 @@ import { CustomSelect } from "@/components/custom-select";
 import { PointsBalanceCard } from "@/components/app/points-balance-card";
 import { ProTipBanner } from "@/components/app/pro-tip-banner";
 import { Instagram, Linkedin, Twitter, Upload } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 const CONTENT_TYPES = [
   { value: "thread", icon: <Twitter />, label: "Thread Format" },
@@ -20,20 +20,19 @@ const CONTENT_TYPES = [
 export function StudioPage() {
   const [contentType, setContentType] = useState("instagram");
   const [prompt, setPrompt] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div className="font-body-md text-body-md pb-section min-h-screen bg-black text-white">
       <main className="max-w-container mx-auto px-lg pt-[100px] flex flex-col gap-lg relative z-10 pb-xxl">
         {/* Points Card */}
         <PointsBalanceCard
-          balance={5000} //get-points
+          balance={5000} //get-points query
           onGetMore={() => {
             /* TODO: navigate to points purchase */
+            navigate({ to: "/app/settings" });
           }}
         />
-
-        {/* Activity Link */}
-        {/*<ActivityHistoryLink />*/}
 
         {/* Generation Form */}
         <section className="mt-md flex flex-col gap-lg">
@@ -72,6 +71,9 @@ export function StudioPage() {
               className="bg-surface-form border-none text-white placeholder:text-text-muted focus:ring-2 focus:ring-primary resize-none rounded-lg px-lg py-md h-32"
             />
           </div>
+
+          {/* Activity Link */}
+          <ActivityHistoryLink />
 
           {/* Pro Tip Banner */}
           <ProTipBanner

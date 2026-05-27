@@ -27,7 +27,7 @@ export function ActivityHistoryLink({
     >
       <div className="flex items-center gap-md">
         <History className="size-5 text-primary" />
-        <span className="font-body-md text-white">Activity History</span>
+        <span className="font-body-md text-white">Prompts Store</span>
       </div>
       <ChevronRight className="size-5 text-white/40" />
     </Link>

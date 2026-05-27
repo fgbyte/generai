@@ -6,12 +6,12 @@ import {
   // Globe,
   LogOut,
   // Moon,
-  // Sparkles,
+  Sparkles,
 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 // import { cn } from "@/lib/utils";
@@ -155,7 +155,7 @@ export function SettingsPage() {
         </section>
 
         {/*Subscription Section*/}
-        {/*<section className="flex flex-col gap-md">
+        <section className="flex flex-col gap-md">
           <SectionHeader>Subscription</SectionHeader>
           <div className="overflow-hidden rounded-[1.5rem] border border-[rgba(143,113,255,0.18)] bg-[radial-gradient(circle_at_top_right,rgba(128,91,255,0.18),transparent_30%),linear-gradient(180deg,rgba(30,24,42,0.96),rgba(20,17,28,0.98))] px-xl pt-[1.35rem] pb-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_50px_rgba(0,0,0,0.32)] backdrop-blur-[18px]">
             <div className="flex items-start justify-between gap-lg">
@@ -181,7 +181,7 @@ export function SettingsPage() {
               Manage Subscription
             </Button>
           </div>
-        </section>*/}
+        </section>
 
         <section className="flex flex-col gap-md">
           <SectionHeader>Rewards</SectionHeader>

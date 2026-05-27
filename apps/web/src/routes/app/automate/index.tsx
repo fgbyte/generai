@@ -116,7 +116,7 @@ function InstagramPreview() {
         </div>
 
         {/* Add more images */}
-        <div className="px-4">
+        <div className="px-4 flex flex-col gap-2">
           <Button
             onClick={addImage}
             variant="outline"
@@ -124,6 +124,13 @@ function InstagramPreview() {
           >
             <Plus className="size-4" />
             Add more images
+          </Button>
+          <Button
+            onClick={() => console.log("Mentions Popup")}
+            variant="outline"
+            className="w-full gap-1.5 rounded-xl border-white/20 bg-surface-material/30 py-3 text-sm text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:text-white"
+          >
+            {/*<Plus className="size-4" />*/}@ Add Mentions
           </Button>
         </div>
 
@@ -380,7 +387,7 @@ function CtaFooter() {
                       </div>
                     </button>
                   }
-                />
+                ></PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
@@ -416,7 +423,7 @@ function CtaFooter() {
                       </div>
                     </button>
                   }
-                />
+                ></PopoverTrigger>
                 <PopoverContent className="w-auto p-4" align="start">
                   <div className="flex items-end gap-2">
                     <div className="flex flex-col gap-1">
