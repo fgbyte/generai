@@ -1,8 +1,15 @@
 import { useState } from "react";
+import { format, parseISO } from "date-fns";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import {
   X,
@@ -21,7 +28,6 @@ import {
   Send,
   Bookmark,
   Pencil,
-  Calendar,
   CopyIcon,
   Check,
   SendHorizonal,
@@ -212,36 +218,6 @@ function PlatformSelector() {
   );
 }
 
-/* ── Date / Time Selectors 💩 ───────────────────────────────── */
-function DateTimeSelector() {
-  return (
-    <div className="grid grid-cols-2 gap-4">
-      <div className="flex flex-col gap-2">
-        <span className="text-mono-label text-text-dim uppercase">Date</span>
-        <button
-          type="button"
-          className="flex items-center justify-between rounded-xl border border-border-glass/30 bg-surface-material px-4 py-3 transition-all hover:bg-surface-deep active:scale-[0.98]"
-        >
-          <span className="font-body-md text-body-md text-white">
-            Oct 25, 2023
-          </span>
-          <CalendarDays className="size-5 text-text-muted" />
-        </button>
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-mono-label text-text-dim uppercase">Time</span>
-        <button
-          type="button"
-          className="flex items-center justify-between rounded-xl border border-border-glass/30 bg-surface-material px-4 py-3 transition-all hover:bg-surface-deep active:scale-[0.98]"
-        >
-          <span className="font-body-md text-body-md text-white">10:30 AM</span>
-          <Clock className="size-5 text-text-muted" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
 /* ── Caption Editor 💩 ──────────────────────────────────────── */
 function CaptionEditor() {
   const [captionOpen, setCaptionOpen] = useState(false);
@@ -341,7 +317,7 @@ function CtaFooter() {
         onClick={() => setScheduleOpen(true)}
         className="btn-primary text-white rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2"
       >
-        <Calendar className="size-4" />
+        <CalendarDays className="size-4" />
         Schedule
       </button>
 
@@ -378,41 +354,133 @@ function CtaFooter() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors">
-                <span
-                  className="text-[10px] font-semibold uppercase text-text-dim"
-                  style={{
-                    fontFamily: "JetBrains Mono, monospace",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  Date
-                </span>
-                <input
-                  type="date"
-                  min={today}
-                  value={scheduleDate}
-                  onChange={(e) => setScheduleDate(e.target.value)}
-                  className="bg-transparent outline-none text-[15px] font-semibold text-white [color-scheme:dark]"
+              <Popover>
+                <PopoverTrigger
+                  render={
+                    <button
+                      type="button"
+                      className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors text-left w-full"
+                    >
+                      <span
+                        className="text-[10px] font-semibold uppercase text-text-dim"
+                        style={{
+                          fontFamily: "JetBrains Mono, monospace",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Date
+                      </span>
+                      <div className="flex items-center justify-between w-full">
+                        <span className="text-[15px] font-semibold text-white">
+                          {scheduleDate
+                            ? format(parseISO(scheduleDate), "PPP")
+                            : "Pick a date"}
+                        </span>
+                        <CalendarDays className="size-4 text-text-muted shrink-0" />
+                      </div>
+                    </button>
+                  }
                 />
-              </label>
-              <label className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors">
-                <span
-                  className="text-[10px] font-semibold uppercase text-text-dim"
-                  style={{
-                    fontFamily: "JetBrains Mono, monospace",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  Time
-                </span>
-                <input
-                  type="time"
-                  value={scheduleTime}
-                  onChange={(e) => setScheduleTime(e.target.value)}
-                  className="bg-transparent outline-none text-[15px] font-semibold text-white [color-scheme:dark]"
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={scheduleDate ? parseISO(scheduleDate) : undefined}
+                    onSelect={(date) =>
+                      setScheduleDate(date ? format(date, "yyyy-MM-dd") : "")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Popover>
+                <PopoverTrigger
+                  render={
+                    <button
+                      type="button"
+                      className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors text-left w-full"
+                    >
+                      <span
+                        className="text-[10px] font-semibold uppercase text-text-dim"
+                        style={{
+                          fontFamily: "JetBrains Mono, monospace",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Time
+                      </span>
+                      <div className="flex items-center justify-between w-full">
+                        <span className="text-[15px] font-semibold text-white">
+                          {scheduleTime}
+                        </span>
+                        <Clock className="size-4 text-text-muted shrink-0" />
+                      </div>
+                    </button>
+                  }
                 />
-              </label>
+                <PopoverContent className="w-auto p-4" align="start">
+                  <div className="flex items-end gap-2">
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="hours"
+                        className="text-[10px] font-semibold uppercase text-text-dim"
+                        style={{
+                          fontFamily: "JetBrains Mono, monospace",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Hours
+                      </label>
+                      <input
+                        id="hours"
+                        type="number"
+                        min={0}
+                        max={23}
+                        value={parseInt(scheduleTime.split(":")[0], 10)}
+                        onChange={(e) => {
+                          const hours = Math.min(
+                            Math.max(parseInt(e.target.value, 10) || 0, 0),
+                            23,
+                          );
+                          setScheduleTime(
+                            `${String(hours).padStart(2, "0")}:${scheduleTime.split(":")[1] || "00"}`,
+                          );
+                        }}
+                        className="w-12 h-10 bg-surface-material border border-border-glass rounded-md text-center text-white font-semibold outline-none focus:border-violet-brand transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                    </div>
+                    <span className="text-white pb-2 font-body-md">:</span>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="minutes"
+                        className="text-[10px] font-semibold uppercase text-text-dim"
+                        style={{
+                          fontFamily: "JetBrains Mono, monospace",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Minutes
+                      </label>
+                      <input
+                        id="minutes"
+                        type="number"
+                        min={0}
+                        max={59}
+                        value={parseInt(scheduleTime.split(":")[1], 10)}
+                        onChange={(e) => {
+                          const minutes = Math.min(
+                            Math.max(parseInt(e.target.value, 10) || 0, 0),
+                            59,
+                          );
+                          setScheduleTime(
+                            `${scheduleTime.split(":")[0] || "12"}:${String(minutes).padStart(2, "0")}`,
+                          );
+                        }}
+                        className="w-12 h-10 bg-surface-material border border-border-glass rounded-md text-center text-white font-semibold outline-none focus:border-violet-brand transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
 
             {/*<div className="flex flex-col gap-2">
@@ -491,8 +559,6 @@ function AutomatePage() {
         <PlatformSelector />
 
         <InstagramPreview />
-
-        <DateTimeSelector />
 
         <CaptionEditor />
 
