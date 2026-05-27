@@ -70,7 +70,7 @@ function TopAppBar() {
   );
 }
 
-function InstagramPreview() {
+function InstagramPreview({ caption }: { caption: string }) {
   const [liked, setLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [images, setImages] = useState([heroImageUrl]);
@@ -78,6 +78,25 @@ function InstagramPreview() {
   const addImage = () => {
     setImages((prev) => [...prev, heroImageUrl]);
   };
+
+  // Parse caption to extract main text and tags
+  const parseCaption = (text: string) => {
+    const parts = text.split("\n");
+    const mainText = parts[0] || "";
+    const tagsLine = parts.slice(1).join(" ");
+    // Extract individual tags
+    const tags = tagsLine.match(/#\w+/g) || [];
+    return { mainText, tags };
+  };
+
+  const { mainText, tags } = parseCaption(caption);
+
+  // Format current date for display
+  const formattedDate = new Date().toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 
   return (
     <Card className="overflow-hidden border border-border-glass/30 bg-surface-material/60">
@@ -171,12 +190,13 @@ function InstagramPreview() {
         {/* Caption */}
         <div className="flex flex-col gap-1 px-4 pb-4">
           <p className="leading-relaxed text-white">
-            <span className="mr-1 font-semibold">generai_art</span>✨ Unlocking
-            the future of creativity. This piece merges fluid dynamics with
-            neural networks to create something truly unique.
+            <span className="mr-1 font-semibold">generai_art</span>
+            {mainText}
           </p>
-          <p className="text-caption-xs text-primary/80">#Generai #ArtFuture</p>
-          <p className="text-caption-xs text-text-dim">October 25, 2023</p>
+          {tags.length > 0 && (
+            <p className="text-caption-xs text-primary/80">{tags.join(" ")}</p>
+          )}
+          <p className="text-caption-xs text-text-dim">{formattedDate}</p>
         </div>
       </CardContent>
     </Card>
@@ -226,11 +246,14 @@ function PlatformSelector() {
 }
 
 /* ── Caption Editor 💩 ──────────────────────────────────────── */
-function CaptionEditor() {
+function CaptionEditor({
+  caption,
+  setCaption,
+}: {
+  caption: string;
+  setCaption: (value: string) => void;
+}) {
   const [captionOpen, setCaptionOpen] = useState(false);
-  const [caption, setCaption] = useState(
-    "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture",
-  );
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -557,6 +580,9 @@ function CtaFooter() {
 
 function AutomatePage() {
   const [notification, setNotification] = useState(true);
+  const [caption, setCaption] = useState(
+    "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture",
+  );
 
   return (
     <div className="relative flex min-h-screen flex-col bg-black pb-section mb-5">
@@ -565,9 +591,9 @@ function AutomatePage() {
       <main className="mx-auto flex w-full max-w-container flex-col gap-6 px-lg pt-20 pb-6">
         <PlatformSelector />
 
-        <InstagramPreview />
+        <InstagramPreview caption={caption} />
 
-        <CaptionEditor />
+        <CaptionEditor caption={caption} setCaption={setCaption} />
 
         {/* Notification Banner */}
         {notification && (
