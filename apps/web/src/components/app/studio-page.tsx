@@ -33,7 +33,7 @@ export function StudioPage() {
         />
 
         {/* Activity Link */}
-        <ActivityHistoryLink />
+        {/*<ActivityHistoryLink />*/}
 
         {/* Generation Form */}
         <section className="mt-md flex flex-col gap-lg">

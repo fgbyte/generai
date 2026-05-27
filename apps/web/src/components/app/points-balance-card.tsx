@@ -1,4 +1,4 @@
-import { Wallet } from "lucide-react";
+import { Coins } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,11 @@ interface PointsBalanceCardProps {
   className?: string;
 }
 
-export function PointsBalanceCard({ balance, onGetMore, className }: PointsBalanceCardProps) {
+export function PointsBalanceCard({
+  balance,
+  onGetMore,
+  className,
+}: PointsBalanceCardProps) {
   return (
     <section
       className={cn(
@@ -21,7 +25,9 @@ export function PointsBalanceCard({ balance, onGetMore, className }: PointsBalan
       )}
     >
       <div className="absolute top-lg right-lg text-secondary opacity-80">
-        <Wallet className="size-[32px]" />
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[rgba(245,158,11,0.18)] bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.16),transparent_60%),rgba(255,204,0,0.03)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          <Coins className="size-7 text-secondary" />
+        </div>
       </div>
 
       <div>

@@ -20,10 +20,18 @@ import {
   MessageCircle,
   Send,
   Bookmark,
-  Copy,
+  ArrowUpRight,
+  Pencil,
+  Calendar,
+  CopyIcon,
 } from "lucide-react";
 
 import heroImageUrl from "@/assets/generai-login-hero.jpg";
+
+/* ══ Route definition ═══════════════════════════════════━ */
+export const Route = createFileRoute("/app/automate/")({
+  component: AutomatePage,
+});
 
 /* ── Reused sub-components ───────────────────────────────── */
 function TopAppBar() {
@@ -39,7 +47,7 @@ function TopAppBar() {
       </button>
 
       <h1 className="font-headline-md text-headline-md text-white">
-        Schedule Post
+        Content Preview
       </h1>
 
       <Link
@@ -230,38 +238,69 @@ function DateTimeSelector() {
 
 /* ── Caption Editor 💩 ──────────────────────────────────────── */
 function CaptionEditor() {
+  const [captionOpen, setCaptionOpen] = useState(false);
   const [caption, setCaption] = useState(
-    "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique. #Generai #ArtFuture",
+    "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture",
   );
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(caption);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // noop
+    }
+  };
 
   return (
-    <div className="flex flex-col gap-3">
-      <span className="text-mono-label text-text-dim uppercase">
+    <section className="flex flex-col gap-2">
+      <span
+        className="text-[12px] font-semibold uppercase text-text-dim"
+        style={{
+          fontFamily: "JetBrains Mono, monospace",
+          letterSpacing: "0.5px",
+        }}
+      >
         Edit Post Caption
       </span>
-      <div className="relative">
-        <Textarea
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          className="min-h-[100px] resize-none rounded-xl border border-border-glass/30 bg-surface-material/30 px-4 py-3 text-sm text-white placeholder:text-text-muted focus-visible:ring-2 focus-visible:ring-primary/50"
-          placeholder="Write a caption..."
-        />
-        <button
-          type="button"
-          className="absolute top-3 right-3 rounded-lg bg-surface-thick/50 p-1.5 text-text-dim transition-colors hover:text-white"
-          aria-label="Copy caption"
-        >
-          <Copy className="size-4" />
+      <button
+        onClick={() => setCaptionOpen((v) => !v)}
+        aria-expanded={captionOpen}
+        className="w-full flex items-center justify-center gap-2 py-3 bg-surface-material/30 border border-border-glass rounded-lg hover:bg-surface-material/50 active:scale-[0.98] transition-all"
+      >
+        <Pencil className="size-4 inline-block text-primary" />
+        <span className="text-[17px] font-semibold text-white">
+          Edit Caption
+        </span>
+      </button>
+      {captionOpen && (
+        <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
+          <button
+            onClick={handleCopy}
+            aria-label="Copy caption"
+            className="absolute top-2 right-2 p-2 rounded-lg bg-surface-thick border border-border-glass text-text-dim hover:text-white active:scale-95 transition-all z-10"
+          >
+            <CopyIcon className="size-4" />
+          </button>
+          <textarea
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            rows={5}
+            className="w-full bg-transparent resize-none outline-none text-[14px] leading-relaxed text-white pr-10 placeholder:text-text-dim"
+          />
+        </div>
+      )}
+      <div className="flex justify-end">
+        <button className="group flex items-center gap-1 px-3 py-2 hover:bg-violet-brand/10 rounded-lg text-violet-brand transition-all">
+          <RefreshCw className="size-4 text-primary" />
+          <span className="text-[14px] font-semibold text-primary">
+            Regenerate Caption
+          </span>
         </button>
       </div>
-      <button
-        type="button"
-        className="flex items-center justify-end gap-1 py-3 pr-2 text-sm text-primary/80 transition-all active:scale-[0.98] hover:text-white"
-      >
-        <RefreshCw className="size-4" />
-        Regenerate Captions
-      </button>
-    </div>
+    </section>
   );
 }
 
@@ -276,10 +315,20 @@ function AutomatePage() {
     <div className="relative flex min-h-screen flex-col bg-black pb-section mb-5">
       <TopAppBar />
 
-      <main className="mx-auto flex w-full max-w-container flex-col gap-6 px-6 pt-20 pb-6">
+      <main className="mx-auto flex w-full max-w-container flex-col gap-6 px-lg pt-20 pb-6">
+        <PlatformSelector />
+
         <InstagramPreview />
 
-        <PlatformSelector />
+        <div className="flex gap-2">
+          <Link
+            to="/app/calendar"
+            className="btn-primary mt-[1.2rem] h-[3.0625rem] w-full rounded-[1rem] border-none bg-linear-to-r from-[#7c5ce6] to-[#8f67ff] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_28px_rgba(102,63,219,0.35)] transition-colors duration-150 hover:from-[#7656df] hover:to-[#8a63fa] text-sm sm:test-md"
+          >
+            Public Now
+            <ArrowUpRight className="size-4 inline-block" />
+          </Link>
+        </div>
 
         <DateTimeSelector />
 
@@ -303,22 +352,16 @@ function AutomatePage() {
             </button>
           </div>
         )}
-      </main>
+        {/* Footer Action */}
 
-      {/* Sticky Footer Action */}
-      <div className="bottom-0 left-0 right-0 border-t border-border-glass/20 bg-black/80 px-6 py-4 backdrop-blur-3xl">
         <Link
           to="/app/calendar"
           className="btn-primary mt-[1.2rem] h-[3.0625rem] w-full rounded-[1rem] border-none bg-linear-to-r from-[#7c5ce6] to-[#8f67ff] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_28px_rgba(102,63,219,0.35)] transition-colors duration-150 hover:from-[#7656df] hover:to-[#8a63fa] text-sm sm:test-md"
         >
           Schedule Content
+          <Calendar className="size-4 inline-block" />
         </Link>
-      </div>
+      </main>
     </div>
   );
 }
-
-/* ══ Route definition ═══════════════════════════════════━ */
-export const Route = createFileRoute("/app/automate/")({
-  component: AutomatePage,
-});
