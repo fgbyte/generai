@@ -20,11 +20,14 @@ import {
   MessageCircle,
   Send,
   Bookmark,
-  ArrowUpRight,
   Pencil,
   Calendar,
   CopyIcon,
   Check,
+  SendHorizonal,
+  CheckCircle,
+  CalendarCheck2Icon,
+  SparklesIcon,
 } from "lucide-react";
 
 import heroImageUrl from "@/assets/generai-login-hero.jpg";
@@ -219,7 +222,9 @@ function DateTimeSelector() {
           type="button"
           className="flex items-center justify-between rounded-xl border border-border-glass/30 bg-surface-material px-4 py-3 transition-all hover:bg-surface-deep active:scale-[0.98]"
         >
-          <span className="font-body-md text-body-md">Oct 25, 2023</span>
+          <span className="font-body-md text-body-md text-white">
+            Oct 25, 2023
+          </span>
           <CalendarDays className="size-5 text-text-muted" />
         </button>
       </div>
@@ -229,7 +234,7 @@ function DateTimeSelector() {
           type="button"
           className="flex items-center justify-between rounded-xl border border-border-glass/30 bg-surface-material px-4 py-3 transition-all hover:bg-surface-deep active:scale-[0.98]"
         >
-          <span className="font-body-md text-body-md">10:30 AM</span>
+          <span className="font-body-md text-body-md text-white">10:30 AM</span>
           <Clock className="size-5 text-text-muted" />
         </button>
       </div>
@@ -298,7 +303,7 @@ function CaptionEditor() {
         </div>
       )}
       <div className="flex justify-end">
-        <button className="group flex items-center gap-1 px-3 py-2 hover:bg-violet-brand/10 rounded-lg text-violet-brand transition-all">
+        <button className="group flex items-center gap-1 px-3 py-2 hover:bg-primary/10 rounded-lg text-violet-brand transition-all">
           <RefreshCw className="size-4 text-primary" />
           <span className="text-[14px] font-semibold text-primary">
             Regenerate Caption
@@ -306,6 +311,168 @@ function CaptionEditor() {
         </button>
       </div>
     </section>
+  );
+}
+
+function CtaFooter() {
+  const [active, setActive] = useState("instagram");
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const today = new Date().toISOString().split("T")[0];
+  const [scheduleDate, setScheduleDate] = useState(today);
+  const [scheduleTime, setScheduleTime] = useState("09:00");
+  const [scheduled, setScheduled] = useState(false);
+  const [repeat, setRepeat] = useState("none");
+
+  const handleSchedule = () => {
+    setScheduled(true);
+    setTimeout(() => {
+      setScheduled(false);
+      setScheduleOpen(false);
+    }, 1400);
+  };
+
+  return (
+    <div className="grid grid-cols-2 gap-3">
+      <button onClick={() => {}} className=" btn-secondary">
+        <SendHorizonal className="size-4" />
+        Publish Now
+      </button>
+      <button
+        onClick={() => setScheduleOpen(true)}
+        className="btn-primary text-white rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+      >
+        <Calendar className="size-4" />
+        Schedule
+      </button>
+
+      {scheduleOpen && (
+        <div
+          className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in"
+          onClick={() => setScheduleOpen(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[576px] bg-surface-thick backdrop-blur-3xl border-t sm:border border-border-glass rounded-t-3xl sm:rounded-3xl p-5 flex flex-col gap-5 animate-in slide-in-from-bottom"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-full bg-surface flex items-center justify-center">
+                  <CalendarCheck2Icon className="size-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-[18px] font-semibold leading-tight text-white">
+                    Schedule Content
+                  </h2>
+                  <p className="text-[12px] text-text-dim">
+                    Pick when this post goes live
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setScheduleOpen(false)}
+                aria-label="Close"
+                className="p-2 rounded-full hover:bg-surface-material transition-colors"
+              >
+                <X className="size-4 text-white" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <label className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors">
+                <span
+                  className="text-[10px] font-semibold uppercase text-text-dim"
+                  style={{
+                    fontFamily: "JetBrains Mono, monospace",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Date
+                </span>
+                <input
+                  type="date"
+                  min={today}
+                  value={scheduleDate}
+                  onChange={(e) => setScheduleDate(e.target.value)}
+                  className="bg-transparent outline-none text-[15px] font-semibold text-white [color-scheme:dark]"
+                />
+              </label>
+              <label className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors">
+                <span
+                  className="text-[10px] font-semibold uppercase text-text-dim"
+                  style={{
+                    fontFamily: "JetBrains Mono, monospace",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Time
+                </span>
+                <input
+                  type="time"
+                  value={scheduleTime}
+                  onChange={(e) => setScheduleTime(e.target.value)}
+                  className="bg-transparent outline-none text-[15px] font-semibold text-white [color-scheme:dark]"
+                />
+              </label>
+            </div>
+
+            {/*<div className="flex flex-col gap-2">
+              <span
+                className="text-[10px] font-semibold uppercase text-text-dim"
+                style={{
+                  fontFamily: "JetBrains Mono, monospace",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Repeat
+              </span>
+              <div className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                {[
+                  { id: "none", label: "One-time" },
+                  { id: "daily", label: "Daily" },
+                  { id: "weekly", label: "Weekly" },
+                  { id: "monthly", label: "Monthly" },
+                ].map((r) => {
+                  const isActive = repeat === r.id;
+                  return (
+                    <button
+                      key={r.id}
+                      onClick={() => setRepeat(r.id)}
+                      className={`px-4 py-2 rounded-full text-[12px] font-semibold shrink-0 border transition-all ${
+                        isActive
+                          ? "bg-primary text-white border-transparent"
+                          : "bg-surface-material border-border-glass text-text-dim hover:text-white"
+                      }`}
+                    >
+                      {r.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>*/}
+
+            <div className="flex items-center gap-3 p-3 bg-primary/10 rounded-xl border border-primary/20">
+              <SparklesIcon className="size-4 text-primary" />
+              <p className="text-[12px] text-text-dim">
+                Best engagement window for{" "}
+                <span className="text-white font-semibold capitalize">
+                  {active}
+                </span>{" "}
+                is around 8–10 PM.
+              </p>
+            </div>
+
+            <button
+              onClick={handleSchedule}
+              disabled={scheduled}
+              className="h-[52px] btn-primary text-white rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(109,93,242,0.4)] disabled:opacity-90"
+            >
+              {scheduled && <CheckCircle className="size-4 text-primary" />}
+              {scheduled ? "Scheduled!" : "Confirm Schedule"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -324,16 +491,6 @@ function AutomatePage() {
         <PlatformSelector />
 
         <InstagramPreview />
-
-        <div className="flex gap-2">
-          <Link
-            to="/app/calendar"
-            className="btn-primary mt-[1.2rem] h-[3.0625rem] w-full rounded-[1rem] border-none bg-linear-to-r from-[#7c5ce6] to-[#8f67ff] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_28px_rgba(102,63,219,0.35)] transition-colors duration-150 hover:from-[#7656df] hover:to-[#8a63fa] text-sm sm:test-md"
-          >
-            Public Now
-            <ArrowUpRight className="size-4 inline-block" />
-          </Link>
-        </div>
 
         <DateTimeSelector />
 
@@ -357,15 +514,9 @@ function AutomatePage() {
             </button>
           </div>
         )}
-        {/* Footer Action */}
 
-        <Link
-          to="/app/calendar"
-          className="btn-primary mt-[1.2rem] h-[3.0625rem] w-full rounded-[1rem] border-none bg-linear-to-r from-[#7c5ce6] to-[#8f67ff] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_28px_rgba(102,63,219,0.35)] transition-colors duration-150 hover:from-[#7656df] hover:to-[#8a63fa] text-sm sm:test-md"
-        >
-          Schedule Content
-          <Calendar className="size-4 inline-block" />
-        </Link>
+        {/* CTA Footer */}
+        <CtaFooter />
       </main>
     </div>
   );

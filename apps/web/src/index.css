@@ -358,6 +358,10 @@
         transform: scale(0.98);
     }
 
+    .btn-secondary {
+        @apply bg-surface-material text-white border border-border-glass rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 cursor-pointer;
+    }
+
     /* ── List Item / Link ────────────────────────────────────
      surface-material background, chevron-right trailing icon.
      ──────────────────────────────────────────────────────── */
