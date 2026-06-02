@@ -17,6 +17,7 @@ import { existsSync } from "node:fs";
 interface NpmPackageInfo {
   "dist-tags": { latest: string };
   versions: Record<string, any>;
+  time?: Record<string, string>;
 }
 
 interface CatalogEntry {
@@ -24,6 +25,13 @@ interface CatalogEntry {
   currentVersion: string;
   latestVersion: string;
   updateType: "patch" | "minor" | "major" | "none";
+}
+
+interface SkippedEntry {
+  name: string;
+  currentVersion: string;
+  latestVersion: string;
+  reason: string;
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -48,8 +56,24 @@ if (Object.keys(catalog).length === 0) {
 
 console.log(`📋 Found ${Object.keys(catalog).length} catalog dependencies\n`);
 
+// Read minimumReleaseAge from bunfig.toml (if configured) so we can skip
+// brand-new releases that bun would refuse to install anyway.
+let minimumReleaseAge = 0;
+const bunfigPath = "./bunfig.toml";
+if (existsSync(bunfigPath)) {
+  const bunfigText = await Bun.file(bunfigPath).text();
+  const match = bunfigText.match(/minimumReleaseAge\s*=\s*(\d+)/);
+  if (match) {
+    minimumReleaseAge = Number.parseInt(match[1]!, 10);
+    console.log(
+      `⏰ minimumReleaseAge: ${minimumReleaseAge}s (${(minimumReleaseAge / 3600).toFixed(1)}h)\n`,
+    );
+  }
+}
+
 // Check each dependency
 const updates: CatalogEntry[] = [];
+const skipped: SkippedEntry[] = [];
 const errors: string[] = [];
 
 for (const [name, version] of Object.entries(catalog)) {
@@ -83,14 +107,40 @@ for (const [name, version] of Object.entries(catalog)) {
       }
     }
 
-    if (updateType !== "none") {
-      updates.push({
-        name,
-        currentVersion,
-        latestVersion: prefix + latestVersion,
-        updateType,
-      });
+    if (updateType === "none") continue;
+
+    // Skip if the latest version is too new and would be blocked by
+    // minimum-release-age. We do not update the catalog entry for it
+    // and the other eligible updates can still be installed in this run.
+    if (minimumReleaseAge > 0) {
+      const publishTime = data.time?.[latestVersion];
+      if (publishTime) {
+        const ageMs = Date.now() - new Date(publishTime).getTime();
+        if (!Number.isNaN(ageMs) && ageMs / 1000 < minimumReleaseAge) {
+          const ageSec = Math.round(ageMs / 1000);
+          const remainingSec = Math.round(minimumReleaseAge - ageMs / 1000);
+          const remainingHours = (remainingSec / 3600).toFixed(1);
+          skipped.push({
+            name,
+            currentVersion,
+            latestVersion: prefix + latestVersion,
+            reason: `published ${ageSec}s ago, need ${minimumReleaseAge}s (${remainingHours}h remaining)`,
+          });
+          continue;
+        }
+      } else {
+        console.log(
+          `⚠️ ${name}: no publish time in registry, allowing update`,
+        );
+      }
     }
+
+    updates.push({
+      name,
+      currentVersion,
+      latestVersion: prefix + latestVersion,
+      updateType,
+    });
   } catch (error) {
     const errorMsg = `Failed to check ${name}: ${error instanceof Error ? error.message : String(error)}`;
     errors.push(errorMsg);
@@ -102,8 +152,24 @@ for (const [name, version] of Object.entries(catalog)) {
 console.log("\n📊 Update Summary");
 console.log("================");
 
+if (skipped.length > 0) {
+  console.log(
+    `\n⏭️  Skipped due to minimum-release-age (${skipped.length}):`,
+  );
+  for (const s of skipped) {
+    console.log(`  ${s.name}: ${s.currentVersion} → ${s.latestVersion}`);
+    console.log(`      ${s.reason}`);
+  }
+}
+
 if (updates.length === 0) {
-  console.log("✅ All catalog dependencies are up to date!");
+  if (skipped.length > 0) {
+    console.log(
+      "\n✅ No updates applied (blocked by minimum-release-age; will retry next run)",
+    );
+  } else {
+    console.log("\n✅ All catalog dependencies are up to date!");
+  }
   process.exit(0);
 }
 

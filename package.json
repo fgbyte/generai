@@ -21,15 +21,15 @@
     "catalog": {
       "dotenv": "^17.4.2",
       "zod": "^4.4.3",
-      "hono": "^4.12.18",
+      "hono": "^4.12.23",
       "typescript": "^6.0.3",
       "@types/node": "^25.6.2",
       "@cloudflare/workers-types": "^4.20260511.1",
       "better-auth": "^1.6.10",
-      "alchemy": "^0.93.7",
-      "vitest": "^4.1.5",
-      "@vitest/ui": "^4.1.5",
-      "@vitest/coverage-v8": "^4.1.5",
+      "alchemy": "^0.93.9",
+      "vitest": "^4.1.8",
+      "@vitest/ui": "^4.1.8",
+      "@vitest/coverage-v8": "^4.1.8",
       "jsdom": "^29.1.1"
     }
   },
