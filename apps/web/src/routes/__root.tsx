@@ -1,8 +1,4 @@
-import {
-  HeadContent,
-  Outlet,
-  createRootRouteWithContext,
-} from "@tanstack/react-router";
+import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { ThemeProvider } from "@/components/theme-provider";

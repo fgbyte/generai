@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Calendar,
-  Clock,
-  MoreVertical,
-  Plus,
-  Instagram,
-  Twitter,
-  Dribbble,
-} from "lucide-react";
+import { Calendar, Clock, MoreVertical, Instagram, Twitter, Dribbble } from "lucide-react";
 
 interface ScheduledPost {
   id: string;
@@ -109,9 +101,7 @@ function DayChip({
           : "glass-card opacity-60 hover:opacity-100"
       }`}
     >
-      <span className="text-[10px] font-medium leading-3 text-text-muted">
-        {chip.day}
-      </span>
+      <span className="text-[10px] font-medium leading-3 text-text-muted">{chip.day}</span>
       <span
         className={`text-headline-md font-semibold ${isSelected ? "text-white" : "text-white"}`}
       >
@@ -124,7 +114,6 @@ function DayChip({
 function TimelineItem({ post }: { post: ScheduledPost }) {
   const platformConfig = PLATFORM_CONFIG[post.platform];
   const statusConfig = STATUS_CONFIG[post.status];
-  const PlatformIcon = platformConfig.icon;
 
   return (
     <div className="relative pl-8 group">
@@ -149,18 +138,13 @@ function TimelineItem({ post }: { post: ScheduledPost }) {
               {statusConfig.label}
             </span>
           </div>
-          <h3 className="text-headline-md font-semibold text-white">
-            {post.title}
-          </h3>
+          <h3 className="text-headline-md font-semibold text-white">{post.title}</h3>
           <div className="flex items-center gap-1 text-text-dim">
             <Clock className="size-4" />
             <span className="text-caption-xs">{post.time}</span>
           </div>
         </div>
-        <button
-          type="button"
-          className="text-text-muted hover:text-white transition-colors"
-        >
+        <button type="button" className="text-text-muted hover:text-white transition-colors">
           <MoreVertical className="size-5" />
         </button>
       </div>

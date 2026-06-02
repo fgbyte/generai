@@ -4,10 +4,7 @@ import { Select as SelectPrimitive } from "@base-ui/react/select";
 
 import { cn } from "@/lib/utils";
 
-function Select({
-  children,
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root>) {
+function Select({ children, ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root {...props}>{children}</SelectPrimitive.Root>;
 }
 
@@ -31,10 +28,7 @@ function SelectTrigger({
   );
 }
 
-function SelectValue({
-  className,
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Value>) {
+function SelectValue({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Value>) {
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
@@ -89,10 +83,7 @@ function SelectItem({
           viewBox="0 0 24 24"
           aria-hidden="true"
         >
-          <path
-            fill="currentColor"
-            d="M20 6L9 17l-5-5l1.41-1.41L9 14.17l7.59-7.59L18 8z"
-          />
+          <path fill="currentColor" d="M20 6L9 17l-5-5l1.41-1.41L9 14.17l7.59-7.59L18 8z" />
         </svg>
       </SelectPrimitive.ItemIndicator>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

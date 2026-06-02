@@ -40,7 +40,6 @@ from everyone. By participating in this project, you agree to abide by our
 3. Set up environment variables:
 
    Create the required `.env` files from the examples:
-
    - `apps/server/.env.dev` — Database URL, CORS origin, Better Auth secrets
    - `apps/web/.env.dev` — VITE_SERVER_URL
 
@@ -100,14 +99,14 @@ generai/
 
 ### Key Locations
 
-| What                  | Where                          |
-| --------------------- | ------------------------------ |
-| Frontend routes       | `apps/web/src/routes/`         |
-| API endpoints         | `apps/server/src/`             |
-| Database schema       | `packages/db/src/schema/`      |
-| Database queries      | `packages/db/src/queries/`     |
-| Auth configuration    | `packages/auth/src/`           |
-| UI components         | `apps/web/src/components/ui/`  |
+| What               | Where                         |
+| ------------------ | ----------------------------- |
+| Frontend routes    | `apps/web/src/routes/`        |
+| API endpoints      | `apps/server/src/`            |
+| Database schema    | `packages/db/src/schema/`     |
+| Database queries   | `packages/db/src/queries/`    |
+| Auth configuration | `packages/auth/src/`          |
+| UI components      | `apps/web/src/components/ui/` |
 
 ## Coding Conventions
 
@@ -122,8 +121,8 @@ generai/
 Use the `@generai/*` alias for cross-package dependencies:
 
 ```typescript
-import { db } from '@generai/db';
-import { auth } from '@generai/auth';
+import { db } from "@generai/db";
+import { auth } from "@generai/auth";
 ```
 
 ### Shared Dependencies (Catalogs)

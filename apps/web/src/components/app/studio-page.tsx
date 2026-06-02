@@ -38,14 +38,8 @@ export function StudioPage() {
         <section className="mt-md flex flex-col gap-lg">
           {/* Content Type Select */}
           <div className="flex flex-col gap-sm">
-            <Label className="text-mono-label text-text-dim pl-xs">
-              Content Type
-            </Label>
-            <CustomSelect
-              value={contentType}
-              onChange={setContentType}
-              options={CONTENT_TYPES}
-            />
+            <Label className="text-mono-label text-text-dim pl-xs">Content Type</Label>
+            <CustomSelect value={contentType} onChange={setContentType} options={CONTENT_TYPES} />
           </div>
 
           {/* Instagram Upload */}
@@ -61,9 +55,7 @@ export function StudioPage() {
 
           {/* Prompt Textarea */}
           <div className="flex flex-col gap-sm">
-            <Label className="text-mono-label text-text-dim pl-xs">
-              Prompt
-            </Label>
+            <Label className="text-mono-label text-text-dim pl-xs">Prompt</Label>
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -76,10 +68,7 @@ export function StudioPage() {
           <ActivityHistoryLink />
 
           {/* Pro Tip Banner */}
-          <ProTipBanner
-            tip="Specificity matters."
-            highlight='"under 280 characters"'
-          />
+          <ProTipBanner tip="Specificity matters." highlight='"under 280 characters"' />
 
           {/* Primary Action */}
           <Link

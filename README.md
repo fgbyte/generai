@@ -14,18 +14,18 @@ Generai is an AI‑powered content‑generation platform that helps users create
 
 ## Features
 
-| Feature                   | Description                                                       |
-| ------------------------- | ----------------------------------------------------------------- |
-| ⚛️ **React + TanStack Router** | Type-safe file-based routing with full type safety              |
-| 🎨 **Tailwind CSS v4 + shadcn/ui** | Modern utility-first CSS with production‑ready components |
-| ⚡ **Hono**               | Lightweight, performant server framework for Cloudflare Workers    |
-| 🗄️ **Drizzle ORM + PostgreSQL** | TypeScript-first ORM with migrations and type-safe queries     |
-| 🔐 **Better Auth**        | Full authentication (email/password, OAuth, session management)    |
-| 📧 **Postmark**           | Transactional email delivery                                      |
-| 📦 **Turborepo**          | Optimized monorepo build system with smart caching                 |
-| 🔍 **Oxlint + Oxfmt**     | Fast linting and formatting (no ESLint/Prettier)                   |
-| 🔄 **TanStack Query**     | Async state management and server data synchronization             |
-| ☁️ **Cloudflare Workers** | Edge-deployed server runtime via Alchemy                          |
+| Feature                            | Description                                                     |
+| ---------------------------------- | --------------------------------------------------------------- |
+| ⚛️ **React + TanStack Router**     | Type-safe file-based routing with full type safety              |
+| 🎨 **Tailwind CSS v4 + shadcn/ui** | Modern utility-first CSS with production‑ready components       |
+| ⚡ **Hono**                        | Lightweight, performant server framework for Cloudflare Workers |
+| 🗄️ **Drizzle ORM + PostgreSQL**    | TypeScript-first ORM with migrations and type-safe queries      |
+| 🔐 **Better Auth**                 | Full authentication (email/password, OAuth, session management) |
+| 📧 **Postmark**                    | Transactional email delivery                                    |
+| 📦 **Turborepo**                   | Optimized monorepo build system with smart caching              |
+| 🔍 **Oxlint + Oxfmt**              | Fast linting and formatting (no ESLint/Prettier)                |
+| 🔄 **TanStack Query**              | Async state management and server data synchronization          |
+| ☁️ **Cloudflare Workers**          | Edge-deployed server runtime via Alchemy                        |
 
 ## Environment Variables
 

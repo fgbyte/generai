@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface TimePickerProps {
   value: string;
@@ -11,23 +11,23 @@ interface TimePickerProps {
 }
 
 export function TimePicker({ value, onValueChange, className }: TimePickerProps) {
-  const [hours, minutes] = value.split(":")
+  const [hours, minutes] = value.split(":");
 
   const handleHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newHours = parseInt(e.target.value, 10)
-    if (isNaN(newHours)) newHours = 0
-    if (newHours < 0) newHours = 0
-    if (newHours > 23) newHours = 23
-    onValueChange(`${String(newHours).padStart(2, "0")}:${minutes || "00"}`)
-  }
+    let newHours = parseInt(e.target.value, 10);
+    if (isNaN(newHours)) newHours = 0;
+    if (newHours < 0) newHours = 0;
+    if (newHours > 23) newHours = 23;
+    onValueChange(`${String(newHours).padStart(2, "0")}:${minutes || "00"}`);
+  };
 
   const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newMinutes = parseInt(e.target.value, 10)
-    if (isNaN(newMinutes)) newMinutes = 0
-    if (newMinutes < 0) newMinutes = 0
-    if (newMinutes > 59) newMinutes = 59
-    onValueChange(`${hours || "12"}:${String(newMinutes).padStart(2, "0")}`)
-  }
+    let newMinutes = parseInt(e.target.value, 10);
+    if (isNaN(newMinutes)) newMinutes = 0;
+    if (newMinutes < 0) newMinutes = 0;
+    if (newMinutes > 59) newMinutes = 59;
+    onValueChange(`${hours || "12"}:${String(newMinutes).padStart(2, "0")}`);
+  };
 
   return (
     <div className={cn("flex items-end gap-2", className)}>
@@ -75,5 +75,5 @@ export function TimePicker({ value, onValueChange, className }: TimePickerProps)
         />
       </div>
     </div>
-  )
+  );
 }

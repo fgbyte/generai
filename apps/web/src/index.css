@@ -20,260 +20,257 @@
    Design system: Generai Luxe — Glassmorphism / Midnight Studio
    ════════════════════════════════════════════════════════════ */
 @theme {
-    /* ── Colors ────────────────────────────────────────────── */
-    --color-black: #000000;
-    --color-white: #ffffff;
+  /* ── Colors ────────────────────────────────────────────── */
+  --color-black: #000000;
+  --color-white: #ffffff;
 
-    /* Glassmorphism surfaces */
-    --color-surface-deep: rgba(28, 28, 30, 0.9);
-    --color-surface-material: rgba(55, 55, 55, 0.5);
-    --color-surface-thick: rgba(44, 44, 46, 0.8);
-    --color-surface-form: rgba(118, 118, 128, 0.24);
+  /* Glassmorphism surfaces */
+  --color-surface-deep: rgba(28, 28, 30, 0.9);
+  --color-surface-material: rgba(55, 55, 55, 0.5);
+  --color-surface-thick: rgba(44, 44, 46, 0.8);
+  --color-surface-form: rgba(118, 118, 128, 0.24);
 
-    /* Glass border */
-    --color-border-glass: rgba(255, 255, 255, 0.15);
+  /* Glass border */
+  --color-border-glass: rgba(255, 255, 255, 0.15);
 
-    /* Typography colors */
-    --color-text-dim: rgba(255, 255, 255, 0.5);
-    --color-text-muted: rgba(255, 255, 255, 0.3);
+  /* Typography colors */
+  --color-text-dim: rgba(255, 255, 255, 0.5);
+  --color-text-muted: rgba(255, 255, 255, 0.3);
 
-    /* Brand accents — inferred from prose */
-    --color-primary: #5e5ce6; /* Custom Violet — active states, primary actions */
-    --color-primary-hover: #7c3aed;
-    --color-primary-active: #6d28d9;
-    --color-primary-disabled: rgba(139, 92, 246, 0.4);
-    --color-on-primary: #ffffff;
+  /* Brand accents — inferred from prose */
+  --color-primary: #5e5ce6; /* Custom Violet — active states, primary actions */
+  --color-primary-hover: #7c3aed;
+  --color-primary-active: #6d28d9;
+  --color-primary-disabled: rgba(139, 92, 246, 0.4);
+  --color-on-primary: #ffffff;
 
-    --color-secondary: #ffd60a; /* Custom Gold — balances, premium features */
-    --color-on-secondary: #000000;
+  --color-secondary: #ffd60a; /* Custom Gold — balances, premium features */
+  --color-on-secondary: #000000;
 
-    /* Semantic aliases for shadcn */
-    --color-neutral: #000000; /* True black base */
-    --color-surface: rgba(28, 28, 30, 0.6);
-    --color-tertiary: #5e5ce6; /* CTA / action color = violet */
-    --color-on-tertiary: #ffffff;
-    --color-tertiary-container: rgba(139, 92, 246, 0.15);
-    --color-border: rgba(255, 255, 255, 0.15);
-    --color-foreground: #ffffff;
-    --color-error: #dc2626; /* synthesized — no error token in DESIGN.md */
+  /* Semantic aliases for shadcn */
+  --color-neutral: #000000; /* True black base */
+  --color-surface: rgba(28, 28, 30, 0.6);
+  --color-tertiary: #5e5ce6; /* CTA / action color = violet */
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: rgba(139, 92, 246, 0.15);
+  --color-border: rgba(255, 255, 255, 0.15);
+  --color-foreground: #ffffff;
+  --color-error: #dc2626; /* synthesized — no error token in DESIGN.md */
 
-    /* ── Font Families ─────────────────────────────────────── */
-    --font-body: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+  /* ── Font Families ─────────────────────────────────────── */
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
 
-    /* ── Type Scale ────────────────────────────────────────── */
-    --text-display-xl: 2.125rem; /* 34px */
-    --text-display-xl--line-height: 1.206; /* 41px / 34px */
+  /* ── Type Scale ────────────────────────────────────────── */
+  --text-display-xl: 2.125rem; /* 34px */
+  --text-display-xl--line-height: 1.206; /* 41px / 34px */
 
-    --text-headline-md: 1.25rem; /* 20px */
-    --text-headline-md--line-height: 1.2; /* 24px / 20px */
+  --text-headline-md: 1.25rem; /* 20px */
+  --text-headline-md--line-height: 1.2; /* 24px / 20px */
 
-    --text-body-md: 1.0625rem; /* 17px */
-    --text-body-md--line-height: 1.294; /* 22px / 17px */
+  --text-body-md: 1.0625rem; /* 17px */
+  --text-body-md--line-height: 1.294; /* 22px / 17px */
 
-    --text-button-md: 1.0625rem; /* 17px */
-    --text-button-md--line-height: 1.294; /* 22px / 17px */
+  --text-button-md: 1.0625rem; /* 17px */
+  --text-button-md--line-height: 1.294; /* 22px / 17px */
 
-    --text-mono-label: 0.75rem; /* 12px */
+  --text-mono-label: 0.75rem; /* 12px */
 
-    --text-caption-xs: 0.75rem; /* 12px */
-    --text-caption-xs--line-height: 1.333; /* 16px / 12px */
+  --text-caption-xs: 0.75rem; /* 12px */
+  --text-caption-xs--line-height: 1.333; /* 16px / 12px */
 
-    --text-nav-label: 0.625rem; /* 10px */
-    --text-nav-label--line-height: 1.2; /* 12px / 10px */
+  --text-nav-label: 0.625rem; /* 10px */
+  --text-nav-label--line-height: 1.2; /* 12px / 10px */
 
-    /* ── Font Weights ──────────────────────────────────────── */
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
+  /* ── Font Weights ──────────────────────────────────────── */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
-    /* ── Letter Spacing ────────────────────────────────────── */
-    --tracking-tight-display: -0.024em; /* -0.4px / 17px approx for display */
-    --tracking-tight-body: -0.024em; /* -0.41px / 17px for body-md */
-    --tracking-wide-label: 0.042em; /* 0.5px / 12px for mono-label */
+  /* ── Letter Spacing ────────────────────────────────────── */
+  --tracking-tight-display: -0.024em; /* -0.4px / 17px approx for display */
+  --tracking-tight-body: -0.024em; /* -0.41px / 17px for body-md */
+  --tracking-wide-label: 0.042em; /* 0.5px / 12px for mono-label */
 
-    /* ── Spacing ───────────────────────────────────────────── */
-    --spacing-xxs: 0.125rem; /* 2px */
-    --spacing-xs: 0.25rem; /* 4px */
-    --spacing-sm: 0.5rem; /* 8px */
-    --spacing-md: 0.75rem; /* 12px */
-    --spacing-lg: 1rem; /* 16px */
-    --spacing-xl: 1.25rem; /* 20px */
-    --spacing-xxl: 2rem; /* 32px */
-    --bottom-nav-height: 80px; /* pt-sm(8) + icon(28) + mt-1(4) + text(16) + pb-6(24) */
-    --spacing-section: var(--bottom-nav-height); /* matches BottomNavBar height */
+  /* ── Spacing ───────────────────────────────────────────── */
+  --spacing-xxs: 0.125rem; /* 2px */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 0.75rem; /* 12px */
+  --spacing-lg: 1rem; /* 16px */
+  --spacing-xl: 1.25rem; /* 20px */
+  --spacing-xxl: 2rem; /* 32px */
+  --bottom-nav-height: 80px; /* pt-sm(8) + icon(28) + mt-1(4) + text(16) + pb-6(24) */
+  --spacing-section: var(--bottom-nav-height); /* matches BottomNavBar height */
 
-    /* ── Border Radius ─────────────────────────────────────── */
-    --radius-sm: 0.25rem; /* 4px */
-    --radius-default: 0.5rem; /* 8px */
-    --radius-md: 0.75rem; /* 12px */
-    --radius-lg: 1rem; /* 16px */
-    --radius-xl: 1.5rem; /* 24px (maps to DESIGN.md 20px for cards — using closest) */
-    --radius-full: 9999px;
+  /* ── Border Radius ─────────────────────────────────────── */
+  --radius-sm: 0.25rem; /* 4px */
+  --radius-default: 0.5rem; /* 8px */
+  --radius-md: 0.75rem; /* 12px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.5rem; /* 24px (maps to DESIGN.md 20px for cards — using closest) */
+  --radius-full: 9999px;
 
-    /* ── Shadows — Material stacking (glassmorphism) ───────── */
-    --shadow-glass-card:
-        0 0 0 0.5px rgba(255, 255, 255, 0.15),
-        inset 0 1px 1px rgba(255, 255, 255, 0.05);
-    --shadow-glass-nav:
-        0 -1px 0 rgba(255, 255, 255, 0.15),
-        inset 0 1px 1px rgba(255, 255, 255, 0.05);
-    --shadow-focus-ring: 0 0 0 2px rgba(139, 92, 246, 0.6);
+  /* ── Shadows — Material stacking (glassmorphism) ───────── */
+  --shadow-glass-card:
+    0 0 0 0.5px rgba(255, 255, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  --shadow-glass-nav: 0 -1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  --shadow-focus-ring: 0 0 0 2px rgba(139, 92, 246, 0.6);
 
-    /* ── Container ─────────────────────────────────────────── */
-    --container-max: 576px;
+  /* ── Container ─────────────────────────────────────────── */
+  --container-max: 576px;
 
-    /* ── Animations ────────────────────────────────────────── */
-    --animate-tap-press: tap-press 100ms ease-out;
+  /* ── Animations ────────────────────────────────────────── */
+  --animate-tap-press: tap-press 100ms ease-out;
 
-    @keyframes tap-press {
-        from {
-            transform: scale(1);
-        }
-        to {
-            transform: scale(0.98);
-        }
+  @keyframes tap-press {
+    from {
+      transform: scale(1);
     }
+    to {
+      transform: scale(0.98);
+    }
+  }
 }
 
 /* ═══ 2. DARK MODE PRIMITIVES ═══════════════════════════════
    This design is dark-first. Light mode is a synthesized inversion.
    ════════════════════════════════════════════════════════════ */
 @layer base {
-    :root {
-        /* Dark mode (default) — all values as designed */
-        --bg-base: var(--color-neutral);
-        --bg-surface-deep: var(--color-surface-deep);
-        --bg-surface-material: var(--color-surface-material);
-        --bg-surface-thick: var(--color-surface-deep);
-        --bg-surface-form: var(--color-surface-form);
-        --border-glass: var(--color-border-glass);
-        --text-primary: var(--color-on-primary);
-        --text-secondary: var(--color-text-dim);
-        --text-muted: var(--color-text-muted);
-        --accent-primary: var(--color-primary);
-        --accent-secondary: var(--color-secondary);
-    }
+  :root {
+    /* Dark mode (default) — all values as designed */
+    --bg-base: var(--color-neutral);
+    --bg-surface-deep: var(--color-surface-deep);
+    --bg-surface-material: var(--color-surface-material);
+    --bg-surface-thick: var(--color-surface-deep);
+    --bg-surface-form: var(--color-surface-form);
+    --border-glass: var(--color-border-glass);
+    --text-primary: var(--color-on-primary);
+    --text-secondary: var(--color-text-dim);
+    --text-muted: var(--color-text-muted);
+    --accent-primary: var(--color-primary);
+    --accent-secondary: var(--color-secondary);
+  }
 
-    /* Light mode — synthesized inversion for accessibility */
-    .light,
-    [data-theme="light"] {
-        --bg-base: #f5f5f7;
-        --bg-surface-deep: rgba(255, 255, 255, 0.9);
-        --bg-surface-material: rgba(255, 255, 255, 0.7);
-        --bg-surface-thick: rgba(245, 245, 247, 0.85);
-        --bg-surface-form: rgba(0, 0, 0, 0.06);
-        --border-glass: rgba(0, 0, 0, 0.12);
-        --text-primary: #1a1a1a;
-        --text-secondary: rgba(0, 0, 0, 0.55);
-        --text-muted: rgba(0, 0, 0, 0.35);
-        --accent-primary: var(--color-primary);
-        --accent-secondary: var(--color-secondary);
-    }
+  /* Light mode — synthesized inversion for accessibility */
+  .light,
+  [data-theme="light"] {
+    --bg-base: #f5f5f7;
+    --bg-surface-deep: rgba(255, 255, 255, 0.9);
+    --bg-surface-material: rgba(255, 255, 255, 0.7);
+    --bg-surface-thick: rgba(245, 245, 247, 0.85);
+    --bg-surface-form: rgba(0, 0, 0, 0.06);
+    --border-glass: rgba(0, 0, 0, 0.12);
+    --text-primary: #1a1a1a;
+    --text-secondary: rgba(0, 0, 0, 0.55);
+    --text-muted: rgba(0, 0, 0, 0.35);
+    --accent-primary: var(--color-primary);
+    --accent-secondary: var(--color-secondary);
+  }
 }
 
 /* ═══ 4. BASE RESETS ════════════════════════════════════════ */
 @layer base {
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-    }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-    html {
-        font-family: var(--font-body);
-        font-size: var(--text-body-md);
-        line-height: var(--text-body-md--line-height);
-        color: var(--text-primary);
-        background-color: #000000;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        overflow-x: hidden;
-    }
+  html {
+    font-family: var(--font-body);
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    color: var(--text-primary);
+    background-color: #000000;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
 
-    body {
-        margin: 0;
-        min-height: 100dvh;
-        background-color: #000000;
-    }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: #000000;
+  }
 
-    /* Typography scale */
-    h1,
-    .text-display-xl {
-        font-size: var(--text-display-xl);
-        line-height: var(--text-display-xl--line-height);
-        font-weight: var(--font-weight-bold);
-        letter-spacing: var(--tracking-tight-display);
-        font-family: var(--font-body);
-    }
+  /* Typography scale */
+  h1,
+  .text-display-xl {
+    font-size: var(--text-display-xl);
+    line-height: var(--text-display-xl--line-height);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-tight-display);
+    font-family: var(--font-body);
+  }
 
-    h2,
-    .text-headline-md {
-        font-size: var(--text-headline-md);
-        line-height: var(--text-headline-md--line-height);
-        font-weight: var(--font-weight-semibold);
-        font-family: var(--font-body);
-    }
+  h2,
+  .text-headline-md {
+    font-size: var(--text-headline-md);
+    line-height: var(--text-headline-md--line-height);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-body);
+  }
 
-    h3 {
-        font-size: var(--text-body-md);
-        line-height: var(--text-body-md--line-height);
-        font-weight: var(--font-weight-semibold);
-        font-family: var(--font-body);
-    }
+  h3 {
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-body);
+  }
 
-    p {
-        font-size: var(--text-body-md);
-        line-height: var(--text-body-md--line-height);
-        font-weight: var(--font-weight-normal);
-        font-family: var(--font-body);
-    }
+  p {
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    font-weight: var(--font-weight-normal);
+    font-family: var(--font-body);
+  }
 
-    /* Mono labels — uppercase with generous tracking */
-    .text-mono-label {
-        font-size: var(--text-mono-label);
-        font-weight: var(--font-weight-semibold);
-        letter-spacing: var(--tracking-wide-label);
-        font-family: var(--font-mono);
-        text-transform: uppercase;
-    }
+  /* Mono labels — uppercase with generous tracking */
+  .text-mono-label {
+    font-size: var(--text-mono-label);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-wide-label);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+  }
 
-    /* Caption */
-    .text-caption-xs {
-        font-size: var(--text-caption-xs);
-        line-height: var(--text-caption-xs--line-height);
-        font-weight: var(--font-weight-normal);
-        font-family: var(--font-body);
-    }
+  /* Caption */
+  .text-caption-xs {
+    font-size: var(--text-caption-xs);
+    line-height: var(--text-caption-xs--line-height);
+    font-weight: var(--font-weight-normal);
+    font-family: var(--font-body);
+  }
 
-    /* Nav label */
-    .text-nav-label {
-        font-size: var(--text-nav-label);
-        line-height: var(--text-nav-label--line-height);
-        font-weight: var(--font-weight-medium);
-        font-family: var(--font-body);
-    }
+  /* Nav label */
+  .text-nav-label {
+    font-size: var(--text-nav-label);
+    line-height: var(--text-nav-label--line-height);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-body);
+  }
 
-    /* Links */
-    a {
-        color: var(--accent-primary);
-        text-decoration: none;
-    }
-    a:hover {
-        color: var(--primary-hover, #7c3aed);
-    }
+  /* Links */
+  a {
+    color: var(--accent-primary);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--primary-hover, #7c3aed);
+  }
 
-    /* Focus visible */
-    :focus-visible {
-        outline: 2px solid var(--ring);
-        outline-offset: 2px;
-    }
+  /* Focus visible */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 
-    /* Safe area for fixed bottom nav */
-    .safe-bottom {
-        padding-bottom: var(--spacing-section);
-    }
+  /* Safe area for fixed bottom nav */
+  .safe-bottom {
+    padding-bottom: var(--spacing-section);
+  }
 }
 
 /* ═══ 5. COMPONENT TOKENS ═══════════════════════════════════
@@ -281,118 +278,118 @@
    All values reference @theme tokens — no hardcoded hex.
    ════════════════════════════════════════════════════════════ */
 @layer components {
-    /* ── Primary Button ──────────────────────────────────────
+  /* ── Primary Button ──────────────────────────────────────
      Solid violet background, white text, no shadow.
      Subtle opacity change on tap (active:scale-[0.98]).
      ──────────────────────────────────────────────────────── */
-    .btn-primary {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--spacing-sm);
-        background-color: var(--color-primary);
-        color: var(--color-on-primary, #ffffff);
-        border: none;
-        border-radius: var(--radius-md);
-        padding-block: 0.75rem;
-        padding-inline: 1.25rem;
-        min-height: 3rem; /* 48px touch target */
-        font-family: var(--font-body);
-        font-size: var(--text-button-md);
-        font-weight: var(--font-weight-semibold);
-        line-height: var(--text-button-md--line-height);
-        cursor: pointer;
-        transition:
-            background-color 150ms ease,
-            opacity 100ms ease,
-            transform 100ms ease;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .btn-primary:hover {
-        background-color: var(
-            --color-primary-hover,
-            color-mix(in oklab, var(--color-primary) 85%, black)
-        );
-    }
-    .btn-primary:active {
-        transform: scale(0.98);
-        opacity: 0.9;
-    }
-    .btn-primary:disabled,
-    .btn-primary[aria-disabled="true"] {
-        background-color: var(--color-primary-disabled);
-        cursor: not-allowed;
-        opacity: 0.5;
-    }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    background-color: var(--color-primary);
+    color: var(--color-on-primary, #ffffff);
+    border: none;
+    border-radius: var(--radius-md);
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
+    min-height: 3rem; /* 48px touch target */
+    font-family: var(--font-body);
+    font-size: var(--text-button-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-button-md--line-height);
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      opacity 100ms ease,
+      transform 100ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-primary:hover {
+    background-color: var(
+      --color-primary-hover,
+      color-mix(in oklab, var(--color-primary) 85%, black)
+    );
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  .btn-primary:disabled,
+  .btn-primary[aria-disabled="true"] {
+    background-color: var(--color-primary-disabled);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 
-    /* ── Secondary / Glass Button ────────────────────────────
+  /* ── Secondary / Glass Button ────────────────────────────
      white/10 background with border-glass stroke.
      ──────────────────────────────────────────────────────── */
-    .btn-glass {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--spacing-sm);
-        background-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-primary);
-        border: 0.5px solid var(--color-border-glass);
-        border-radius: var(--radius-md);
-        padding-block: 0.75rem;
-        padding-inline: 1.25rem;
-        min-height: 3rem; /* 48px touch target */
-        font-family: var(--font-body);
-        font-size: var(--text-button-md);
-        font-weight: var(--font-weight-semibold);
-        line-height: var(--text-button-md--line-height);
-        cursor: pointer;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        transition:
-            background-color 150ms ease,
-            transform 100ms ease;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .btn-glass:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-    }
-    .btn-glass:active {
-        transform: scale(0.98);
-    }
+  .btn-glass {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 0.5px solid var(--color-border-glass);
+    border-radius: var(--radius-md);
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
+    min-height: 3rem; /* 48px touch target */
+    font-family: var(--font-body);
+    font-size: var(--text-button-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-button-md--line-height);
+    cursor: pointer;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition:
+      background-color 150ms ease,
+      transform 100ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-glass:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  .btn-glass:active {
+    transform: scale(0.98);
+  }
 
-    .btn-secondary {
-        @apply bg-surface-material text-white border border-border-glass rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 cursor-pointer;
-    }
+  .btn-secondary {
+    @apply bg-surface-material text-white border border-border-glass rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 cursor-pointer;
+  }
 
-    /* ── List Item / Link ────────────────────────────────────
+  /* ── List Item / Link ────────────────────────────────────
      surface-material background, chevron-right trailing icon.
      ──────────────────────────────────────────────────────── */
-    .list-item {
-        display: flex !important;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--spacing-lg);
-        background-color: var(--color-surface-material);
-        border: 0.5px solid var(--color-border-glass);
-        border-radius: var(--radius-lg);
-        padding: var(--spacing-lg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        cursor: pointer;
-        transition:
-            background-color 150ms ease,
-            transform 100ms ease;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .list-item:hover {
-        background-color: var(--color-surface-deep);
-    }
-    .list-item:active {
-        transform: scale(0.98);
-    }
-    .list-item .trailing-icon {
-        color: var(--color-text-dim);
-        flex-shrink: 0;
-    }
+  .list-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    background-color: var(--color-surface-material);
+    border: 0.5px solid var(--color-border-glass);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      transform 100ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .list-item:hover {
+    background-color: var(--color-surface-deep);
+  }
+  .list-item:active {
+    transform: scale(0.98);
+  }
+  .list-item .trailing-icon {
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+  }
 }
 
 /* ═══ 6. MAX-W OVERRIDES ════════════════════════════════════
@@ -401,23 +398,23 @@
    defines ANY --container-* token, you MUST emit overrides.
    ════════════════════════════════════════════════════════════ */
 @utility max-w-xs {
-    max-width: var(--container-xs) !important;
+  max-width: var(--container-xs) !important;
 }
 @utility max-w-sm {
-    max-width: var(--container-sm) !important;
+  max-width: var(--container-sm) !important;
 }
 @utility max-w-md {
-    max-width: var(--container-md) !important;
+  max-width: var(--container-md) !important;
 }
 @utility max-w-lg {
-    max-width: var(--container-lg) !important;
+  max-width: var(--container-lg) !important;
 }
 @utility max-w-xl {
-    max-width: var(--container-xl) !important;
+  max-width: var(--container-xl) !important;
 }
 @utility max-w-2xl {
-    max-width: var(--container-2xl) !important;
+  max-width: var(--container-2xl) !important;
 }
 @utility max-w-container {
-    max-width: var(--container-max) !important;
+  max-width: var(--container-max) !important;
 }

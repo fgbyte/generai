@@ -5,12 +5,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   X,
   Instagram as InstagramIcon,
@@ -56,9 +51,7 @@ function TopAppBar() {
         </Link>
       </button>
 
-      <h1 className="font-headline-md text-headline-md text-white">
-        Content Preview
-      </h1>
+      <h1 className="font-headline-md text-headline-md text-white">Content Preview</h1>
 
       <Link
         to="/app/history"
@@ -72,7 +65,7 @@ function TopAppBar() {
 
 function InstagramPreview({ caption }: { caption: string }) {
   const [liked, setLiked] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImageIndex, _setCurrentImageIndex] = useState(0);
   const [images, setImages] = useState([heroImageUrl]);
 
   const addImage = () => {
@@ -107,9 +100,7 @@ function InstagramPreview({ caption }: { caption: string }) {
             G
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-white">
-              generai_art
-            </span>
+            <span className="text-sm font-semibold text-white">generai_art</span>
             <span className="text-caption-xs text-text-dim">Sponsored</span>
           </div>
           <button
@@ -161,9 +152,7 @@ function InstagramPreview({ caption }: { caption: string }) {
             aria-label={liked ? "Unlike" : "Like"}
             className="transition-transform active:scale-90"
           >
-            <Heart
-              className={`size-6 ${liked ? "fill-red-400 text-red-400" : "text-white"}`}
-            />
+            <Heart className={`size-6 ${liked ? "fill-red-400 text-red-400" : "text-white"}`} />
           </button>
           <button
             type="button"
@@ -193,9 +182,7 @@ function InstagramPreview({ caption }: { caption: string }) {
             <span className="mr-1 font-semibold">generai_art</span>
             {mainText}
           </p>
-          {tags.length > 0 && (
-            <p className="text-caption-xs text-primary/80">{tags.join(" ")}</p>
-          )}
+          {tags.length > 0 && <p className="text-caption-xs text-primary/80">{tags.join(" ")}</p>}
           <p className="text-caption-xs text-text-dim">{formattedDate}</p>
         </div>
       </CardContent>
@@ -216,9 +203,7 @@ function PlatformSelector() {
 
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-mono-label text-text-dim uppercase">
-        Select Platform
-      </span>
+      <span className="text-mono-label text-text-dim uppercase">Select Platform</span>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {platforms.map((p) => {
           const isActive = p.id === selected;
@@ -283,9 +268,7 @@ function CaptionEditor({
         className="w-full flex items-center justify-center gap-2 py-3 bg-surface-material/30 border border-border-glass rounded-lg hover:bg-surface-material/50 active:scale-[0.98] transition-all"
       >
         <Pencil className="size-4 inline-block text-primary" />
-        <span className="text-[17px] font-semibold text-white">
-          Edit Caption
-        </span>
+        <span className="text-[17px] font-semibold text-white">Edit Caption</span>
       </button>
       {captionOpen && (
         <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
@@ -294,11 +277,7 @@ function CaptionEditor({
             aria-label="Copy caption"
             className="absolute top-2 right-2 p-2 rounded-lg bg-surface-thick border border-border-glass text-text-dim hover:text-white active:scale-95 transition-all z-10"
           >
-            {copied ? (
-              <Check className="size-4" />
-            ) : (
-              <CopyIcon className="size-4" />
-            )}
+            {copied ? <Check className="size-4" /> : <CopyIcon className="size-4" />}
           </button>
           <textarea
             value={caption}
@@ -311,9 +290,7 @@ function CaptionEditor({
       <div className="flex justify-end">
         <button className="group flex items-center gap-1 px-3 py-2 hover:bg-primary/10 rounded-lg text-violet-brand transition-all">
           <RefreshCw className="size-4 text-primary" />
-          <span className="text-[14px] font-semibold text-primary">
-            Regenerate Caption
-          </span>
+          <span className="text-[14px] font-semibold text-primary">Regenerate Caption</span>
         </button>
       </div>
     </section>
@@ -321,13 +298,13 @@ function CaptionEditor({
 }
 
 function CtaFooter() {
-  const [active, setActive] = useState("instagram");
+  const [active, _setActive] = useState("instagram");
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const today = new Date().toISOString().split("T")[0];
   const [scheduleDate, setScheduleDate] = useState(today);
   const [scheduleTime, setScheduleTime] = useState("09:00");
   const [scheduled, setScheduled] = useState(false);
-  const [repeat, setRepeat] = useState("none");
+  const [_repeat, _setRepeat] = useState("none");
 
   const handleSchedule = () => {
     setScheduled(true);
@@ -369,9 +346,7 @@ function CtaFooter() {
                   <h2 className="text-[18px] font-semibold leading-tight text-white">
                     Schedule Content
                   </h2>
-                  <p className="text-[12px] text-text-dim">
-                    Pick when this post goes live
-                  </p>
+                  <p className="text-[12px] text-text-dim">Pick when this post goes live</p>
                 </div>
               </div>
               <button
@@ -402,9 +377,7 @@ function CtaFooter() {
                       </span>
                       <div className="flex items-center justify-between w-full">
                         <span className="text-[15px] font-semibold text-white">
-                          {scheduleDate
-                            ? format(parseISO(scheduleDate), "PPP")
-                            : "Pick a date"}
+                          {scheduleDate ? format(parseISO(scheduleDate), "PPP") : "Pick a date"}
                         </span>
                         <CalendarDays className="size-4 text-text-muted shrink-0" />
                       </div>
@@ -415,9 +388,7 @@ function CtaFooter() {
                   <Calendar
                     mode="single"
                     selected={scheduleDate ? parseISO(scheduleDate) : undefined}
-                    onSelect={(date) =>
-                      setScheduleDate(date ? format(date, "yyyy-MM-dd") : "")
-                    }
+                    onSelect={(date) => setScheduleDate(date ? format(date, "yyyy-MM-dd") : "")}
                     initialFocus
                   />
                 </PopoverContent>
@@ -439,9 +410,7 @@ function CtaFooter() {
                         Time
                       </span>
                       <div className="flex items-center justify-between w-full">
-                        <span className="text-[15px] font-semibold text-white">
-                          {scheduleTime}
-                        </span>
+                        <span className="text-[15px] font-semibold text-white">{scheduleTime}</span>
                         <Clock className="size-4 text-text-muted shrink-0" />
                       </div>
                     </button>
@@ -552,10 +521,8 @@ function CtaFooter() {
               <SparklesIcon className="size-4 text-primary" />
               <p className="text-[12px] text-text-dim">
                 Best engagement window for{" "}
-                <span className="text-white font-semibold capitalize">
-                  {active}
-                </span>{" "}
-                is around 8–10 PM.
+                <span className="text-white font-semibold capitalize">{active}</span> is around 8–10
+                PM.
               </p>
             </div>
 
@@ -600,8 +567,7 @@ function AutomatePage() {
           <div className="flex items-center gap-3 rounded-lg border border-primary/10 bg-primary/5 p-3">
             <Sparkles className="size-5 shrink-0 text-primary" />
             <p className="text-caption-xs text-text-dim">
-              Generative tags and optimal timing analysis are applied
-              automatically.
+              Generative tags and optimal timing analysis are applied automatically.
             </p>
             <button
               type="button"

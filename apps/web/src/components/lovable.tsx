@@ -73,9 +73,7 @@ function Index() {
           <button className="flex items-center gap-2 active:scale-[0.98] transition-all">
             <Icon name="close" />
           </button>
-          <h1 className="text-[20px] leading-6 font-semibold">
-            Content Preview
-          </h1>
+          <h1 className="text-[20px] leading-6 font-semibold">Content Preview</h1>
           <button className="text-[17px] text-text-dim hover:opacity-80 active:scale-[0.98] transition-all">
             Drafts
           </button>
@@ -107,11 +105,7 @@ function Index() {
                         : "bg-surface-material border-border-glass text-text-dim hover:text-white"
                     }`}
                   >
-                    <Icon
-                      name={p.icon}
-                      fill={isActive}
-                      className="text-[18px]"
-                    />
+                    <Icon name={p.icon} fill={isActive} className="text-[18px]" />
                     <span className="text-[12px] font-semibold">{p.label}</span>
                   </button>
                 );
@@ -146,9 +140,7 @@ function Index() {
               <div className="px-3 pb-1 mt-3">
                 <button className="w-full flex items-center justify-center gap-1 py-2 bg-surface-material border border-border-glass rounded-xl text-violet-brand active:scale-[0.98] transition-all hover:bg-surface-material/80">
                   <Icon name="add" className="text-[20px]" />
-                  <span className="text-[14px] font-semibold">
-                    Add more images
-                  </span>
+                  <span className="text-[14px] font-semibold">Add more images</span>
                 </button>
               </div>
               <div className="p-3 flex flex-col gap-2">
@@ -160,14 +152,11 @@ function Index() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-[12px] leading-relaxed">
-                    <span className="font-semibold mr-1">generai_art</span>✨
-                    Exploring new horizons with Generai. This piece was
-                    generated using the 'Liquid Silk' model with a focus on
-                    movement and light.
+                    <span className="font-semibold mr-1">generai_art</span>✨ Exploring new horizons
+                    with Generai. This piece was generated using the 'Liquid Silk' model with a
+                    focus on movement and light.
                   </p>
-                  <p className="text-[12px] text-violet-brand">
-                    #Generai #AIArt #DigitalCreation
-                  </p>
+                  <p className="text-[12px] text-violet-brand">#Generai #AIArt #DigitalCreation</p>
                 </div>
               </div>
             </div>
@@ -189,10 +178,7 @@ function Index() {
               aria-expanded={captionOpen}
               className="w-full flex items-center justify-center gap-2 py-3 bg-surface-material border border-border-glass rounded-xl hover:bg-surface-material/50 active:scale-[0.98] transition-all"
             >
-              <Icon
-                name="edit_note"
-                className="text-[20px] text-violet-brand"
-              />
+              <Icon name="edit_note" className="text-[20px] text-violet-brand" />
               <span className="text-[17px] font-semibold">Edit Caption</span>
             </button>
             {captionOpen && (
@@ -202,10 +188,7 @@ function Index() {
                   aria-label="Copy caption"
                   className="absolute top-2 right-2 p-2 rounded-lg bg-surface-thick border border-border-glass text-text-dim hover:text-white active:scale-95 transition-all z-10"
                 >
-                  <Icon
-                    name={copied ? "check" : "content_copy"}
-                    className="text-[16px]"
-                  />
+                  <Icon name={copied ? "check" : "content_copy"} className="text-[16px]" />
                 </button>
                 <textarea
                   value={caption}
@@ -221,22 +204,16 @@ function Index() {
                   name="refresh"
                   className="text-[18px] group-hover:rotate-180 transition-transform duration-500"
                 />
-                <span className="text-[14px] font-semibold">
-                  Regenerate Caption
-                </span>
+                <span className="text-[14px] font-semibold">Regenerate Caption</span>
               </button>
             </div>
           </section>
 
           {/* Hint */}
           <div className="flex items-center gap-3 p-3 bg-violet-brand/10 rounded-lg border border-violet-brand/20">
-            <Icon
-              name="auto_awesome"
-              className="text-violet-brand text-[20px]"
-            />
+            <Icon name="auto_awesome" className="text-violet-brand text-[20px]" />
             <p className="text-[12px] text-text-dim">
-              Generative tags and optimal timing analysis are applied
-              automatically.
+              Generative tags and optimal timing analysis are applied automatically.
             </p>
           </div>
         </div>
@@ -271,19 +248,11 @@ function Index() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 rounded-full bg-violet-brand/20 flex items-center justify-center">
-                  <Icon
-                    name="event_available"
-                    className="text-violet-brand text-[20px]"
-                    fill
-                  />
+                  <Icon name="event_available" className="text-violet-brand text-[20px]" fill />
                 </div>
                 <div>
-                  <h2 className="text-[18px] font-semibold leading-tight">
-                    Schedule Content
-                  </h2>
-                  <p className="text-[12px] text-text-dim">
-                    Pick when this post goes live
-                  </p>
+                  <h2 className="text-[18px] font-semibold leading-tight">Schedule Content</h2>
+                  <p className="text-[12px] text-text-dim">Pick when this post goes live</p>
                 </div>
               </div>
               <button
@@ -369,16 +338,11 @@ function Index() {
             </div>
 
             <div className="flex items-center gap-3 p-3 bg-violet-brand/10 rounded-xl border border-violet-brand/20">
-              <Icon
-                name="auto_awesome"
-                className="text-violet-brand text-[20px]"
-              />
+              <Icon name="auto_awesome" className="text-violet-brand text-[20px]" />
               <p className="text-[12px] text-text-dim">
                 Best engagement window for{" "}
-                <span className="text-white font-semibold capitalize">
-                  {active}
-                </span>{" "}
-                is around 8–10 PM.
+                <span className="text-white font-semibold capitalize">{active}</span> is around 8–10
+                PM.
               </p>
             </div>
 
@@ -387,10 +351,7 @@ function Index() {
               disabled={scheduled}
               className="h-[52px] bg-violet-brand text-white rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(109,93,242,0.4)] disabled:opacity-90"
             >
-              <Icon
-                name={scheduled ? "check_circle" : "schedule_send"}
-                fill={scheduled}
-              />
+              <Icon name={scheduled ? "check_circle" : "schedule_send"} fill={scheduled} />
               {scheduled ? "Scheduled!" : "Confirm Schedule"}
             </button>
           </div>

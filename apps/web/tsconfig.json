@@ -13,8 +13,8 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"],
-      "@server/*": ["../server/src/*"],
-    },
+      "@server/*": ["../server/src/*"]
+    }
   },
-  "references": [{ "path": "../server" }],
+  "references": [{ "path": "../server" }]
 }

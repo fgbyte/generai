@@ -16,13 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 // import { cn } from "@/lib/utils";
 
-function SettingRow({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
+function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button
       type="button"
@@ -113,9 +107,7 @@ export function SettingsPage() {
                   <div className="text-headline-md font-headline-md tracking-[-0.03em] text-white">
                     Julian Sterling
                   </div>
-                  <div className="mt-1 text-caption-xs text-white/42">
-                    j.sterling@generai.luxe
-                  </div>
+                  <div className="mt-1 text-caption-xs text-white/42">j.sterling@generai.luxe</div>
                 </div>
                 <ChevronRight className={chevronClassName} />
               </SettingRow>
@@ -169,8 +161,7 @@ export function SettingsPage() {
                   </span>
                 </div>
                 <p className="max-w-[16rem] text-caption-xs leading-[1.45] text-white/58">
-                  Access to GPT-4o, unlimited image generation, and priority
-                  rendering.
+                  Access to GPT-4o, unlimited image generation, and priority rendering.
                 </p>
               </div>
               <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-[rgba(158,126,255,0.16)] bg-[radial-gradient(circle_at_35%_35%,rgba(125,92,255,0.28),rgba(125,92,255,0.08)_55%,transparent_70%),rgba(255,255,255,0.02)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
@@ -203,9 +194,7 @@ export function SettingsPage() {
               <div className="text-headline-md font-headline-md tracking-[-0.04em] text-secondary">
                 5,000
               </div>
-              <div className="mt-1 text-caption-xs text-white/46">
-                Remaining
-              </div>
+              <div className="mt-1 text-caption-xs text-white/46">Remaining</div>
             </div>
           </div>
         </section>
