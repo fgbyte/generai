@@ -11,7 +11,7 @@
     "check-types": "tsr generate && tsc --noEmit",
     "test": "bunx vitest run --config vitest.config.ts",
     "tauri:dev": "tauri dev",
-    "android:dev": "tauri android dev",
+    "android:dev": "VITE_SERVER_BASE_URL=http://192.168.1.100:3001 tauri android dev",
     "tauri:build": "tauri build"
   },
   "dependencies": {

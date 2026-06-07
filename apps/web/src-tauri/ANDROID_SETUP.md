@@ -369,6 +369,33 @@ cargo tauri android init
 If all 4 prereqs are met, this creates the `gen/android/` directory and
 updates `tauri.conf.json` with the Android configuration block.
 
+## Typical Workflow
+
+Tauri Android has two distinct modes that are easy to confuse on first
+contact. The `dev` mode (`bun run dev:android` → `tauri android dev`) needs
+the Vite dev server running because Tauri reads `build.devUrl` from
+`apps/web/src-tauri/tauri.conf.json` — currently `http://localhost:3001` —
+and points the Android WebView at it for HMR. The `build` mode
+(`bunx tauri android build --apk ...`) is fully self-contained: it runs
+`build.beforeBuildCommand` (`bun run build` → Vite produces
+`apps/web/dist/`), then bundles the contents of `build.frontendDist` —
+currently `../dist` — INTO the APK as static assets, so the installed APK
+does **not** need Vite (or any other server) running to launch.
+
+### Tu workflow típico
+
+1. Desarrollas: bun run dev:android (Vite + emulator corriendo, HMR activo)
+2. Pruebas el bundle: bunx tauri android build --apk debug (genera APK, sin Vite)
+3. Empaquetas para distribuir: bunx tauri android build --apk release (APK firmado)
+
+Step 1 runs `build.beforeDevCommand` (which in this repo is `bun run dev`,
+starting Vite) and then points the WebView at `build.devUrl` (live Vite at
+`http://localhost:3001`). Steps 2 and 3 use `build.beforeBuildCommand` and
+`build.frontendDist` instead — no dev server is needed, because the WebView
+loads the bundled assets straight from the APK. This is analogous to the
+desktop case: `tauri dev` needs Vite, `tauri build` produces a self-contained
+`.exe`.
+
 ## Notes & Troubleshooting
 
 ### `ANDROID_SDK_ROOT` works but produces a deprecation warning
