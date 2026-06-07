@@ -27,6 +27,7 @@ export const Route = createFileRoute("/")({
 type AuthMode = "sign-in" | "sign-up";
 
 function HomeComponent() {
+  const navigate = useNavigate({ from: "/" });
   const [authMode, setAuthMode] = useState<AuthMode | null>(null);
 
   return (
@@ -63,7 +64,8 @@ function HomeComponent() {
             <div className="flex flex-col gap-4">
               <Button
                 className="h-16 rounded-full bg-[#6d5df2] text-lg font-bold text-white shadow-lg shadow-black/30 hover:bg-[#7d70f4]"
-                onClick={() => setAuthMode("sign-in")}
+                // onClick={() => setAuthMode("sign-in")}
+                onClick={() => navigate({ to: "/app" })}
               >
                 Get Started
               </Button>
