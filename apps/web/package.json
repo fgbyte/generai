@@ -11,6 +11,7 @@
     "check-types": "tsr generate && tsc --noEmit",
     "test": "bunx vitest run --config vitest.config.ts",
     "tauri:dev": "tauri dev",
+    "android:dev": "tauri android dev",
     "tauri:build": "tauri build"
   },
   "dependencies": {

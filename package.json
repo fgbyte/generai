@@ -39,6 +39,8 @@
     "dev": "turbo -F @generai/infra dev",
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
+    "dev:desk": "turbo -F web tauri:dev",
+    "dev:android": "turbo -F web android:dev",
     "dev:server": "turbo -F server dev",
     "deploy:dev": "bun run --filter @generai/infra deploy:dev",
     "deploy:staging": "bun run --filter @generai/infra deploy:staging",

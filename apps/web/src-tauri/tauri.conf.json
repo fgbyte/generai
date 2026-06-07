@@ -29,6 +29,10 @@
     }
   },
   "bundle": {
+    "android": {
+      "versionCode": 100,
+      "minSdkVersion": 28
+    },
     "active": false,
     "targets": "all",
     "icon": [
