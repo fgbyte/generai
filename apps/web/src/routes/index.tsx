@@ -27,6 +27,7 @@ export const Route = createFileRoute("/")({
 type AuthMode = "sign-in" | "sign-up";
 
 function HomeComponent() {
+  const navigate = useNavigate({ from: "/" });
   const [authMode, setAuthMode] = useState<AuthMode | null>(null);
 
   return (
@@ -48,20 +49,23 @@ function HomeComponent() {
               Social Media Made Simple
             </h1>
             <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-white/80">
-              GenerAI empowers you to craft captivating social media posts and streamline your
-              workflow in seconds
+              GenerAI empowers you to craft captivating social media posts and
+              streamline your workflow in seconds
             </p>
           </header>
         )}
 
-        <div className={authMode ? "mb-2 w-full max-w-md" : "mb-6 w-full max-w-md"}>
+        <div
+          className={authMode ? "mb-2 w-full max-w-md" : "mb-6 w-full max-w-md"}
+        >
           {authMode ? (
             <AuthPanel mode={authMode} onBack={() => setAuthMode(null)} />
           ) : (
             <div className="flex flex-col gap-4">
               <Button
                 className="h-16 rounded-full bg-[#6d5df2] text-lg font-bold text-white shadow-lg shadow-black/30 hover:bg-[#7d70f4]"
-                onClick={() => setAuthMode("sign-in")}
+                // onClick={() => setAuthMode("sign-in")}
+                onClick={() => navigate({ to: "/app" })}
               >
                 Get Started
               </Button>
@@ -104,11 +108,17 @@ function AuthPanel({ mode, onBack }: { mode: AuthMode; onBack: () => void }) {
         >
           <ArrowLeft className="size-5" />
         </button>
-        <h2 className="text-lg font-bold">{mode === "sign-in" ? "Sign in" : "Sign Up"}</h2>
+        <h2 className="text-lg font-bold">
+          {mode === "sign-in" ? "Sign in" : "Sign Up"}
+        </h2>
         <span className="size-10" />
       </div>
 
-      {mode === "sign-in" ? <InlineSignInForm /> : <InlineSignUpForm onSignedUp={onBack} />}
+      {mode === "sign-in" ? (
+        <InlineSignInForm />
+      ) : (
+        <InlineSignUpForm onSignedUp={onBack} />
+      )}
     </div>
   );
 }
@@ -135,7 +145,8 @@ function InlineSignInForm() {
             navigate({ to: "/app" });
           },
           onError: (error) => {
-            const errorMessage = error.error.message || error.error.statusText || "";
+            const errorMessage =
+              error.error.message || error.error.statusText || "";
 
             if (
               errorMessage.toLowerCase().includes("email") &&

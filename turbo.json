@@ -39,6 +39,20 @@
     "test": {
       "dependsOn": ["^build"],
       "cache": false
+    },
+    "tauri:dev": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "persistent": true
+    },
+    "android:dev": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "persistent": true
+    },
+    "tauri:build": {
+      "dependsOn": ["^build"],
+      "outputs": ["src-tauri/target/release/**", "dist/**"]
     }
   }
 }
