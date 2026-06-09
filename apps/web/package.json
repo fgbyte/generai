@@ -11,8 +11,11 @@
     "check-types": "tsr generate && tsc --noEmit",
     "test": "bunx vitest run --config vitest.config.ts",
     "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
     "android:dev": "VITE_SERVER_BASE_URL=http://192.168.1.100:3001 tauri android dev",
-    "tauri:build": "tauri build"
+    "android:build-debug": "bunx tauri android build --apk --debug",
+    "android:build-release": "bunx tauri android build --apk --release",
+    "android:build-release-phone": "bunx tauri android build --target aarch64"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",

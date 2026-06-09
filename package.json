@@ -36,6 +36,9 @@
   "type": "module",
   "scripts": {
     "build": "turbo build",
+    "build:desk": "turbo -F web tauri:build",
+    "build:android": "cd apps/web && bun run android:build-debug",
+    "build:phone": "cd apps/web && bun run android:build-release-phone",
     "dev": "turbo -F @generai/infra dev",
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
