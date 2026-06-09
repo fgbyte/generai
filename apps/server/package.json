@@ -20,6 +20,7 @@
     "@langchain/openai": "^1.4.7",
     "@scalar/hono-api-reference": "^0.10.20",
     "better-auth": "catalog:",
+    "kysely": "0.29.2",
     "dotenv": "catalog:",
     "hono": "catalog:",
     "zod": "catalog:"
