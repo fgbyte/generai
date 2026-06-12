@@ -6,6 +6,7 @@ import { corsMiddleware } from "./middlewares/cors-middleware";
 import { peopleRoutes } from "./routes/people.routes";
 import { testRoute } from "./routes/test.routes";
 import { generateRoutes } from "./routes/generate.routes";
+import { instagramRoutes } from "./routes/instagram.routes";
 
 const app = new OpenAPIHono();
 
@@ -26,7 +27,8 @@ const router = app
   .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
   .route("/api/people", peopleRoutes) //public route
   .route("/api/test", testRoute) //public route
-  .route("/", generateRoutes); //auth-protected generate routes
+  .route("/", generateRoutes) //auth-protected generate routes
+  .route("/", instagramRoutes); //auth-protected Instagram routes (OAuth, publish, quota)
 
 // Global error handler
 app.onError((err, c) => {

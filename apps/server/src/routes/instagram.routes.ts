@@ -13,7 +13,7 @@ import {
   publishContainer,
   getContentPublishingLimit,
 } from "../lib/instagram";
-import { encryptToken, decryptToken } from "../lib/crypto";
+import { encryptAccountToken, decryptAccountToken, assertNoConcurrentPublish, ConcurrentPublishError } from "../lib/instagram-token";
 import { sanitizeMetaError } from "../lib/instagram-errors";
 import {
   createInstagramAccount,
@@ -23,7 +23,6 @@ import {
   deleteInstagramAccount,
 } from "@generai/db/queries/instagram-accounts";
 import {
-  getProcessingPublishLogForAccount,
   createPublishLog,
   updatePublishLog,
   getPublishLogsByAccountId,
@@ -153,7 +152,7 @@ export const instagramRoutes = new Hono<HonoEnv>()
       }
 
       // 4. Encrypt the page access token before storing
-      const encryptedToken = await encryptToken(page.accessToken);
+      const encryptedToken = await encryptAccountToken(page.accessToken);
       const tokenExpiresAt = expiresIn
         ? new Date(Date.now() + expiresIn * 1000)
         : null;
@@ -276,16 +275,20 @@ export const instagramRoutes = new Hono<HonoEnv>()
       if (account.userId !== user.id) return c.json({ error: "Forbidden" }, 403);
 
       // 2. Concurrent publish guard
-      const processingLog = await getProcessingPublishLogForAccount(account.id);
-      if (processingLog) {
-        return c.json(
-          { error: "Another publish is in progress for this account", publishLogId: processingLog.id },
-          409,
-        );
+      try {
+        await assertNoConcurrentPublish(account.id);
+      } catch (err) {
+        if (err instanceof ConcurrentPublishError) {
+          return c.json(
+            { error: "Another publish is in progress for this account", publishLogId: err.publishLogId },
+            409,
+          );
+        }
+        throw err;
       }
 
       // 3. Pre-check quota
-      const decrypted = await decryptToken(account.pageAccessToken);
+      const decrypted = await decryptAccountToken(account.pageAccessToken);
       const quota = await getContentPublishingLimit(account.igUserId, decrypted);
       if (quota.quotaUsage >= quota.publishingLimit) {
         return c.json(
@@ -398,6 +401,9 @@ export const instagramRoutes = new Hono<HonoEnv>()
         // ignore log update failures
       }
       const sanitized = sanitizeMetaError(err);
+      if (sanitized.status === 429 && sanitized.body.retryAfterSeconds) {
+        c.header("Retry-After", String(sanitized.body.retryAfterSeconds));
+      }
       return c.json(sanitized.body, sanitized.status as 400 | 401 | 429 | 500 | 502 | 503);
     }
   })
@@ -423,7 +429,7 @@ export const instagramRoutes = new Hono<HonoEnv>()
       return c.json({ error: "No Instagram account connected" }, 404);
     }
     try {
-      const decrypted = await decryptToken(account.pageAccessToken);
+      const decrypted = await decryptAccountToken(account.pageAccessToken);
       const quota = await getContentPublishingLimit(account.igUserId, decrypted);
       return c.json(quota, 200);
     } catch (err) {

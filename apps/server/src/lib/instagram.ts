@@ -28,6 +28,22 @@ export class InstagramApiError extends Error {
   }
 }
 
+const DEFAULT_TIMEOUT_MS = 25_000;
+
+export async function fetchWithTimeout(
+  url: string,
+  init: RequestInit = {},
+  timeoutMs: number = DEFAULT_TIMEOUT_MS,
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 // --- helpers ---
 
 async function parseError(response: Response): Promise<InstagramApiError> {
@@ -57,7 +73,7 @@ async function parseError(response: Response): Promise<InstagramApiError> {
 }
 
 async function igFetch(url: string, init: RequestInit = {}): Promise<Response> {
-  const response = await fetch(url, {
+  const response = await fetchWithTimeout(url, {
     ...init,
     headers: {
       "Content-Type": "application/json",
