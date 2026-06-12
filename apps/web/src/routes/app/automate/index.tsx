@@ -122,7 +122,7 @@ function InstagramPreview({ caption }: { caption: string }) {
         </div>
 
         {/* Add more images */}
-        <div className="px-4 flex flex-col gap-2">
+        {/*<div className="px-4 flex flex-col gap-2">
           <Button
             onClick={addImage}
             variant="outline"
@@ -136,9 +136,9 @@ function InstagramPreview({ caption }: { caption: string }) {
             variant="outline"
             className="w-full gap-1.5 rounded-xl border-white/20 bg-surface-material/30 py-3 text-sm text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:text-white"
           >
-            {/*<Plus className="size-4" />*/}@ Add Mentions
+            @ Add Mentions
           </Button>
-        </div>
+        </div>*/}
 
         {/* Interactions */}
         <div className="flex items-center gap-4 px-4">
@@ -323,11 +323,7 @@ function CtaFooter({ caption }: { caption: string }) {
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <button
-        type="button"
-        onClick={handleCopy}
-        className=" btn-secondary"
-      >
+      <button type="button" onClick={handleCopy} className=" btn-secondary">
         {copied ? (
           <Check className="size-4" />
         ) : (
@@ -382,8 +378,7 @@ function CtaFooter({ caption }: { caption: string }) {
 
               <p className="text-center text-[14px] leading-relaxed text-text-dim max-w-[340px]">
                 The publishing and scheduling feature is currently under
-                development. We're working hard to bring it to you — stay
-                tuned!
+                development. We're working hard to bring it to you — stay tuned!
               </p>
             </div>
 
