@@ -35,18 +35,18 @@ Android on a fresh machine.
 
 ## Current State (verified 2026-06-05 via T15 + T16)
 
-| Component                     | Status                             | Path / Value                                                                 |
-| ----------------------------- | ---------------------------------- | ---------------------------------------------------------------------------- |
-| `ANDROID_SDK_ROOT` (USER)     | SET                                | `C:\AndroidSDK`                                                               |
-| `ANDROID_HOME` (USER)         | NOT SET (deprecated fallback used) | Recommend: set to `C:\AndroidSDK` (same as `ANDROID_SDK_ROOT`)                |
-| `ANDROID_NDK_HOME` (USER)     | NOT SET (auto-detected)            | Auto-resolved to `C:\AndroidSDK\ndk\29.0.13846066` by Tauri CLI                |
-| `JAVA_HOME` (USER)            | NOT SET (java on `PATH` works)     | `java -version` -> Java 24.0.1; Tauri 2 + AGP 8.x prefer **JDK 17 LTS**       |
-| Android Studio                | NOT INSTALLED (not required)       | CLI workflow does not need the IDE                                            |
-| Android SDK                   | INSTALLED                          | `C:\AndroidSDK` (non-default; user customized)                                |
-| Android NDK                   | INSTALLED                          | `C:\AndroidSDK\ndk\29.0.13846066` (29.0.x side-by-side)                       |
-| `build-tools`                 | Present                            | `C:\AndroidSDK\build-tools`                                                   |
-| `platform-tools`              | Present                            | `C:\AndroidSDK\platform-tools`                                                |
-| Rust Android targets          | ALL 4 INSTALLED                    | `aarch64-linux-android`, `armv7-linux-androideabi`, `i686-linux-android`, `x86_64-linux-android` |
+| Component                 | Status                             | Path / Value                                                                                     |
+| ------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `ANDROID_SDK_ROOT` (USER) | SET                                | `C:\AndroidSDK`                                                                                  |
+| `ANDROID_HOME` (USER)     | NOT SET (deprecated fallback used) | Recommend: set to `C:\AndroidSDK` (same as `ANDROID_SDK_ROOT`)                                   |
+| `ANDROID_NDK_HOME` (USER) | NOT SET (auto-detected)            | Auto-resolved to `C:\AndroidSDK\ndk\29.0.13846066` by Tauri CLI                                  |
+| `JAVA_HOME` (USER)        | NOT SET (java on `PATH` works)     | `java -version` -> Java 24.0.1; Tauri 2 + AGP 8.x prefer **JDK 17 LTS**                          |
+| Android Studio            | NOT INSTALLED (not required)       | CLI workflow does not need the IDE                                                               |
+| Android SDK               | INSTALLED                          | `C:\AndroidSDK` (non-default; user customized)                                                   |
+| Android NDK               | INSTALLED                          | `C:\AndroidSDK\ndk\29.0.13846066` (29.0.x side-by-side)                                          |
+| `build-tools`             | Present                            | `C:\AndroidSDK\build-tools`                                                                      |
+| `platform-tools`          | Present                            | `C:\AndroidSDK\platform-tools`                                                                   |
+| Rust Android targets      | ALL 4 INSTALLED                    | `aarch64-linux-android`, `armv7-linux-androideabi`, `i686-linux-android`, `x86_64-linux-android` |
 
 The persistent env vars were read via PowerShell's
 `[System.Environment]::GetEnvironmentVariable("VAR", "User")` (see
@@ -240,12 +240,12 @@ warning on the existing setup (see above).
 
 ### Windows-Specific Default Paths
 
-| Component | Default Path |
-| --------- | ------------ |
-| Android Studio | `C:\Program Files\Android\Android Studio` |
-| Android SDK (default) | `C:\Users\<USER>\AppData\Local\Android\Sdk` (i.e. `%LOCALAPPDATA%\Android\Sdk`) |
-| Android NDK | `%LOCALAPPDATA%\Android\Sdk\ndk\<version>` (installed via SDK Manager) |
-| JDK 17 (recommended) | `C:\Program Files\Eclipse Adoptium\jdk-17.x.x` (Adoptium Temurin 17+ recommended) |
+| Component             | Default Path                                                                      |
+| --------------------- | --------------------------------------------------------------------------------- |
+| Android Studio        | `C:\Program Files\Android\Android Studio`                                         |
+| Android SDK (default) | `C:\Users\<USER>\AppData\Local\Android\Sdk` (i.e. `%LOCALAPPDATA%\Android\Sdk`)   |
+| Android NDK           | `%LOCALAPPDATA%\Android\Sdk\ndk\<version>` (installed via SDK Manager)            |
+| JDK 17 (recommended)  | `C:\Program Files\Eclipse Adoptium\jdk-17.x.x` (Adoptium Temurin 17+ recommended) |
 
 The user on this machine chose `C:\AndroidSDK` instead of the default — that
 is fully supported. Android Studio, the SDK, and the NDK do not need to live
@@ -304,11 +304,11 @@ Open **System Properties** -> **Environment Variables** (or `sysdm.cpl` ->
 **Advanced** -> **Environment Variables**) and set **user-level** variables
 (NOT system-level, NOT `PATH`, NOT registry):
 
-| Variable | Value (example) |
-| -------- | --------------- |
-| `ANDROID_HOME` | `C:\Users\<USER>\AppData\Local\Android\Sdk` (or your custom path) |
+| Variable           | Value (example)                                                                        |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| `ANDROID_HOME`     | `C:\Users\<USER>\AppData\Local\Android\Sdk` (or your custom path)                      |
 | `ANDROID_NDK_HOME` | `C:\Users\<USER>\AppData\Local\Android\Sdk\ndk\<version>` (use your installed version) |
-| `JAVA_HOME` | `C:\Program Files\Eclipse Adoptium\jdk-17.0.x` |
+| `JAVA_HOME`        | `C:\Program Files\Eclipse Adoptium\jdk-17.0.x`                                         |
 
 > **Important**: Do not edit the Windows `PATH` variable directly. Android
 > Studio's `studio.bat` and the Tauri CLI resolve `ANDROID_HOME` /
@@ -401,10 +401,9 @@ desktop case: `tauri dev` needs Vite, `tauri build` produces a self-contained
 ### `ANDROID_SDK_ROOT` works but produces a deprecation warning
 
 The Tauri CLI emits `Warn \`ANDROID_HOME\` isn't set; falling back to
-\`ANDROID_SDK_ROOT\`, which is deprecated` when only `ANDROID_SDK_ROOT` is
-set. The warning is harmless; the toolchain still works. To silence it, set
-`ANDROID_HOME` to the same value as `ANDROID_SDK_ROOT` (see [Optional:
-Silence the `ANDROID_HOME` deprecation warning](#optional-silence-the-android_home-deprecation-warning)
+\`ANDROID_SDK_ROOT\`, which is deprecated`when only`ANDROID_SDK_ROOT`is
+set. The warning is harmless; the toolchain still works. To silence it, set`ANDROID_HOME`to the same value as`ANDROID_SDK_ROOT`(see [Optional:
+Silence the`ANDROID_HOME` deprecation warning](#optional-silence-the-android_home-deprecation-warning)
 above).
 
 ### Tauri CLI doesn't find the NDK

@@ -8,13 +8,13 @@ The 16 files in this directory are the **default Tauri v2 placeholder icons** ge
 
 The five files referenced by `tauri.conf.json` > `bundle.icon` are:
 
-| File                  | Platform                    |
-| --------------------- | --------------------------- |
-| `32x32.png`           | Linux / Windows small icon  |
-| `128x128.png`         | Windows medium icon         |
-| `128x128@2x.png`      | macOS retina icon           |
-| `icon.icns`           | macOS `.icns` bundle        |
-| `icon.ico`            | Windows `.ico` bundle       |
+| File             | Platform                   |
+| ---------------- | -------------------------- |
+| `32x32.png`      | Linux / Windows small icon |
+| `128x128.png`    | Windows medium icon        |
+| `128x128@2x.png` | macOS retina icon          |
+| `icon.icns`      | macOS `.icns` bundle       |
+| `icon.ico`       | Windows `.ico` bundle      |
 
 The remaining 11 files (`icon.png`, `Square*Logo.png`, `StoreLogo.png`) are platform-specific variants used by the Windows Store / MSIX packaging targets. They will be regenerated automatically when you run the icon command.
 

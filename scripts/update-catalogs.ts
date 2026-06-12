@@ -129,9 +129,7 @@ for (const [name, version] of Object.entries(catalog)) {
           continue;
         }
       } else {
-        console.log(
-          `⚠️ ${name}: no publish time in registry, allowing update`,
-        );
+        console.log(`⚠️ ${name}: no publish time in registry, allowing update`);
       }
     }
 
@@ -153,9 +151,7 @@ console.log("\n📊 Update Summary");
 console.log("================");
 
 if (skipped.length > 0) {
-  console.log(
-    `\n⏭️  Skipped due to minimum-release-age (${skipped.length}):`,
-  );
+  console.log(`\n⏭️  Skipped due to minimum-release-age (${skipped.length}):`);
   for (const s of skipped) {
     console.log(`  ${s.name}: ${s.currentVersion} → ${s.latestVersion}`);
     console.log(`      ${s.reason}`);
@@ -164,9 +160,7 @@ if (skipped.length > 0) {
 
 if (updates.length === 0) {
   if (skipped.length > 0) {
-    console.log(
-      "\n✅ No updates applied (blocked by minimum-release-age; will retry next run)",
-    );
+    console.log("\n✅ No updates applied (blocked by minimum-release-age; will retry next run)");
   } else {
     console.log("\n✅ All catalog dependencies are up to date!");
   }

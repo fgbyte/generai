@@ -35,8 +35,7 @@ export default defineConfig({
   envPrefix: ["VITE_", "TAURI_ENV_*"],
   build: {
     // Tauri's webview targets differ by OS — match the broader ones.
-    target:
-      process.env.TAURI_ENV_PLATFORM === "windows" ? "chrome105" : "safari13",
+    target: process.env.TAURI_ENV_PLATFORM === "windows" ? "chrome105" : "safari13",
     // Skip minification in debug builds to keep Rust stack traces meaningful.
     minify: process.env.TAURI_ENV_DEBUG ? false : "esbuild",
     // Emit sourcemaps only in debug builds (smaller release artifacts).

@@ -41,6 +41,7 @@ Android workflow (T14-T16) are unaffected.
   xcode-select --install
   ```
 - [ ] **CocoaPods 1.13+** (iOS dependency manager; required for the Tauri project's native iOS Pods):
+
   ```bash
   # Recommended (Homebrew)
   brew install cocoapods
@@ -48,14 +49,17 @@ Android workflow (T14-T16) are unaffected.
   # Alternative (RubyGems, slower but works without Homebrew)
   sudo gem install cocoapods
   ```
+
 - [ ] **Rust iOS targets** (run once on the Mac):
   ```bash
   rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
   ```
+
   - `aarch64-apple-ios` — physical iPhone / iPad (arm64)
   - `aarch64-apple-ios-sim` — Apple Silicon Mac simulator (arm64)
   - `x86_64-apple-ios` — Intel Mac simulator (x86_64)
 - [ ] **Node.js / Bun** (for the JS CLI installed in T5; required to run `bun run tauri ios ...`):
+
   ```bash
   # Bun is recommended (matches the rest of the monorepo)
   curl -fsSL https://bun.sh/install | bash
@@ -63,6 +67,7 @@ Android workflow (T14-T16) are unaffected.
   # Node.js (LTS) is an acceptable alternative
   brew install node@20
   ```
+
 - [ ] **Apple Developer account** ($99/year) — only required for **device deployment** and **App Store submission**. Simulator builds work without one. Sign up at https://developer.apple.com/programs/.
 
 ## Commands to Run on macOS
@@ -86,13 +91,13 @@ bun run tauri ios build
 
 ### Command Reference (subcommands of `tauri ios`)
 
-| Subcommand    | What it does                                                            |
-| ------------- | ----------------------------------------------------------------------- |
-| `tauri ios init`        | Generates `gen/ios/` — Xcode project, Podfile, Info.plist, asset catalog |
-| `tauri ios dev`         | Boots the iOS simulator, runs the app, attaches the dev webview to the local Vite dev server |
-| `tauri ios build`       | Produces a release `.app` bundle and (optionally) a signed `.ipa` archive for App Store Connect |
-| `tauri ios list`        | Lists available iOS simulators and connected physical devices           |
-| `tauri ios run`         | Boots a specific simulator and installs the freshly-built `.app`        |
+| Subcommand        | What it does                                                                                    |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `tauri ios init`  | Generates `gen/ios/` — Xcode project, Podfile, Info.plist, asset catalog                        |
+| `tauri ios dev`   | Boots the iOS simulator, runs the app, attaches the dev webview to the local Vite dev server    |
+| `tauri ios build` | Produces a release `.app` bundle and (optionally) a signed `.ipa` archive for App Store Connect |
+| `tauri ios list`  | Lists available iOS simulators and connected physical devices                                   |
+| `tauri ios run`   | Boots a specific simulator and installs the freshly-built `.app`                                |
 
 For the full surface, run `bun run tauri ios --help` (or `npx tauri ios --help`) from `apps/web/`.
 
