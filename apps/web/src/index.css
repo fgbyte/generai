@@ -123,6 +123,7 @@
 
   /* ── Animations ────────────────────────────────────────── */
   --animate-tap-press: tap-press 100ms ease-out;
+  --animate-shine: shine 3s linear infinite;
 
   @keyframes tap-press {
     from {
@@ -130,6 +131,12 @@
     }
     to {
       transform: scale(0.98);
+    }
+  }
+
+  @keyframes shine {
+    to {
+      background-position: 200% center;
     }
   }
 }
@@ -358,6 +365,29 @@
 
   .btn-secondary {
     @apply bg-surface-material text-white border border-border-glass rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 cursor-pointer;
+  }
+
+  /* ── Shining / Brilliant text ─────────────────────────────
+     Animated gradient sweep + violet glow for a "metal" feel.
+     Used on hero / announcement text (e.g. "Comming Soon").
+     ──────────────────────────────────────────────────────── */
+  .shine-text {
+    background-image: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #c4b5fd 25%,
+      #ffffff 50%,
+      #c4b5fd 75%,
+      #ffffff 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.45))
+      drop-shadow(0 0 36px rgba(139, 92, 246, 0.25));
+    animation: var(--animate-shine);
   }
 
   /* ── List Item / Link ────────────────────────────────────

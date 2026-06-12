@@ -1,23 +1,14 @@
 import { useState } from "react";
-import { format, parseISO } from "date-fns";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   X,
   Instagram as InstagramIcon,
   Twitter,
   Dribbble,
   Pin,
-  CalendarDays,
-  Clock,
   RefreshCw,
   Sparkles,
   MoreHorizontal,
@@ -30,9 +21,6 @@ import {
   CopyIcon,
   Check,
   SendHorizonal,
-  CheckCircle,
-  CalendarCheck2Icon,
-  SparklesIcon,
 } from "lucide-react";
 
 import heroImageUrl from "@/assets/generai-login-hero.jpg";
@@ -319,30 +307,36 @@ function CaptionEditor({
   );
 }
 
-function CtaFooter() {
-  const [active, _setActive] = useState("instagram");
+function CtaFooter({ caption }: { caption: string }) {
   const [scheduleOpen, setScheduleOpen] = useState(false);
-  const today = new Date().toISOString().split("T")[0];
-  const [scheduleDate, setScheduleDate] = useState(today);
-  const [scheduleTime, setScheduleTime] = useState("09:00");
-  const [scheduled, setScheduled] = useState(false);
-  const [_repeat, _setRepeat] = useState("none");
+  const [copied, setCopied] = useState(false);
 
-  const handleSchedule = () => {
-    setScheduled(true);
-    setTimeout(() => {
-      setScheduled(false);
-      setScheduleOpen(false);
-    }, 1400);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(caption);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // noop
+    }
   };
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <button onClick={() => {}} className=" btn-secondary">
-        <CopyIcon className="size-4" />
-        Copy
+      <button
+        type="button"
+        onClick={handleCopy}
+        className=" btn-secondary"
+      >
+        {copied ? (
+          <Check className="size-4" />
+        ) : (
+          <CopyIcon className="size-4" />
+        )}
+        {copied ? "Copied!" : "Copy"}
       </button>
       <button
+        type="button"
         onClick={() => setScheduleOpen(true)}
         className="btn-primary text-white rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2"
       >
@@ -357,23 +351,14 @@ function CtaFooter() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[576px] bg-surface-thick backdrop-blur-3xl border-t sm:border border-border-glass rounded-t-3xl sm:rounded-3xl p-5 flex flex-col gap-5 animate-in slide-in-from-bottom"
+            className="w-full max-w-[576px] bg-surface-thick backdrop-blur-3xl border-t sm:border border-border-glass rounded-t-3xl sm:rounded-3xl p-6 flex flex-col gap-5 animate-in slide-in-from-bottom"
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-surface flex items-center justify-center">
-                  <CalendarCheck2Icon className="size-4 text-primary" />
-                </div>
-                <div>
-                  <h2 className="text-[18px] font-semibold leading-tight text-white">
-                    Schedule Content
-                  </h2>
-                  <p className="text-[12px] text-text-dim">
-                    Pick when this post goes live
-                  </p>
-                </div>
-              </div>
+              <span className="text-mono-label text-text-dim uppercase">
+                Publishing
+              </span>
               <button
+                type="button"
                 onClick={() => setScheduleOpen(false)}
                 aria-label="Close"
                 className="p-2 rounded-full hover:bg-surface-material transition-colors"
@@ -382,189 +367,32 @@ function CtaFooter() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Popover>
-                <PopoverTrigger
-                  render={
-                    <button
-                      type="button"
-                      className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors text-left w-full"
-                    >
-                      <span
-                        className="text-[10px] font-semibold uppercase text-text-dim"
-                        style={{
-                          fontFamily: "JetBrains Mono, monospace",
-                          letterSpacing: "0.5px",
-                        }}
-                      >
-                        Date
-                      </span>
-                      <div className="flex items-center justify-between w-full">
-                        <span className="text-[15px] font-semibold text-white">
-                          {scheduleDate
-                            ? format(parseISO(scheduleDate), "PPP")
-                            : "Pick a date"}
-                        </span>
-                        <CalendarDays className="size-4 text-text-muted shrink-0" />
-                      </div>
-                    </button>
-                  }
-                ></PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={scheduleDate ? parseISO(scheduleDate) : undefined}
-                    onSelect={(date) =>
-                      setScheduleDate(date ? format(date, "yyyy-MM-dd") : "")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <Popover>
-                <PopoverTrigger
-                  render={
-                    <button
-                      type="button"
-                      className="flex flex-col gap-1 bg-surface-material border border-border-glass rounded-xl p-3 focus-within:border-violet-brand transition-colors text-left w-full"
-                    >
-                      <span
-                        className="text-[10px] font-semibold uppercase text-text-dim"
-                        style={{
-                          fontFamily: "JetBrains Mono, monospace",
-                          letterSpacing: "0.5px",
-                        }}
-                      >
-                        Time
-                      </span>
-                      <div className="flex items-center justify-between w-full">
-                        <span className="text-[15px] font-semibold text-white">
-                          {scheduleTime}
-                        </span>
-                        <Clock className="size-4 text-text-muted shrink-0" />
-                      </div>
-                    </button>
-                  }
-                ></PopoverTrigger>
-                <PopoverContent className="w-auto p-4" align="start">
-                  <div className="flex items-end gap-2">
-                    <div className="flex flex-col gap-1">
-                      <label
-                        htmlFor="hours"
-                        className="text-[10px] font-semibold uppercase text-text-dim"
-                        style={{
-                          fontFamily: "JetBrains Mono, monospace",
-                          letterSpacing: "0.5px",
-                        }}
-                      >
-                        Hours
-                      </label>
-                      <input
-                        id="hours"
-                        type="number"
-                        min={0}
-                        max={23}
-                        value={parseInt(scheduleTime.split(":")[0], 10)}
-                        onChange={(e) => {
-                          const hours = Math.min(
-                            Math.max(parseInt(e.target.value, 10) || 0, 0),
-                            23,
-                          );
-                          setScheduleTime(
-                            `${String(hours).padStart(2, "0")}:${scheduleTime.split(":")[1] || "00"}`,
-                          );
-                        }}
-                        className="w-12 h-10 bg-surface-material border border-border-glass rounded-md text-center text-white font-semibold outline-none focus:border-violet-brand transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      />
-                    </div>
-                    <span className="text-white pb-2 font-body-md">:</span>
-                    <div className="flex flex-col gap-1">
-                      <label
-                        htmlFor="minutes"
-                        className="text-[10px] font-semibold uppercase text-text-dim"
-                        style={{
-                          fontFamily: "JetBrains Mono, monospace",
-                          letterSpacing: "0.5px",
-                        }}
-                      >
-                        Minutes
-                      </label>
-                      <input
-                        id="minutes"
-                        type="number"
-                        min={0}
-                        max={59}
-                        value={parseInt(scheduleTime.split(":")[1], 10)}
-                        onChange={(e) => {
-                          const minutes = Math.min(
-                            Math.max(parseInt(e.target.value, 10) || 0, 0),
-                            59,
-                          );
-                          setScheduleTime(
-                            `${scheduleTime.split(":")[0] || "12"}:${String(minutes).padStart(2, "0")}`,
-                          );
-                        }}
-                        className="w-12 h-10 bg-surface-material border border-border-glass rounded-md text-center text-white font-semibold outline-none focus:border-violet-brand transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      />
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            {/*<div className="flex flex-col gap-2">
-              <span
-                className="text-[10px] font-semibold uppercase text-text-dim"
-                style={{
-                  fontFamily: "JetBrains Mono, monospace",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                Repeat
-              </span>
-              <div className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                {[
-                  { id: "none", label: "One-time" },
-                  { id: "daily", label: "Daily" },
-                  { id: "weekly", label: "Weekly" },
-                  { id: "monthly", label: "Monthly" },
-                ].map((r) => {
-                  const isActive = repeat === r.id;
-                  return (
-                    <button
-                      key={r.id}
-                      onClick={() => setRepeat(r.id)}
-                      className={`px-4 py-2 rounded-full text-[12px] font-semibold shrink-0 border transition-all ${
-                        isActive
-                          ? "bg-primary text-white border-transparent"
-                          : "bg-surface-material border-border-glass text-text-dim hover:text-white"
-                      }`}
-                    >
-                      {r.label}
-                    </button>
-                  );
-                })}
+            <div className="flex flex-col items-center gap-4 py-6">
+              <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20">
+                <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl" />
+                <Sparkles className="size-7 text-primary relative" />
               </div>
-            </div>*/}
 
-            <div className="flex items-center gap-3 p-3 bg-primary/10 rounded-xl border border-primary/20">
-              <SparklesIcon className="size-4 text-primary" />
-              <p className="text-[12px] text-text-dim">
-                Best engagement window for{" "}
-                <span className="text-white font-semibold capitalize">
-                  {active}
-                </span>{" "}
-                is around 8–10 PM.
+              <h2
+                className="shine-text text-[48px] font-bold tracking-tight leading-none mt-1"
+                style={{ letterSpacing: "-0.03em" }}
+              >
+                Comming Soon
+              </h2>
+
+              <p className="text-center text-[14px] leading-relaxed text-text-dim max-w-[340px]">
+                The publishing and scheduling feature is currently under
+                development. We're working hard to bring it to you — stay
+                tuned!
               </p>
             </div>
 
             <button
-              onClick={handleSchedule}
-              disabled={scheduled}
-              className="h-[52px] btn-primary text-white rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(109,93,242,0.4)] disabled:opacity-90"
+              type="button"
+              onClick={() => setScheduleOpen(false)}
+              className="h-[52px] btn-primary text-white rounded-xl text-[17px] font-semibold active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(109,93,242,0.4)]"
             >
-              {scheduled && <CheckCircle className="size-4 text-primary" />}
-              {scheduled ? "Scheduled!" : "Confirm Schedule"}
+              Got it
             </button>
           </div>
         </div>
@@ -614,7 +442,7 @@ function AutomatePage() {
         )}
 
         {/* CTA Footer */}
-        <CtaFooter />
+        <CtaFooter caption={caption} />
       </main>
     </div>
   );
