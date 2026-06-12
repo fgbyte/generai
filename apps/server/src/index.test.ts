@@ -14,6 +14,12 @@ vi.mock("cloudflare:workers", () => ({
     AI_TEXT_MODEL: "google/gemma-3n-e4b-it",
     AI_VISION_MODEL: "google/gemma-3n-e4b-it",
     VITE_SERVER_URL: "http://localhost:3000",
+    MEDIA_BUCKET: {} as any,
+    R2_PUBLIC_URL: "https://test-bucket.r2.dev",
+    META_APP_ID: "test-meta-app-id",
+    META_APP_SECRET: "test-meta-app-secret",
+    META_REDIRECT_URI: "http://localhost:3000/api/instagram/callback",
+    META_TOKEN_ENCRYPTION_KEY: "dGVzdC1rZXktdGVzdC1rZXktdGVzdC1rZXktdGVzdC1rZXkxMjM0NTY3OA==",
   },
 }));
 
