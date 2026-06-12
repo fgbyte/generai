@@ -206,12 +206,12 @@ Base path: `/api/instagram`
 | # | Método | Path                          | Auth | Descripción                          |
 | - | ------ | ----------------------------- | ---- | ------------------------------------ |
 | 1 | GET    | `/auth-url`                   | ✅   | Genera URL de OAuth con Meta         |
-| 2 | GET    | `/callback`                   | ❌   | Recibe `code` y `state` de Meta      |
+| 2 | GET    | `/callback`                   | ✅   | Recibe `code` y `state` de Meta (invocado via redirect) |
 | 3 | GET    | `/accounts`                   | ✅   | Lista cuentas IG del user            |
 | 4 | GET    | `/accounts/:id`               | ✅   | Detalle de una cuenta                |
 | 5 | DELETE | `/accounts/:id`               | ✅   | Desconecta una cuenta                |
 | 6 | POST   | `/publish`                    | ✅   | Publica un post (single o carousel)  |
-| 7 | GET    | `/publish-log/:logId`         | ✅   | Status de un publish                 |
+| 7 | GET    | `/publish-log?limit=N`        | ✅   | Lista de publishes (default 20, max 100) |
 | 8 | GET    | `/quota`                      | ✅   | Cuota de publicación restante        |
 | 9 | POST   | `/upload`                     | ✅   | Sube imagen a R2 (helper)            |
 
@@ -341,12 +341,14 @@ GET {{base_url}}/api/instagram/accounts
   "accounts": [
     {
       "id": "uuid-here",
-      "instagramAccountId": "17841234567890",
+      "userId": "user-uuid",
+      "igUserId": "17841234567890",
       "igUsername": "test_ig_account",
-      "pageId": "1234567890",
-      "pageName": "Test Page",
-      "connectedAt": "2026-06-12T10:00:00Z",
-      "lastQuotaCheck": null
+      "fbPageId": "1234567890",
+      "fbPageName": "Test Page",
+      "tokenExpiresAt": "2026-09-10T10:00:00Z",
+      "createdAt": "2026-06-12T10:00:00Z",
+      "updatedAt": "2026-06-12T10:00:00Z"
     }
   ]
 }
@@ -405,29 +407,30 @@ POST {{base_url}}/api/instagram/publish
 Content-Type: application/json
 
 {
-  "instagramAccountId": "{{account_id}}",
-  "imageUrls": ["{{media_bucket_url}}/{{image_id}}"],
-  "caption": "Hello from Postman! 🚀 #test",
-  "isCarousel": false
+  "mediaType": "single_image",
+  "accountId": "{{account_id}}",
+  "imageUrl": "{{media_bucket_url}}/{{image_id}}",
+  "caption": "Hello from Postman! 🚀 #test"
 }
 ```
 
 **Response 200**:
 ```json
 {
-  "publishLogId": "uuid-here",
+  "success": true,
   "containerId": "17899999999999999",
-  "mediaId": "17888888888888888",
-  "status": "PUBLISHED"
+  "mediaId": "17888888888888888"
 }
 ```
+
+> **Nota**: El `publishLogId` NO se devuelve en el 200 — se crea internamente. Solo aparece en errores 409 (concurrent publish). Para tracking, usa el log vía `GET /api/instagram/publish-log?limit=5`.
 
 **Postman — Tests**:
 ```javascript
 const data = pm.response.json();
-pm.environment.set("publish_log_id", data.publishLogId);
+pm.environment.set("publish_log_id", data.mediaId); // guarda mediaId para trazabilidad
 pm.test("Published successfully", () => {
-  pm.expect(data.status).to.eql("PUBLISHED");
+  pm.expect(data.success).to.eql(true);
   pm.expect(data.mediaId).to.exist;
 });
 ```
@@ -439,58 +442,72 @@ POST {{base_url}}/api/instagram/publish
 Content-Type: application/json
 
 {
-  "instagramAccountId": "{{account_id}}",
+  "mediaType": "carousel",
+  "accountId": "{{account_id}}",
   "imageUrls": [
     "{{media_bucket_url}}/img1.jpg",
     "{{media_bucket_url}}/img2.jpg",
     "{{media_bucket_url}}/img3.jpg"
   ],
-  "caption": "Carousel test with 3 images",
-  "isCarousel": true
+  "caption": "Carousel test with 3 images"
 }
 ```
 
 **Response 200**:
 ```json
 {
-  "publishLogId": "uuid-here",
+  "success": true,
   "containerId": "17899999999999999",
-  "mediaId": "17888888888888888",
-  "status": "PUBLISHED"
+  "mediaId": "17888888888888888"
 }
 ```
 
 **Verificaciones**:
-- `isCarousel: true` con 1 sola imagen → 400 Bad Request
-- 11+ imágenes → 400 Bad Request
+- `mediaType: "carousel"` con 1 sola imagen → 400 Bad Request (Zod: `imageUrls.min(2)`)
+- 11+ imágenes → 400 Bad Request (Zod: `imageUrls.max(10)`)
 - `caption.length > 2200` → 400 Bad Request
+- `mediaType` desconocido → 400 Bad Request (Zod: `discriminatedUnion`)
 
-### Paso 9 — Ver status del publish
+### Paso 9 — Ver historial de publish
 
 ```http
-GET {{base_url}}/api/instagram/publish-log/{{publish_log_id}}
+GET {{base_url}}/api/instagram/publish-log?limit=5
 ```
+
+> **Importante**: Esta ruta **NO** toma `:logId` en el path. Es un listado de los últimos N publishes del usuario (default 20, max 100). Para tracking de un publish específico, filtra por `mediaId` en la respuesta.
 
 **Response 200**:
 ```json
 {
-  "id": "uuid-here",
-  "instagramAccountId": "17841234567890",
-  "status": "PUBLISHED",
-  "containerId": "17899999999999999",
-  "mediaId": "17888888888888888",
-  "errorCode": null,
-  "errorMessage": null,
-  "createdAt": "2026-06-12T10:00:00Z",
-  "publishedAt": "2026-06-12T10:00:05Z"
+  "items": [
+    {
+      "id": "uuid-here",
+      "instagramAccountId": "uuid-account",
+      "status": "published",
+      "mediaType": "single_image",
+      "imageUrl": "https://...",
+      "caption": "Hello from Postman! 🚀",
+      "containerId": "17899999999999999",
+      "mediaId": "17888888888888888",
+      "errorCode": null,
+      "errorSubcode": null,
+      "errorMessage": null,
+      "createdAt": "2026-06-12T10:00:00Z",
+      "publishedAt": "2026-06-12T10:00:05Z"
+    }
+  ]
 }
 ```
+
+Status values: `processing`, `published`, `failed`.
 
 ### Paso 10 — Ver quota
 
 ```http
-GET {{base_url}}/api/instagram/quota?instagramAccountId={{account_id}}
+GET {{base_url}}/api/instagram/quota
 ```
+
+> **Importante**: Esta ruta **NO** toma `?instagramAccountId=...` como query param. Usa automáticamente la cuenta IG del usuario autenticado (1 cuenta por user).
 
 **Response 200**:
 ```json
@@ -516,7 +533,7 @@ DELETE {{base_url}}/api/instagram/accounts/{{account_id}}
 }
 ```
 
-> **Cuidado**: Esto borra el `instagramAccountId` y el `encryptedToken` de la DB. No se puede deshacer. Para volver a usar la cuenta, hay que re-hacer el OAuth flow.
+> **Cuidado**: Esto borra el `id` (UUID) y el `pageAccessToken` (cifrado) de la DB. No se puede deshacer. Para volver a usar la cuenta, hay que re-hacer el OAuth flow.
 
 ---
 
@@ -629,7 +646,7 @@ Copia este JSON y pégalo en Postman → **Import** → **Raw text**:
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"instagramAccountId\": \"{{account_id}}\",\n  \"imageUrls\": [\"{{media_bucket_url}}/{{image_id}}\"],\n  \"caption\": \"Hello from Postman! 🚀\",\n  \"isCarousel\": false\n}"
+          "raw": "{\n  \"mediaType\": \"single_image\",\n  \"accountId\": \"{{account_id}}\",\n  \"imageUrl\": \"{{media_bucket_url}}/{{image_id}}\",\n  \"caption\": \"Hello from Postman! 🚀\"\n}"
         },
         "url": { "raw": "{{base_url}}/api/instagram/publish", "host": ["{{base_url}}"], "path": ["api", "instagram", "publish"] }
       },
@@ -640,7 +657,7 @@ Copia este JSON y pégalo en Postman → **Import** → **Raw text**:
             "type": "text/javascript",
             "exec": [
               "const data = pm.response.json();",
-              "pm.environment.set('publish_log_id', data.publishLogId);"
+              "pm.environment.set('media_id', data.mediaId);"
             ]
           }
         }
@@ -653,7 +670,7 @@ Copia este JSON y pégalo en Postman → **Import** → **Raw text**:
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"instagramAccountId\": \"{{account_id}}\",\n  \"imageUrls\": [\"{{media_bucket_url}}/img1.jpg\", \"{{media_bucket_url}}/img2.jpg\"],\n  \"caption\": \"Carousel test\",\n  \"isCarousel\": true\n}"
+          "raw": "{\n  \"mediaType\": \"carousel\",\n  \"accountId\": \"{{account_id}}\",\n  \"imageUrls\": [\"{{media_bucket_url}}/img1.jpg\", \"{{media_bucket_url}}/img2.jpg\"],\n  \"caption\": \"Carousel test\"\n}"
         },
         "url": { "raw": "{{base_url}}/api/instagram/publish", "host": ["{{base_url}}"], "path": ["api", "instagram", "publish"] }
       }
@@ -662,19 +679,14 @@ Copia este JSON y pégalo en Postman → **Import** → **Raw text**:
       "name": "8. Instagram — Get Publish Status",
       "request": {
         "method": "GET",
-        "url": { "raw": "{{base_url}}/api/instagram/publish-log/{{publish_log_id}}", "host": ["{{base_url}}"], "path": ["api", "instagram", "publish-log", "{{publish_log_id}}"] }
+        "url": { "raw": "{{base_url}}/api/instagram/publish-log?limit=5", "host": ["{{base_url}}"], "path": ["api", "instagram", "publish-log"], "query": [{ "key": "limit", "value": "5" }] }
       }
     },
     {
       "name": "9. Instagram — Get Quota",
       "request": {
         "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/api/instagram/quota?instagramAccountId={{account_id}}",
-          "host": ["{{base_url}}"],
-          "path": ["api", "instagram", "quota"],
-          "query": [{ "key": "instagramAccountId", "value": "{{account_id}}" }]
-        }
+        "url": { "raw": "{{base_url}}/api/instagram/quota", "host": ["{{base_url}}"], "path": ["api", "instagram", "quota"] }
       }
     },
     {
@@ -770,44 +782,85 @@ Dispara dos requests `/publish` en paralelo desde el Collection Runner con `--de
 ```http
 POST {{base_url}}/api/instagram/publish
 {
-  "instagramAccountId": "123",
-  "imageUrls": [],
-  "caption": "",
-  "isCarousel": true
+  "mediaType": "carousel",
+  "accountId": "123",
+  "imageUrls": ["https://example.com/only-one.jpg"]
+}
+```
+
+> Con solo 1 imagen, Zod falla con `imageUrls: Array must contain at least 2 element(s)`.
+
+**Expected**: `400 Bad Request` con body:
+```json
+{
+  "error": "Invalid request body",
+  "details": {
+    "fieldErrors": {
+      "imageUrls": ["Array must contain at least 2 element(s)"]
+    },
+    "formErrors": []
+  }
+}
+```
+
+> **Otros casos de validación** que también devuelven 400:
+> - `imageUrls: ["not-a-url"]` → `"imageUrls.0 must be a valid URL"`
+> - `mediaType: "video"` (no existe) → `"discriminatorUnion: Invalid discriminator value"`
+> - `accountId: ""` → `"accountId: String must contain at least 1 character(s)"`
+
+### 7.6 Caption muy larga (> 2200 chars)
+
+```http
+POST {{base_url}}/api/instagram/publish
+{
+  "mediaType": "single_image",
+  "accountId": "real-uuid-from-/accounts",
+  "imageUrl": "https://example.com/img.jpg",
+  "caption": "x".repeat(2201)
 }
 ```
 
 **Expected**: `400 Bad Request` con body:
 ```json
 {
-  "error": "VALIDATION_ERROR",
-  "issues": [
-    { "path": ["imageUrls"], "message": "Array must contain at least 1 element(s)" },
-    { "path": ["caption"], "message": "String must contain at least 1 character(s)" }
+  "error": "Invalid request body",
+  "details": {
+    "fieldErrors": {
+      "caption": ["String must contain at most 2200 character(s)"]
+    }
+  }
+}
+```
+
+### 7.7 Carousel con 11+ imágenes
+
+```http
+POST {{base_url}}/api/instagram/publish
+{
+  "mediaType": "carousel",
+  "accountId": "real-uuid-from-/accounts",
+  "imageUrls": [
+    "https://example.com/1.jpg", "https://example.com/2.jpg",
+    "https://example.com/3.jpg", "https://example.com/4.jpg",
+    "https://example.com/5.jpg", "https://example.com/6.jpg",
+    "https://example.com/7.jpg", "https://example.com/8.jpg",
+    "https://example.com/9.jpg", "https://example.com/10.jpg",
+    "https://example.com/11.jpg"
   ]
 }
 ```
 
-### 7.6 Caption muy larga (> 2200 chars)
-
+**Expected**: `400 Bad Request` con body:
 ```json
 {
-  "caption": "x".repeat(2201)
+  "error": "Invalid request body",
+  "details": {
+    "fieldErrors": {
+      "imageUrls": ["Array must contain at most 10 element(s)"]
+    }
+  }
 }
 ```
-
-**Expected**: `400 Bad Request` con mensaje `caption must be at most 2200 characters`.
-
-### 7.7 Carousel con 11+ imágenes
-
-```json
-{
-  "isCarousel": true,
-  "imageUrls": ["url1", "url2", "url3", "url4", "url5", "url6", "url7", "url8", "url9", "url10", "url11"]
-}
-```
-
-**Expected**: `400 Bad Request` con mensaje `carousel must have between 2 and 10 images`.
 
 ### 7.8 Magic bytes inválidos (no es JPEG ni PNG)
 
@@ -815,13 +868,15 @@ Sube un `.txt` renombrado a `.jpg`.
 
 **Expected**: `400 Bad Request` con mensaje `Invalid image format. Only JPEG and PNG are supported.`
 
-### 7.9 Cuenta no encontrada
+### 7.9 Disconnect de cuenta ajena (Forbidden)
 
 ```http
-GET {{base_url}}/api/instagram/accounts/00000000-0000-0000-0000-000000000000
+DELETE {{base_url}}/api/instagram/accounts/<uuid-de-otro-user>
 ```
 
-**Expected**: `404 Not Found`.
+**Expected**: `403 Forbidden` con body `{ "error": "Forbidden" }`.
+
+> **Nota**: No existe `GET /api/instagram/accounts/:id` (solo `GET /accounts` lista todas, y `DELETE /accounts/:id` borra). Para probar 404, intenta borrar un UUID que no existe.
 
 ### 7.10 Auth faltante
 
