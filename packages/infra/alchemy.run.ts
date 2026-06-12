@@ -1,10 +1,24 @@
 import alchemy from "alchemy";
-import { Vite } from "alchemy/cloudflare";
-import { Worker } from "alchemy/cloudflare";
+import { Vite, Worker, R2Bucket } from "alchemy/cloudflare";
 import { requireEnv, stage } from "./utils/stageEnv";
 
 const app = await alchemy("generai");
 console.log(`(detected: ${stage})`);
+
+const mediaBucket = await R2Bucket("media", {
+  name: `${app.name}-${app.stage}-media`,
+  adopt: true,
+  devDomain: true,
+  cors: [
+    {
+      allowed: {
+        origins: ["*"],
+        methods: ["GET", "HEAD", "PUT"],
+        headers: ["*"],
+      },
+    },
+  ],
+});
 
 export const web = await Vite("web", {
   cwd: "../../apps/web",
@@ -36,6 +50,13 @@ export const server = await Worker("server", {
     AI_PROVIDER_BASE_URL: requireEnv("AI_PROVIDER_BASE_URL"),
     AI_TEXT_MODEL: requireEnv("AI_TEXT_MODEL"),
     AI_VISION_MODEL: requireEnv("AI_VISION_MODEL"),
+    META_APP_ID: requireEnv("META_APP_ID"),
+    META_APP_SECRET: requireEnv("META_APP_SECRET"),
+    META_REDIRECT_URI: requireEnv("META_REDIRECT_URI"),
+    MEDIA_BUCKET: mediaBucket,
+    R2_PUBLIC_URL: mediaBucket.devDomain
+      ? `https://${mediaBucket.devDomain}`
+      : "",
   },
   dev: {
     port: 3000,
@@ -45,5 +66,6 @@ export const server = await Worker("server", {
 console.log(`Web    -> ${web.url}`);
 console.log(`Server -> ${server.url}`);
 console.log(`Auth Docs -> ${server.url}api/auth/reference`);
+console.log(`Media -> ${mediaBucket.devDomain ?? "no dev domain"}`);
 
 await app.finalize();
