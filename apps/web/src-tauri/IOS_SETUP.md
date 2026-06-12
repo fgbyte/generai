@@ -51,6 +51,7 @@ Android workflow (T14-T16) are unaffected.
   ```
 
 - [ ] **Rust iOS targets** (run once on the Mac):
+
   ```bash
   rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
   ```
@@ -58,6 +59,7 @@ Android workflow (T14-T16) are unaffected.
   - `aarch64-apple-ios` — physical iPhone / iPad (arm64)
   - `aarch64-apple-ios-sim` — Apple Silicon Mac simulator (arm64)
   - `x86_64-apple-ios` — Intel Mac simulator (x86_64)
+
 - [ ] **Node.js / Bun** (for the JS CLI installed in T5; required to run `bun run tauri ios ...`):
 
   ```bash
