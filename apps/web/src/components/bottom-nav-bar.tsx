@@ -56,10 +56,19 @@ export function BottomNavBar({ items = defaultItems, className }: BottomNavBarPr
         "bg-surface-thick backdrop-blur-[30px] backdrop-saturate-[200%]",
         "border-t border-border-glass/50",
         "flex justify-around items-center",
-        "px-lg pt-sm pb-6",
+        "px-lg pt-sm",
         className,
       )}
-      style={{ minHeight: "var(--bottom-nav-height)" }}
+      style={{
+        minHeight: "var(--bottom-nav-height)",
+        // Keep the icons above the Android system nav bar / iOS home
+        // indicator. We always reserve 1.5rem of visual breathing room
+        // and then add the safe area inset (from the polyfill in
+        // index.html on legacy Android WebViews, or env() on iOS / modern
+        // WebViews). --bottom-nav-height mirrors this calc so the main
+        // content's pb-section tracks the same total height.
+        paddingBottom: `calc(1.5rem + max(var(--safe-area-inset-bottom, 0px), env(safe-area-inset-bottom, 0px)))`,
+      }}
     >
       {navItems.map((item) => (
         <Link

@@ -101,7 +101,13 @@
   --spacing-lg: 1rem; /* 16px */
   --spacing-xl: 1.25rem; /* 20px */
   --spacing-xxl: 2rem; /* 32px */
-  --bottom-nav-height: 80px; /* pt-sm(8) + icon(28) + mt-1(4) + text(16) + pb-6(24) */
+  /* Base bottom-nav height (8pt + 28icon + 4mt-1 + 12text + 24pb-6 = 80px).
+     The +safe-area-inset accounts for the system nav bar so anything
+     using this var (or its alias --spacing-section) reserves the full
+     vertical footprint of the nav, including the OS chrome. */
+  --bottom-nav-height: calc(
+    80px + max(var(--safe-area-inset-bottom, 0px), env(safe-area-inset-bottom, 0px))
+  );
   --spacing-section: var(--bottom-nav-height); /* matches BottomNavBar height */
 
   /* ── Border Radius ─────────────────────────────────────── */
@@ -120,6 +126,17 @@
 
   /* ── Container ─────────────────────────────────────────── */
   --container-max: 576px;
+
+  /* ── Safe area insets (Android nav bar, iOS home indicator, etc)
+     Defaults to 0. The polyfill in index.html populates these on
+     legacy Android WebViews (pre-Chrome 88) by computing the
+     difference between screen dimensions. Modern WebViews and iOS
+     get the value via env(safe-area-inset-*); consumers should
+     combine both via max() in their computed paddings. ───────── */
+  --safe-area-inset-top: 0px;
+  --safe-area-inset-right: 0px;
+  --safe-area-inset-bottom: 0px;
+  --safe-area-inset-left: 0px;
 
   /* ── Animations ────────────────────────────────────────── */
   --animate-tap-press: tap-press 100ms ease-out;
@@ -274,7 +291,9 @@
     outline-offset: 2px;
   }
 
-  /* Safe area for fixed bottom nav */
+  /* Safe area for fixed bottom nav. --spacing-section already includes
+     the system nav bar inset (via --bottom-nav-height calc), so .safe-bottom
+     just forwards it without double-counting. */
   .safe-bottom {
     padding-bottom: var(--spacing-section);
   }
