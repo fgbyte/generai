@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { InstagramPreview } from "@/components/previews/instagram-preview";
 import {
   X,
   Instagram as InstagramIcon,
@@ -11,19 +10,11 @@ import {
   Pin,
   RefreshCw,
   Sparkles,
-  MoreHorizontal,
-  Plus,
-  Heart,
-  MessageCircle,
-  Send,
-  Bookmark,
   Pencil,
   CopyIcon,
   Check,
   SendHorizonal,
 } from "lucide-react";
-
-import heroImageUrl from "@/assets/generai-login-hero.jpg";
 
 /* ══ Route definition ═══════════════════════════════════━ */
 export const Route = createFileRoute("/app/automate/")({
@@ -57,150 +48,23 @@ function TopAppBar() {
   );
 }
 
-function InstagramPreview({ caption }: { caption: string }) {
-  const [liked, setLiked] = useState(false);
-  const [currentImageIndex, _setCurrentImageIndex] = useState(0);
-  const [images, setImages] = useState([heroImageUrl]);
-
-  const addImage = () => {
-    setImages((prev) => [...prev, heroImageUrl]);
-  };
-
-  // Parse caption to extract main text and tags
-  const parseCaption = (text: string) => {
-    const parts = text.split("\n");
-    const mainText = parts[0] || "";
-    const tagsLine = parts.slice(1).join(" ");
-    // Extract individual tags
-    const tags = tagsLine.match(/#\w+/g) || [];
-    return { mainText, tags };
-  };
-
-  const { mainText, tags } = parseCaption(caption);
-
-  // Format current date for display
-  const formattedDate = new Date().toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-
-  return (
-    <Card className="overflow-hidden border border-border-glass/30 bg-surface-material/60">
-      <CardContent className="flex flex-col gap-3 p-0">
-        {/* IG Header */}
-        <div className="flex items-center gap-3 px-4 pt-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-caption-xs font-bold text-white">
-            G
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold text-white">
-              generai_art
-            </span>
-            <span className="text-caption-xs text-text-dim">Sponsored</span>
-          </div>
-          <button
-            type="button"
-            className="ml-auto rounded-md p-1 text-text-dim transition-colors hover:bg-white/10 hover:text-white"
-          >
-            <MoreHorizontal className="size-5" />
-          </button>
-        </div>
-
-        {/* Post Image */}
-        <div className="relative aspect-square w-full">
-          <img
-            src={images[currentImageIndex]}
-            alt="AI Generated Artwork"
-            className="size-full object-cover"
-          />
-          {images.length > 1 && (
-            <div className="absolute text-white bottom-3 right-3 flex items-center gap-1.5 rounded-full border border-border-glass/50 bg-surface-thick/70 px-3 py-1.5 text-caption-xs backdrop-blur-md">
-              {currentImageIndex + 1}/{images.length}
-            </div>
-          )}
-        </div>
-
-        {/* Add more images */}
-        {/*<div className="px-4 flex flex-col gap-2">
-          <Button
-            onClick={addImage}
-            variant="outline"
-            className="w-full gap-1.5 rounded-xl border-white/20 bg-surface-material/30 py-3 text-sm text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:text-white"
-          >
-            <Plus className="size-4" />
-            Add more images
-          </Button>
-          <Button
-            onClick={() => console.log("Mentions Popup")}
-            variant="outline"
-            className="w-full gap-1.5 rounded-xl border-white/20 bg-surface-material/30 py-3 text-sm text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:text-white"
-          >
-            @ Add Mentions
-          </Button>
-        </div>*/}
-
-        {/* Interactions */}
-        <div className="flex items-center gap-4 px-4">
-          <button
-            type="button"
-            onClick={() => setLiked((p) => !p)}
-            aria-label={liked ? "Unlike" : "Like"}
-            className="transition-transform active:scale-90"
-          >
-            <Heart
-              className={`size-6 ${liked ? "fill-red-400 text-red-400" : "text-white"}`}
-            />
-          </button>
-          <button
-            type="button"
-            aria-label="Comment"
-            className="transition-transform text-white active:scale-90 hover:text-white/60"
-          >
-            <MessageCircle className="size-6" />
-          </button>
-          <button
-            type="button"
-            aria-label="Share"
-            className="transition-transform text-white active:scale-90 hover:text-white/60"
-          >
-            <Send className="size-6" />
-          </button>
-          <button
-            type="button"
-            className="ml-auto rounded-md p-1 text-white transition-colors hover:bg-white/10"
-          >
-            <Bookmark className="size-6" />
-          </button>
-        </div>
-
-        {/* Caption */}
-        <div className="flex flex-col gap-1 px-4 pb-4">
-          <p className="leading-relaxed text-white">
-            <span className="mr-1 font-semibold">generai_art</span>
-            {mainText}
-          </p>
-          {tags.length > 0 && (
-            <p className="text-caption-xs text-primary/80">{tags.join(" ")}</p>
-          )}
-          <p className="text-caption-xs text-text-dim">{formattedDate}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
 /* ── Platform Selection ──────────────────────────────────── */
 const platforms = [
   { id: "instagram", label: "Instagram", icon: InstagramIcon },
   { id: "twitter", label: "X / Twitter", icon: Twitter },
   { id: "dribbble", label: "Dribbble", icon: Dribbble },
   { id: "pinterest", label: "Pinterest", icon: Pin },
-];
+] as const;
 
-function PlatformSelector() {
-  const [selected, setSelected] = useState<string>("instagram");
+export type PlatformId = (typeof platforms)[number]["id"];
 
+function PlatformSelector({
+  value,
+  onChange,
+}: {
+  value: PlatformId;
+  onChange: (value: PlatformId) => void;
+}) {
   return (
     <div className="flex flex-col gap-3">
       <span className="text-mono-label text-text-dim uppercase">
@@ -208,13 +72,13 @@ function PlatformSelector() {
       </span>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {platforms.map((p) => {
-          const isActive = p.id === selected;
+          const isActive = p.id === value;
           const Icon = p.icon;
           return (
             <button
               type="button"
               key={p.id}
-              onClick={() => setSelected(p.id)}
+              onClick={() => onChange(p.id)}
               className={`flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all ${
                 isActive
                   ? "border-primary/30 bg-primary text-white shadow-[0_0_15px_rgba(109,93,242,0.4)]"
@@ -401,6 +265,7 @@ function CtaFooter({ caption }: { caption: string }) {
  ═══════════════════════════════════════════════════════════ */
 
 function AutomatePage() {
+  const [selected, setSelected] = useState<PlatformId>("instagram");
   const [notification, setNotification] = useState(true);
   const [caption, setCaption] = useState(
     "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture",
@@ -411,9 +276,9 @@ function AutomatePage() {
       <TopAppBar />
 
       <main className="mx-auto flex w-full max-w-container flex-col gap-6 px-lg">
-        <PlatformSelector />
+        <PlatformSelector value={selected} onChange={setSelected} />
 
-        <InstagramPreview caption={caption} />
+        {selected === "instagram" && <InstagramPreview caption={caption} />}
 
         <CaptionEditor caption={caption} setCaption={setCaption} />
 
