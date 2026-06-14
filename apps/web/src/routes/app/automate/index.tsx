@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
 import { generationStore } from "@/stores/generation-store";
+import { useGenerateContent } from "@/hooks/use-generate-content";
 
 import { CommingSoonMock } from "@/components/previews/comming-soon-mock";
 import { CommingSoonModal } from "@/components/modals/comming-soon-modal";
@@ -113,9 +114,13 @@ const previewRegistry: Partial<Record<PlatformId, ComponentType<{ caption: strin
 function CaptionEditor({
   caption,
   setCaption,
+  onRegenerate,
+  isRegenerating,
 }: {
   caption: string;
   setCaption: (value: string) => void;
+  onRegenerate: () => void;
+  isRegenerating: boolean;
 }) {
   const [captionOpen, setCaptionOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -167,9 +172,17 @@ function CaptionEditor({
         </div>
       )}
       <div className="flex justify-end">
-        <button className="group flex items-center gap-1 px-3 py-2 hover:bg-primary/10 rounded-lg text-violet-brand transition-all">
-          <RefreshCw className="size-4 text-primary" />
-          <span className="text-[14px] font-semibold text-primary">Regenerate Caption</span>
+        <button
+          onClick={onRegenerate}
+          disabled={isRegenerating}
+          className="group flex items-center gap-1 px-3 py-2 hover:bg-primary/10 rounded-lg text-violet-brand transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <RefreshCw
+            className={`size-4 text-primary ${isRegenerating ? "animate-spin" : ""}`}
+          />
+          <span className="text-[14px] font-semibold text-primary">
+            {isRegenerating ? "Regenerating…" : "Regenerate Caption"}
+          </span>
         </button>
       </div>
     </section>
@@ -252,6 +265,12 @@ function AutomatePage() {
     };
   }, [generation?.imageBase64]);
 
+  const generateMutation = useGenerateContent({
+    onSuccess: (data) => {
+      setCaption(data.content.join("\n\n"));
+    },
+  });
+
   const currentPlatform = platforms.find((p) => p.id === selected);
   const PlatformPreview = previewRegistry[selected];
 
@@ -268,7 +287,12 @@ function AutomatePage() {
           <CommingSoonMock label={currentPlatform.label} icon={currentPlatform.icon} />
         ) : null}
 
-        <CaptionEditor caption={caption} setCaption={setCaption} />
+        <CaptionEditor
+          caption={caption}
+          setCaption={setCaption}
+          onRegenerate={() => generateMutation.mutate()}
+          isRegenerating={generateMutation.isPending}
+        />
 
         {/* Notification Banner */}
         {notification && (
