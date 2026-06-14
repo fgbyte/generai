@@ -7,12 +7,15 @@ import heroImageUrl from "@/assets/generai-login-hero.jpg";
 
 type InstagramPreviewProps = {
   caption: string;
+  image?: string; // Optional override: URL (e.g. blob URL) of the image to display
 };
 
-export function InstagramPreview({ caption }: InstagramPreviewProps) {
+export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
   const [liked, setLiked] = useState(false);
   const [currentImageIndex, _setCurrentImageIndex] = useState(0);
   const [images, _setImages] = useState([heroImageUrl]);
+
+  const displaySrc = image ?? images[currentImageIndex];
 
   // Parse caption to extract main text and tags
   const parseCaption = (text: string) => {
@@ -56,11 +59,11 @@ export function InstagramPreview({ caption }: InstagramPreviewProps) {
         {/* Post Image */}
         <div className="relative aspect-square w-full">
           <img
-            src={images[currentImageIndex]}
+            src={displaySrc}
             alt="AI Generated Artwork"
             className="size-full object-cover"
           />
-          {images.length > 1 && (
+          {!image && images.length > 1 && (
             <div className="absolute text-white bottom-3 right-3 flex items-center gap-1.5 rounded-full border border-border-glass/50 bg-surface-thick/70 px-3 py-1.5 text-caption-xs backdrop-blur-md">
               {currentImageIndex + 1}/{images.length}
             </div>

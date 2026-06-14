@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
@@ -102,7 +102,7 @@ function PlatformSelector({
  * Platforms without a real implementation fall through to
  * <CommingSoonMock> at the call site.
  * ─────────────────────────────────────────────────────────── */
-const previewRegistry: Partial<Record<PlatformId, ComponentType<{ caption: string }>>> = {
+const previewRegistry: Partial<Record<PlatformId, ComponentType<{ caption: string; image?: string }>>> = {
   instagram: InstagramPreview,
   // twitter: TwitterPreview,
   // dribbble: DribbblePreview,
@@ -225,6 +225,33 @@ function AutomatePage() {
     return "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture";
   });
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const base64 = generation?.imageBase64;
+    if (!base64) {
+      setImageUrl(null);
+      return;
+    }
+    let revoked = false;
+    let createdUrl: string | null = null;
+    (async () => {
+      try {
+        const res = await fetch(base64);
+        const blob = await res.blob();
+        createdUrl = URL.createObjectURL(blob);
+        if (!revoked) setImageUrl(createdUrl);
+      } catch (err) {
+        console.warn("[automate] Failed to convert imageBase64 to blob URL:", err);
+        setImageUrl(null);
+      }
+    })();
+    return () => {
+      revoked = true;
+      if (createdUrl) URL.revokeObjectURL(createdUrl);
+    };
+  }, [generation?.imageBase64]);
+
   const currentPlatform = platforms.find((p) => p.id === selected);
   const PlatformPreview = previewRegistry[selected];
 
@@ -236,7 +263,7 @@ function AutomatePage() {
         <PlatformSelector value={selected} onChange={setSelected} />
 
         {PlatformPreview ? (
-          <PlatformPreview caption={caption} />
+          <PlatformPreview caption={caption} image={imageUrl ?? undefined} />
         ) : currentPlatform ? (
           <CommingSoonMock label={currentPlatform.label} icon={currentPlatform.icon} />
         ) : null}
