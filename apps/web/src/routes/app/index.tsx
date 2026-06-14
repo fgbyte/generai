@@ -60,7 +60,7 @@ function RouteComponent() {
       <main className="max-w-container mx-auto px-lg flex flex-col gap-lg relative z-10">
         {/* Points Card */}
         <PointsBalanceCard
-          balance={data?.points ?? 0}
+          balance={data?.points ?? "~"}
           onGetMore={() => {
             /* TODO: navigate to points purchase */
             navigate({ to: "/app/settings" });

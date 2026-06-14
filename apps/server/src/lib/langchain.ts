@@ -109,7 +109,9 @@ export async function generateContent(
             image_url: {
               // imageBase64 may already be a full data URL (from FileReader.readAsDataURL)
               // or it may be just the raw base64 string. Handle both cases.
-              url: imageBase64.startsWith("data:") ? imageBase64 : `data:image/jpeg;base64,${imageBase64}`,
+              url: imageBase64.startsWith("data:")
+                ? imageBase64
+                : `data:image/jpeg;base64,${imageBase64}`,
             },
           },
         ],

@@ -57,7 +57,7 @@ export function useGenerateContent(options: UseGenerateContentOptions = {}) {
         },
       });
       if (!res.ok) {
-        const errBody = await res.json().catch(() => ({} as Record<string, string>));
+        const errBody = await res.json().catch(() => ({}) as Record<string, string>);
         throw new Error(errBody.error ?? `Generation failed (${res.status})`);
       }
       return res.json() as Promise<GenerateContentResponse>;

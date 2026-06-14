@@ -40,9 +40,7 @@ function TopAppBar() {
         </Link>
       </button>
 
-      <h1 className="font-headline-md text-headline-md text-white">
-        Content Preview
-      </h1>
+      <h1 className="font-headline-md text-headline-md text-white">Content Preview</h1>
 
       <Link
         to="/app/history"
@@ -73,9 +71,7 @@ function PlatformSelector({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-mono-label text-text-dim uppercase">
-        Select Platform
-      </span>
+      <span className="text-mono-label text-text-dim uppercase">Select Platform</span>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {platforms.map((p) => {
           const isActive = p.id === value;
@@ -163,17 +159,13 @@ function EditContent({
         className="w-full flex items-center justify-center gap-2 py-3 bg-surface-material/30 border border-border-glass rounded-lg hover:bg-surface-material/50 active:scale-[0.98] transition-all"
       >
         <Pencil className="size-4 inline-block text-primary" />
-        <span className="text-[17px] font-semibold text-white">
-          Edit Content
-        </span>
+        <span className="text-[17px] font-semibold text-white">Edit Content</span>
       </button>
       {editorOpen && (
         <div className="flex flex-col gap-3">
           {/* Caption editor (with copy) */}
           <div className="flex flex-col gap-1">
-            <label className="text-mono-label text-text-dim text-[11px]">
-              Caption
-            </label>
+            <label className="text-mono-label text-text-dim text-[11px]">Caption</label>
             <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
               <button
                 type="button"
@@ -181,11 +173,7 @@ function EditContent({
                 aria-label="Copy caption"
                 className="absolute top-2 right-2 p-2 rounded-lg bg-surface-thick border border-border-glass text-text-dim hover:text-white active:scale-95 transition-all z-10"
               >
-                {copied ? (
-                  <Check className="size-4" />
-                ) : (
-                  <CopyIcon className="size-4" />
-                )}
+                {copied ? <Check className="size-4" /> : <CopyIcon className="size-4" />}
               </button>
               <textarea
                 value={caption}
@@ -197,9 +185,7 @@ function EditContent({
           </div>
           {/* Prompt editor */}
           <div className="flex flex-col gap-1">
-            <label className="text-mono-label text-text-dim text-[11px]">
-              Prompt
-            </label>
+            <label className="text-mono-label text-text-dim text-[11px]">Prompt</label>
             <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
               <textarea
                 value={prompt}
@@ -219,9 +205,7 @@ function EditContent({
           disabled={isRegenerating}
           className="group flex items-center gap-1 px-3 py-2 hover:bg-primary/10 rounded-lg text-violet-brand transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <RefreshCw
-            className={`size-4 text-primary ${isRegenerating ? "animate-spin" : ""}`}
-          />
+          <RefreshCw className={`size-4 text-primary ${isRegenerating ? "animate-spin" : ""}`} />
           <span className="text-[14px] font-semibold text-primary">
             {isRegenerating ? "Regenerating…" : "Regenerate Caption"}
           </span>
@@ -248,11 +232,7 @@ function CtaFooter({ caption }: { caption: string }) {
   return (
     <div className="grid grid-cols-2 gap-3">
       <button type="button" onClick={handleCopy} className=" btn-secondary">
-        {copied ? (
-          <Check className="size-4" />
-        ) : (
-          <CopyIcon className="size-4" />
-        )}
+        {copied ? <Check className="size-4" /> : <CopyIcon className="size-4" />}
         {copied ? "Copied!" : "Copy"}
       </button>
       <button
@@ -264,9 +244,7 @@ function CtaFooter({ caption }: { caption: string }) {
         Publish
       </button>
 
-      {scheduleOpen && (
-        <CommingSoonModal open={scheduleOpen} onOpenChange={setScheduleOpen} />
-      )}
+      {scheduleOpen && <CommingSoonModal open={scheduleOpen} onOpenChange={setScheduleOpen} />}
     </div>
   );
 }
@@ -304,10 +282,7 @@ function AutomatePage() {
         createdUrl = URL.createObjectURL(blob);
         if (!revoked) setImageUrl(createdUrl);
       } catch (err) {
-        console.warn(
-          "[automate] Failed to convert imageBase64 to blob URL:",
-          err,
-        );
+        console.warn("[automate] Failed to convert imageBase64 to blob URL:", err);
         setImageUrl(null);
       }
     })();
@@ -345,10 +320,7 @@ function AutomatePage() {
         {PlatformPreview ? (
           <PlatformPreview caption={caption} image={imageUrl ?? undefined} />
         ) : currentPlatform ? (
-          <CommingSoonMock
-            label={currentPlatform.label}
-            icon={currentPlatform.icon}
-          />
+          <CommingSoonMock label={currentPlatform.label} icon={currentPlatform.icon} />
         ) : null}
 
         <EditContent
@@ -365,8 +337,7 @@ function AutomatePage() {
           <div className="flex items-center gap-3 rounded-lg border border-primary/10 bg-primary/5 p-3">
             <Sparkles className="size-5 shrink-0 text-primary" />
             <p className="text-caption-xs text-text-dim">
-              Generative tags and optimal timing analysis are applied
-              automatically.
+              Generative tags and optimal timing analysis are applied automatically.
             </p>
             <button
               type="button"

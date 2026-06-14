@@ -13,16 +13,16 @@ For app-wide conventions (port, routing, state strategy), see `apps/web/AGENTS.m
 
 ## Where to Look
 
-| Pattern              | Reference File                                          | Lines      |
-| -------------------- | ------------------------------------------------------- | ---------- |
-| Hono client setup    | `apps/web/src/routes/todos.tsx`                         | 31-33      |
-| Simple GET query     | `apps/web/src/routes/app/index.tsx`                     | 35-42      |
-| Optimistic create    | `apps/web/src/routes/todos.tsx`                         | 52-108     |
-| Optimistic toggle    | `apps/web/src/routes/todos.tsx`                         | 110-155    |
-| Optimistic delete    | `apps/web/src/routes/todos.tsx`                         | 157-189    |
-| QueryClient defaults | `apps/web/src/main.tsx`                                 | 8-15       |
-| Test wrapper         | `apps/web/src/components/app/history-page.test.tsx`     | 14-32      |
-| Server type export   | `apps/server/src/index.ts`                              | 1-37       |
+| Pattern              | Reference File                                      | Lines   |
+| -------------------- | --------------------------------------------------- | ------- |
+| Hono client setup    | `apps/web/src/routes/todos.tsx`                     | 31-33   |
+| Simple GET query     | `apps/web/src/routes/app/index.tsx`                 | 35-42   |
+| Optimistic create    | `apps/web/src/routes/todos.tsx`                     | 52-108  |
+| Optimistic toggle    | `apps/web/src/routes/todos.tsx`                     | 110-155 |
+| Optimistic delete    | `apps/web/src/routes/todos.tsx`                     | 157-189 |
+| QueryClient defaults | `apps/web/src/main.tsx`                             | 8-15    |
+| Test wrapper         | `apps/web/src/components/app/history-page.test.tsx` | 14-32   |
+| Server type export   | `apps/server/src/index.ts`                          | 1-37    |
 
 ## Hono RPC Client Setup
 
@@ -158,9 +158,7 @@ const addTodoMutation = useMutation<Todo, Error, string, TodoMutationContext>({
   onSuccess: (data, _variables, context) => {
     queryClient.setQueryData<Todo[]>(["todos"], (old) => {
       if (!old) return [data];
-      return old.map((todo) =>
-        todo.id === context?.optimisticTodo?.id ? data : todo
-      );
+      return old.map((todo) => (todo.id === context?.optimisticTodo?.id ? data : todo));
     });
   },
   onError: (err, _newTodo, context) => {
@@ -203,18 +201,14 @@ const toggleTodoMutation = useMutation<
     const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]);
     queryClient.setQueryData<Todo[]>(["todos"], (old) => {
       if (!old) return old;
-      return old.map((todo) =>
-        todo.id === id ? { ...todo, completed } : todo
-      );
+      return old.map((todo) => (todo.id === id ? { ...todo, completed } : todo));
     });
     return { previousTodos };
   },
   onSuccess: (data, variables) => {
     queryClient.setQueryData<Todo[]>(["todos"], (old) => {
       if (!old) return old;
-      return old.map((todo) =>
-        todo.id === variables.id ? data : todo
-      );
+      return old.map((todo) => (todo.id === variables.id ? data : todo));
     });
   },
   onError: (_err, _variables, context) => {
@@ -273,11 +267,11 @@ The codebase uses flat array query keys. No nested keys, no factory functions, n
 
 **Keys in use:**
 
-| Query Key   | File                                      | Lines      | Endpoint                  |
-| ----------- | ----------------------------------------- | ---------- | ------------------------- |
-| `["todos"]` | `apps/web/src/routes/todos.tsx`           | 44, 62, 79 | `GET /api/todos`          |
-| `["points"]`| `apps/web/src/routes/app/index.tsx`       | 36         | `GET /api/generate/points`|
-| `["people"]`| `apps/web/src/routes/demo.tanstack-query.tsx` | 15    | `GET /api/people`         |
+| Query Key    | File                                          | Lines      | Endpoint                   |
+| ------------ | --------------------------------------------- | ---------- | -------------------------- |
+| `["todos"]`  | `apps/web/src/routes/todos.tsx`               | 44, 62, 79 | `GET /api/todos`           |
+| `["points"]` | `apps/web/src/routes/app/index.tsx`           | 36         | `GET /api/generate/points` |
+| `["people"]` | `apps/web/src/routes/demo.tanstack-query.tsx` | 15         | `GET /api/people`          |
 
 **Rules:**
 

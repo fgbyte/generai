@@ -1,108 +1,86 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-        />
-        <title>generai</title>
-        <!--
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>generai</title>
+    <!--
       Safe-area polyfill for older Android WebViews (pre-Chrome 88) that
       don't expose env(safe-area-inset-*). Detects the system navigation
       bar height from screen dimensions and exposes it as CSS custom
       properties so the same CSS that reads env() also works on legacy
       WebViews. Runs synchronously before paint to avoid layout flash.
     -->
-        <script>
-            (function () {
-                var ua,
-                    dpr,
-                    setInset,
-                    recompute,
-                    screenH,
-                    windowH,
-                    diff,
-                    bottom;
-                try {
-                    // iOS WKWebView exposes env() natively — skip.
-                    ua = navigator.userAgent || "";
-                    if (/iPad|iPhone|iPod/.test(ua)) return;
+    <script>
+      (function () {
+        var ua, dpr, setInset, recompute, screenH, windowH, diff, bottom;
+        try {
+          // iOS WKWebView exposes env() natively — skip.
+          ua = navigator.userAgent || "";
+          if (/iPad|iPhone|iPod/.test(ua)) return;
 
-                    dpr = window.devicePixelRatio || 1;
+          dpr = window.devicePixelRatio || 1;
 
-                    setInset = function (b, t) {
-                        var root = document.documentElement;
-                        root.style.setProperty(
-                            "--safe-area-inset-top",
-                            (t || 0) + "px",
-                        );
-                        root.style.setProperty(
-                            "--safe-area-inset-right",
-                            "0px",
-                        );
-                        root.style.setProperty(
-                            "--safe-area-inset-bottom",
-                            (b || 0) + "px",
-                        );
-                        root.style.setProperty("--safe-area-inset-left", "0px");
-                    };
+          setInset = function (b, t) {
+            var root = document.documentElement;
+            root.style.setProperty("--safe-area-inset-top", (t || 0) + "px");
+            root.style.setProperty("--safe-area-inset-right", "0px");
+            root.style.setProperty("--safe-area-inset-bottom", (b || 0) + "px");
+            root.style.setProperty("--safe-area-inset-left", "0px");
+          };
 
-                    recompute = function () {
-                        screenH = window.screen && window.screen.height;
-                        windowH = window.innerHeight;
-                        bottom = 0;
+          recompute = function () {
+            screenH = window.screen && window.screen.height;
+            windowH = window.innerHeight;
+            bottom = 0;
 
-                        if (
-                            typeof screenH !== "number" ||
-                            typeof windowH !== "number"
-                        ) {
-                            setInset(0, 0);
-                            return;
-                        }
+            if (typeof screenH !== "number" || typeof windowH !== "number") {
+              setInset(0, 0);
+              return;
+            }
 
-                        diff = screenH - windowH;
+            diff = screenH - windowH;
 
-                        // Inset mode: the WebView is sized to fit between the system
-                        // bars, so the system nav bar is rendered OUTSIDE the WebView
-                        // (below its viewport). The fixed bottom nav at bottom-0 is
-                        // already flush against the top edge of the system nav bar,
-                        // so no extra padding is required — adding it just creates a
-                        // visual gap. This is the default for Tauri 2 on Android.
-                        // Threshold: a combined status+nav bar is typically 60-100dp
-                        // (180-300px on 3x). Anything above ~120px means inset.
-                        if (diff > 120) {
-                            setInset(0, 0);
-                            return;
-                        }
+            // Inset mode: the WebView is sized to fit between the system
+            // bars, so the system nav bar is rendered OUTSIDE the WebView
+            // (below its viewport). The fixed bottom nav at bottom-0 is
+            // already flush against the top edge of the system nav bar,
+            // so no extra padding is required — adding it just creates a
+            // visual gap. This is the default for Tauri 2 on Android.
+            // Threshold: a combined status+nav bar is typically 60-100dp
+            // (180-300px on 3x). Anything above ~120px means inset.
+            if (diff > 120) {
+              setInset(0, 0);
+              return;
+            }
 
-                        // Fullscreen / edge-to-edge mode: the WebView fills the screen
-                        // and the system bars are drawn on top. The bottom nav would
-                        // otherwise be hidden behind the system nav bar. We can't
-                        // reliably measure the nav bar from window dimensions, so we
-                        // fall back to a conservative 24dp (gesture mode). 3-button
-                        // nav users should bump this in CSS if overlap persists.
-                        bottom = 16 * dpr;
-                        setInset(bottom, 0);
-                    };
+            // Fullscreen / edge-to-edge mode: the WebView fills the screen
+            // and the system bars are drawn on top. The bottom nav would
+            // otherwise be hidden behind the system nav bar. We can't
+            // reliably measure the nav bar from window dimensions, so we
+            // fall back to a conservative 24dp (gesture mode). 3-button
+            // nav users should bump this in CSS if overlap persists.
+            bottom = 16 * dpr;
+            setInset(bottom, 0);
+          };
 
-                    recompute();
-                    // Re-measure on orientation change / nav bar hide-show.
-                    window.addEventListener("resize", recompute, {
-                        passive: true,
-                    });
-                    window.addEventListener("orientationchange", recompute, {
-                        passive: true,
-                    });
-                } catch (e) {
-                    // Polyfill is best-effort; CSS env() still works on modern WebViews.
-                }
-            })();
-        </script>
-    </head>
+          recompute();
+          // Re-measure on orientation change / nav bar hide-show.
+          window.addEventListener("resize", recompute, {
+            passive: true,
+          });
+          window.addEventListener("orientationchange", recompute, {
+            passive: true,
+          });
+        } catch (e) {
+          // Polyfill is best-effort; CSS env() still works on modern WebViews.
+        }
+      })();
+    </script>
+  </head>
 
-    <body>
-        <div id="app"></div>
-        <script type="module" src="/src/main.tsx"></script>
-    </body>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

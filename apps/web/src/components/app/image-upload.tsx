@@ -26,7 +26,11 @@ interface ImageUploadProps {
  * Clicking the uploaded body reopens the file picker to replace the image.
  * The trailing X button clears the selection.
  */
-export function ImageUpload({ simulateLatencyMs = 1200, className, onBase64Change }: ImageUploadProps) {
+export function ImageUpload({
+  simulateLatencyMs = 1200,
+  className,
+  onBase64Change,
+}: ImageUploadProps) {
   const [state, setState] = useState<UploadState>("idle");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);

@@ -46,11 +46,7 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
 
         {/* Post Image */}
         <div className="relative aspect-square w-full">
-          <img
-            src={displaySrc}
-            alt="AI Generated Artwork"
-            className="size-full object-cover"
-          />
+          <img src={displaySrc} alt="AI Generated Artwork" className="size-full object-cover" />
           {!image && images.length > 1 && (
             <div className="absolute text-white bottom-3 right-3 flex items-center gap-1.5 rounded-full border border-border-glass/50 bg-surface-thick/70 px-3 py-1.5 text-caption-xs backdrop-blur-md">
               {currentImageIndex + 1}/{images.length}
@@ -93,8 +89,7 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
         {/* Caption */}
         <div className="flex flex-col gap-1 px-4 pb-4">
           <p className="leading-relaxed text-white whitespace-pre-wrap">
-            <span className="mr-1 font-semibold">generai_art</span>{" "}
-            {caption}
+            <span className="mr-1 font-semibold">generai_art</span> {caption}
           </p>
           <p className="text-caption-xs text-text-dim">{formattedDate}</p>
         </div>
