@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { ComponentType } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useStore } from "@tanstack/react-store";
+import { generationStore } from "@/stores/generation-store";
 
 import { CommingSoonMock } from "@/components/previews/comming-soon-mock";
 import { CommingSoonModal } from "@/components/modals/comming-soon-modal";
@@ -215,9 +217,13 @@ function CtaFooter({ caption }: { caption: string }) {
 function AutomatePage() {
   const [selected, setSelected] = useState<PlatformId>("instagram");
   const [notification, setNotification] = useState(true);
-  const [caption, setCaption] = useState(
-    "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture",
-  );
+  const generation = useStore(generationStore, (s) => s.current);
+  const [caption, setCaption] = useState<string>(() => {
+    if (generation?.content && generation.content.length > 0) {
+      return generation.content.join("\n\n");
+    }
+    return "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture";
+  });
 
   const currentPlatform = platforms.find((p) => p.id === selected);
   const PlatformPreview = previewRegistry[selected];
