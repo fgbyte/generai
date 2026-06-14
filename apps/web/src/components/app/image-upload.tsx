@@ -12,6 +12,9 @@ interface ImageUploadProps {
    */
   simulateLatencyMs?: number;
   className?: string;
+  /** Called with a data:image/...;base64,... string when a file is selected,
+   *  or null when the selection is removed / component unmounts. */
+  onBase64Change?: (base64: string | null) => void;
 }
 
 /**
@@ -23,7 +26,7 @@ interface ImageUploadProps {
  * Clicking the uploaded body reopens the file picker to replace the image.
  * The trailing X button clears the selection.
  */
-export function ImageUpload({ simulateLatencyMs = 1200, className }: ImageUploadProps) {
+export function ImageUpload({ simulateLatencyMs = 1200, className, onBase64Change }: ImageUploadProps) {
   const [state, setState] = useState<UploadState>("idle");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -35,6 +38,14 @@ export function ImageUpload({ simulateLatencyMs = 1200, className }: ImageUpload
     };
   }, [previewUrl]);
 
+  // Notify parent of removal on unmount so stale base64 isn't kept.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    return () => {
+      onBase64Change?.(null);
+    };
+  }, []);
+
   const resetInput = () => {
     if (inputRef.current) inputRef.current.value = "";
   };
@@ -44,6 +55,14 @@ export function ImageUpload({ simulateLatencyMs = 1200, className }: ImageUpload
 
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+
+    // Fire-and-forget FileReader: converts file to base64 for parent consumption.
+    // Runs in parallel with the simulated upload delay below.
+    const reader = new FileReader();
+    reader.onload = () => {
+      onBase64Change?.(typeof reader.result === "string" ? reader.result : null);
+    };
+    reader.readAsDataURL(file);
 
     // Placeholder for the real R2 PUT — keep the loader visible long enough
     // to demo the state. Swap for an `await uploadToR2(file)` later.
@@ -73,6 +92,7 @@ export function ImageUpload({ simulateLatencyMs = 1200, className }: ImageUpload
     setPreviewUrl(null);
     setState("idle");
     resetInput();
+    onBase64Change?.(null);
   };
 
   return (
