@@ -61,13 +61,6 @@ export function ImageUpload({ simulateLatencyMs = 1200, className, onBase64Chang
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        // Debug log: confirm conversion succeeded + show first 200 chars of the data URL
-        // so the user can verify the base64 is being generated correctly.
-        // Remove or downgrade to console.debug once verified.
-        const preview = reader.result.slice(0, 200);
-        console.log(
-          `[ImageUpload] File converted to base64 (${reader.result.length} chars total): ${preview}${reader.result.length > 200 ? "…" : ""}`,
-        );
         onBase64Change?.(reader.result);
       } else {
         console.warn("[ImageUpload] FileReader returned non-string result");
