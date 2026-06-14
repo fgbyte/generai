@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { env } from "@generai/env/web";
 import { hc } from "hono/client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { AppType } from "@server/index";
 
 import { useState } from "react";
@@ -16,8 +16,7 @@ import { PointsBalanceCard } from "@/components/app/points-balance-card";
 import { ProTipBanner } from "@/components/app/pro-tip-banner";
 import { Instagram } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import { toast } from "sonner";
-import { generationStore } from "@/stores/generation-store";
+import { useGenerateContent } from "@/hooks/use-generate-content";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/app/")({
@@ -43,51 +42,13 @@ function RouteComponent() {
       return res.json();
     },
   });
-  const queryClient = useQueryClient();
   const [contentType, setContentType] = useState("instagram");
   const [prompt, setPrompt] = useState("");
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const generateMutation = useMutation<
-    { content: string[]; contentType: "thread" | "instagram" | "linkedin"; id: string },
-    Error,
-    void
-  >({
-    mutationFn: async () => {
-      const res = await client.api.generate.$post({
-        json: {
-          contentType: contentType as "thread" | "instagram" | "linkedin",
-          prompt,
-          imageBase64: imageBase64 ?? undefined,
-        },
-      });
-      if (!res.ok) {
-        const errBody = await res.json().catch(() => ({} as Record<string, string>));
-        throw new Error(errBody.error ?? `Generation failed (${res.status})`);
-      }
-      return res.json() as Promise<{ content: string[]; contentType: "thread" | "instagram" | "linkedin"; id: string }>;
-    },
-    onSuccess: (data) => {
-      generationStore.setState((prev) => ({
-        ...prev,
-        current: {
-          id: data.id,
-          content: data.content,
-          contentType: data.contentType,
-          prompt,
-          imageBase64,
-          createdAt: new Date().toISOString(),
-        },
-      }));
-      navigate({ to: "/app/automate" });
-    },
-    onError: (err) => {
-      toast.error(err.message || "Failed to generate content");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["points"] });
-    },
+  const generateMutation = useGenerateContent({
+    onSuccess: () => navigate({ to: "/app/automate" }),
   });
 
   const isPromptValid = prompt.trim().length > 0;
