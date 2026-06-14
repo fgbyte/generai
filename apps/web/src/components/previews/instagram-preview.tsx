@@ -17,17 +17,10 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
 
   const displaySrc = image ?? images[currentImageIndex];
 
-  // Parse caption to extract main text and tags
-  const parseCaption = (text: string) => {
-    const parts = text.split("\n");
-    const mainText = parts[0] || "";
-    const tagsLine = parts.slice(1).join(" ");
-    // Extract individual tags
-    const tags = tagsLine.match(/#\w+/g) || [];
-    return { mainText, tags };
-  };
-
-  const { mainText, tags } = parseCaption(caption);
+  // Extract ALL hashtags from the entire caption (not just after the first line).
+  // Multi-paragraph content is preserved by rendering the full caption with
+  // `whitespace-pre-wrap` in the JSX below — no content is lost.
+  const allHashtags = caption.match(/#\w+/g) || [];
 
   // Format current date for display
   const formattedDate = new Date().toLocaleDateString("en-US", {
@@ -104,11 +97,13 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
 
         {/* Caption */}
         <div className="flex flex-col gap-1 px-4 pb-4">
-          <p className="leading-relaxed text-white">
-            <span className="mr-1 font-semibold">generai_art</span>
-            {mainText}
+          <p className="leading-relaxed text-white whitespace-pre-wrap">
+            <span className="mr-1 font-semibold">generai_art</span>{" "}
+            {caption}
           </p>
-          {tags.length > 0 && <p className="text-caption-xs text-primary/80">{tags.join(" ")}</p>}
+          {allHashtags.length > 0 && (
+            <p className="text-caption-xs text-primary/80">{allHashtags.join(" ")}</p>
+          )}
           <p className="text-caption-xs text-text-dim">{formattedDate}</p>
         </div>
       </CardContent>
