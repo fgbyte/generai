@@ -17,11 +17,6 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
 
   const displaySrc = image ?? images[currentImageIndex];
 
-  // Extract ALL hashtags from the entire caption (not just after the first line).
-  // Multi-paragraph content is preserved by rendering the full caption with
-  // `whitespace-pre-wrap` in the JSX below — no content is lost.
-  const allHashtags = caption.match(/#\w+/g) || [];
-
   // Format current date for display
   const formattedDate = new Date().toLocaleDateString("en-US", {
     month: "long",
@@ -101,9 +96,6 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
             <span className="mr-1 font-semibold">generai_art</span>{" "}
             {caption}
           </p>
-          {allHashtags.length > 0 && (
-            <p className="text-caption-xs text-primary/80">{allHashtags.join(" ")}</p>
-          )}
           <p className="text-caption-xs text-text-dim">{formattedDate}</p>
         </div>
       </CardContent>
