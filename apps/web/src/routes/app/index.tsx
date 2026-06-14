@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { env } from "@generai/env/web";
+import { hc } from "hono/client";
+import { useQuery } from "@tanstack/react-query";
+import type { AppType } from "@server/index";
 
 import { useState } from "react";
 
@@ -23,7 +27,19 @@ const CONTENT_TYPES = [
   { value: "instagram", icon: <Instagram />, label: "Instagram Caption" },
 ];
 
+const client = hc<AppType>(env.VITE_SERVER_URL, {
+  init: { credentials: "include" },
+});
+
 function RouteComponent() {
+  const { data } = useQuery({
+    queryKey: ["points"],
+    queryFn: async () => {
+      const res = await client.api.generate.points.$get();
+      if (!res.ok) throw new Error("Failed to fetch points");
+      return res.json();
+    },
+  });
   const [contentType, setContentType] = useState("instagram");
   const [prompt, setPrompt] = useState("");
   const navigate = useNavigate();
@@ -32,7 +48,7 @@ function RouteComponent() {
       <main className="max-w-container mx-auto px-lg flex flex-col gap-lg relative z-10">
         {/* Points Card */}
         <PointsBalanceCard
-          balance={5000} //get-points query
+          balance={data?.points ?? 0}
           onGetMore={() => {
             /* TODO: navigate to points purchase */
             navigate({ to: "/app/settings" });
@@ -43,14 +59,8 @@ function RouteComponent() {
         <section className="mt-md flex flex-col gap-lg">
           {/* Content Type Select */}
           <div className="flex flex-col gap-sm">
-            <Label className="text-mono-label text-text-dim pl-xs">
-              Content Type
-            </Label>
-            <CustomSelect
-              value={contentType}
-              onChange={setContentType}
-              options={CONTENT_TYPES}
-            />
+            <Label className="text-mono-label text-text-dim pl-xs">Content Type</Label>
+            <CustomSelect value={contentType} onChange={setContentType} options={CONTENT_TYPES} />
           </div>
 
           {/* Instagram Upload */}
@@ -66,9 +76,7 @@ function RouteComponent() {
 
           {/* Prompt Textarea */}
           <div className="flex flex-col gap-sm">
-            <Label className="text-mono-label text-text-dim pl-xs">
-              Prompt
-            </Label>
+            <Label className="text-mono-label text-text-dim pl-xs">Prompt</Label>
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -81,10 +89,7 @@ function RouteComponent() {
           <ActivityHistoryLink />
 
           {/* Pro Tip Banner */}
-          <ProTipBanner
-            tip="Specificity matters."
-            highlight='"under 280 characters"'
-          />
+          <ProTipBanner tip="Specificity matters." highlight='"under 280 characters"' />
 
           {/* Primary Action */}
           <Link
