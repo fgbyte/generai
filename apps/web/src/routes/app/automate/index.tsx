@@ -114,13 +114,9 @@ const previewRegistry: Partial<Record<PlatformId, ComponentType<{ caption: strin
 function CaptionEditor({
   caption,
   setCaption,
-  onRegenerate,
-  isRegenerating,
 }: {
   caption: string;
   setCaption: (value: string) => void;
-  onRegenerate: () => void;
-  isRegenerating: boolean;
 }) {
   const [captionOpen, setCaptionOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -147,6 +143,7 @@ function CaptionEditor({
         Edit Post Caption
       </span>
       <button
+        type="button"
         onClick={() => setCaptionOpen((v) => !v)}
         aria-expanded={captionOpen}
         className="w-full flex items-center justify-center gap-2 py-3 bg-surface-material/30 border border-border-glass rounded-lg hover:bg-surface-material/50 active:scale-[0.98] transition-all"
@@ -157,6 +154,7 @@ function CaptionEditor({
       {captionOpen && (
         <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
           <button
+            type="button"
             onClick={handleCopy}
             aria-label="Copy caption"
             className="absolute top-2 right-2 p-2 rounded-lg bg-surface-thick border border-border-glass text-text-dim hover:text-white active:scale-95 transition-all z-10"
@@ -171,8 +169,58 @@ function CaptionEditor({
           />
         </div>
       )}
+    </section>
+  );
+}
+
+/* ── Prompt Editor ───────────────────────────────────────── */
+function EditPrompt({
+  prompt,
+  setPrompt,
+  onRegenerate,
+  isRegenerating,
+}: {
+  prompt: string;
+  setPrompt: (value: string) => void;
+  onRegenerate: () => void;
+  isRegenerating: boolean;
+}) {
+  const [promptOpen, setPromptOpen] = useState(false);
+
+  return (
+    <section className="flex flex-col gap-2">
+      <span
+        className="text-[12px] font-semibold uppercase text-text-dim"
+        style={{
+          fontFamily: "JetBrains Mono, monospace",
+          letterSpacing: "0.5px",
+        }}
+      >
+        Edit Post Prompt
+      </span>
+      <button
+        type="button"
+        onClick={() => setPromptOpen((v) => !v)}
+        aria-expanded={promptOpen}
+        className="w-full flex items-center justify-center gap-2 py-3 bg-surface-material/30 border border-border-glass rounded-lg hover:bg-surface-material/50 active:scale-[0.98] transition-all"
+      >
+        <Pencil className="size-4 inline-block text-primary" />
+        <span className="text-[17px] font-semibold text-white">Edit Prompt</span>
+      </button>
+      {promptOpen && (
+        <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            rows={3}
+            className="w-full bg-transparent resize-none outline-none text-[14px] leading-relaxed text-white pr-10 placeholder:text-text-dim"
+            placeholder="No prompt available"
+          />
+        </div>
+      )}
       <div className="flex justify-end">
         <button
+          type="button"
           onClick={onRegenerate}
           disabled={isRegenerating}
           className="group flex items-center gap-1 px-3 py-2 hover:bg-primary/10 rounded-lg text-violet-brand transition-all disabled:opacity-50 disabled:cursor-not-allowed"
@@ -237,6 +285,7 @@ function AutomatePage() {
     }
     return "✨ Unlocking the future of creativity. This piece merges fluid dynamics with neural networks to create something truly unique.\n#Generai #ArtFuture";
   });
+  const [prompt, setPrompt] = useState<string>(() => generation?.prompt ?? "");
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -271,6 +320,15 @@ function AutomatePage() {
     },
   });
 
+  const handleRegenerate = () => {
+    if (!generation) return; // Safety: no generation exists yet
+    generateMutation.mutate({
+      contentType: generation.contentType,
+      prompt: prompt.trim(),
+      imageBase64: generation.imageBase64,
+    });
+  };
+
   const currentPlatform = platforms.find((p) => p.id === selected);
   const PlatformPreview = previewRegistry[selected];
 
@@ -287,10 +345,11 @@ function AutomatePage() {
           <CommingSoonMock label={currentPlatform.label} icon={currentPlatform.icon} />
         ) : null}
 
-        <CaptionEditor
-          caption={caption}
-          setCaption={setCaption}
-          onRegenerate={() => generateMutation.mutate()}
+        <CaptionEditor caption={caption} setCaption={setCaption} />
+        <EditPrompt
+          prompt={prompt}
+          setPrompt={setPrompt}
+          onRegenerate={handleRegenerate}
           isRegenerating={generateMutation.isPending}
         />
 
