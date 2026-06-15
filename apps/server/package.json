@@ -16,9 +16,9 @@
     "@google/genai": "^2.6.0",
     "@hono/zod-openapi": "^1.4.0",
     "@hono/zod-validator": "^0.8.0",
-    "@langchain/core": "^1.1.48",
+    "@langchain/core": "^1.1.49",
     "@langchain/openai": "^1.4.7",
-    "@scalar/hono-api-reference": "^0.10.20",
+    "@scalar/hono-api-reference": "^0.11.3",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "hono": "catalog:",
@@ -37,6 +37,6 @@
     "typescript": "catalog:",
     "unrun": "^0.3.1",
     "vitest": "catalog:",
-    "wrangler": "^4.98.0"
+    "wrangler": "^4.100.0"
   }
 }
