@@ -12,7 +12,8 @@
   "scripts": {
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
-    "db:migrate": "bun run src/migrate.ts"
+    "db:migrate": "bun run src/migrate.ts",
+    "db:migrate-staging": "bun run src/migrate.ts --staging"
   },
   "dependencies": {
     "@generai/env": "workspace:*",
