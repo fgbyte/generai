@@ -9,13 +9,18 @@ import ws from "ws";
 // Configurar WebSocket para Node.js (necesario para migraciones)
 neonConfig.webSocketConstructor = ws;
 
-// Carga .env.dev
-const localEnvPath = resolve(".env.dev");
+// Determine environment from CLI args or default to dev
+const args = process.argv.slice(2);
+const envFlag = args.includes("--staging") ? "staging" : "dev";
+const envFile = envFlag === "staging" ? ".env.staging" : ".env.dev";
+
+// Carga el archivo .env correspondiente
+const localEnvPath = resolve(envFile);
 if (existsSync(localEnvPath)) {
   config({ path: localEnvPath });
-  console.log("[migrate] ✅ Loaded .env.dev");
+  console.log(`[migrate] ✅ Loaded ${envFile}`);
 } else {
-  console.warn("[migrate] ⚠️ No .env.dev found");
+  console.warn(`[migrate] ⚠️ No ${envFile} found`);
 }
 
 const DATABASE_URL = process.env.DATABASE_URL;
