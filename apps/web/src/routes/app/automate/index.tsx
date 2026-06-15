@@ -4,6 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
 import { generationStore } from "@/stores/generation-store";
 import { useGenerateContent } from "@/hooks/use-generate-content";
+import { Textarea } from "@/components/ui/textarea";
 
 import { CommingSoonMock } from "@/components/previews/comming-soon-mock";
 import { CommingSoonModal } from "@/components/modals/comming-soon-modal";
@@ -165,7 +166,7 @@ function EditContent({
         <div className="flex flex-col gap-3">
           {/* Caption editor (with copy) */}
           <div className="flex flex-col gap-1">
-            <label className="text-mono-label text-text-dim text-[11px]">Caption</label>
+            <label htmlFor="caption" className="text-mono-label text-text-dim text-[11px]">Caption</label>
             <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
               <button
                 type="button"
@@ -175,23 +176,25 @@ function EditContent({
               >
                 {copied ? <Check className="size-4" /> : <CopyIcon className="size-4" />}
               </button>
-              <textarea
+              <Textarea
+                id="caption"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 rows={5}
-                className="w-full bg-transparent resize-none outline-none text-[14px] leading-relaxed text-white pr-10 placeholder:text-text-dim"
+                className="w-full bg-transparent border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/40 resize-none text-[14px] leading-relaxed text-white pr-10 placeholder:text-text-dim"
               />
             </div>
           </div>
           {/* Prompt editor */}
           <div className="flex flex-col gap-1">
-            <label className="text-mono-label text-text-dim text-[11px]">Prompt</label>
+            <label htmlFor="prompt" className="text-mono-label text-text-dim text-[11px]">Prompt</label>
             <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
-              <textarea
+              <Textarea
+                id="prompt"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 rows={3}
-                className="w-full bg-transparent resize-none outline-none text-[14px] leading-relaxed text-white pr-10 placeholder:text-text-dim"
+                className="w-full bg-transparent border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/40 resize-none text-[14px] leading-relaxed text-white pr-10 placeholder:text-text-dim"
                 placeholder="No prompt available"
               />
             </div>
