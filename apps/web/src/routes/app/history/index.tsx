@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   AtSign,
   BriefcaseBusiness,
-  Camera,
+  InstagramIcon,
   ChevronRight,
   Filter,
   Sparkles,
@@ -51,7 +51,7 @@ const CONTENT_TYPE_CONFIG: Record<
   },
   instagram: {
     label: "Instagram Caption",
-    icon: <Camera className="size-5" />,
+    icon: <InstagramIcon className="size-5" />,
     points: 5,
   },
   linkedin: {
@@ -161,12 +161,17 @@ function ActivityCard({
           </Button>
         </div>
         <p className="text-text-dim text-caption-xs line-clamp-2 mb-sm leading-snug">
-          {config.label}
+          {item.content}
         </p>
         <div className="flex justify-between items-center">
-          <span className="text-text-muted text-caption-xs italic">
-            {formatTime(item.createdAt)}
-          </span>
+          <div className="flex gap-4">
+            <span className="text-text-muted text-caption-xs italic">
+              {formatTime(item.createdAt)}
+            </span>
+            <span className="text-text-muted text-caption-xs">
+              {config.label}
+            </span>
+          </div>
           <ChevronRight className="size-[18px] text-text-muted" />
         </div>
       </div>
