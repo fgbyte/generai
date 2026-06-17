@@ -13,6 +13,12 @@ type NavItem = {
 interface BottomNavBarProps {
   items?: NavItem[];
   className?: string;
+  /**
+   * Called after every click on a nav item. Receives the resolved `href`.
+   * Useful for triggering side-effects tied to a target route, like
+   * invalidating a query so the destination renders fresh data on entry.
+   */
+  onItemClick?: (href: string) => void;
 }
 
 function useActiveNav(items: NavItem[]): NavItem[] {
@@ -46,7 +52,11 @@ const defaultItems: NavItem[] = [
   },
 ];
 
-export function BottomNavBar({ items = defaultItems, className }: BottomNavBarProps) {
+export function BottomNavBar({
+  items = defaultItems,
+  className,
+  onItemClick,
+}: BottomNavBarProps) {
   const navItems = useActiveNav(items);
 
   return (
@@ -74,6 +84,7 @@ export function BottomNavBar({ items = defaultItems, className }: BottomNavBarPr
         <Link
           key={item.label}
           to={item.href}
+          onClick={() => onItemClick?.(item.href)}
           className={cn(
             "flex flex-col items-center justify-center",
             "active:opacity-70 transition-opacity",
