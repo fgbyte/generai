@@ -8,6 +8,7 @@ import {
   Sparkles,
   Trash2,
   AlertCircle,
+  Loader2,
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { env } from "@generai/env/web";
@@ -16,7 +17,6 @@ import type { AppType } from "@server/index";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -66,7 +66,11 @@ function formatDateGroup(dateStr: string): string {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterday = new Date(today.getTime() - 86400000);
-  const itemDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const itemDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
 
   if (itemDate.getTime() === today.getTime()) return "TODAY";
   if (itemDate.getTime() === yesterday.getTime()) return "YESTERDAY";
@@ -82,7 +86,11 @@ function formatTime(dateStr: string): string {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterday = new Date(today.getTime() - 86400000);
-  const itemDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const itemDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+  );
 
   const time = date.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -130,34 +138,36 @@ function ActivityCard({
       {/* Content */}
       <div className="flex-grow min-w-0">
         <div className="flex justify-between items-start mb-xxs">
-          <span className="text-white font-headline-md text-[15px]">{config.label}</span>
-          <Badge
-            variant="secondary"
-            className="bg-secondary/12 text-secondary text-[10px] font-bold"
+          <span className="text-white font-headline-md text-[15px]">
+            {item.prompt}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onDelete(item.id)}
+            disabled={isDeleting}
+            className="cursor-pointer h-8 w-8 hover:bg-destructive/10"
+            aria-label={
+              isDeleting
+                ? `Deleting "${item.prompt}"`
+                : `Delete "${item.prompt}"`
+            }
           >
-            {config.points} pts
-          </Badge>
+            {isDeleting ? (
+              <Loader2 className="text-red-500 size-5 animate-spin" />
+            ) : (
+              <Trash2 className="text-red-500 size-5" />
+            )}
+          </Button>
         </div>
         <p className="text-text-dim text-caption-xs line-clamp-2 mb-sm leading-snug">
-          {item.prompt}
+          {config.label}
         </p>
         <div className="flex justify-between items-center">
           <span className="text-text-muted text-caption-xs italic">
             {formatTime(item.createdAt)}
           </span>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onDelete(item.id)}
-              disabled={isDeleting}
-              className="h-7 w-7 text-text-muted hover:text-destructive"
-              aria-label={`Delete "${item.prompt}"`}
-            >
-              <Trash2 className="size-4" />
-            </Button>
-            <ChevronRight className="size-[18px] text-text-muted" />
-          </div>
+          <ChevronRight className="size-[18px] text-text-muted" />
         </div>
       </div>
     </div>
@@ -165,7 +175,11 @@ function ActivityCard({
 }
 
 function DateHeader({ label }: { label: string }) {
-  return <p className="text-text-muted font-mono-label text-mono-label mt-xl px-xs">{label}</p>;
+  return (
+    <p className="text-text-muted font-mono-label text-mono-label mt-xl px-xs">
+      {label}
+    </p>
+  );
 }
 
 function EmptyState() {
@@ -174,15 +188,24 @@ function EmptyState() {
       <div className="w-12 h-12 rounded-full bg-surface-form flex items-center justify-center mb-md">
         <Sparkles className="size-6 text-text-muted" />
       </div>
-      <h3 className="font-headline-md text-headline-md text-white mb-sm">No Activity Yet</h3>
+      <h3 className="font-headline-md text-headline-md text-white mb-sm">
+        No Activity Yet
+      </h3>
       <p className="text-text-dim text-body-md max-w-xs">
-        Your generated content will appear here. Head to the Studio to create your first post!
+        Your generated content will appear here. Head to the Studio to create
+        your first post!
       </p>
     </div>
   );
 }
 
-function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+function ErrorState({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry: () => void;
+}) {
   return (
     <Card className="border-destructive">
       <CardContent className="pt-6">
@@ -213,7 +236,12 @@ export function HistoryPage() {
     },
   });
 
-  const deleteHistoryMutation = useMutation<unknown, Error, string, HistoryMutationContext>({
+  const deleteHistoryMutation = useMutation<
+    unknown,
+    Error,
+    string,
+    HistoryMutationContext
+  >({
     mutationFn: async (id: string) => {
       const res = await client.api.generate.history.$delete({
         query: { id },
@@ -223,7 +251,9 @@ export function HistoryPage() {
     },
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ["history"] });
-      const previousHistory = queryClient.getQueryData<HistoryResponse>(["history"]);
+      const previousHistory = queryClient.getQueryData<HistoryResponse>([
+        "history",
+      ]);
 
       queryClient.setQueryData<HistoryResponse>(["history"], (old) => {
         if (!old) return old;
@@ -242,14 +272,16 @@ export function HistoryPage() {
         queryClient.removeQueries({ queryKey: ["history"] });
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["history"] });
-    },
+    // No onSettled invalidate - the item is already removed from the cache optimistically.
+    // Invalidating here would trigger an immediate refetch that briefly re-shows the deleted
+    // item before the response arrives, defeating the optimistic UI.
+    // Matches the deleteTodoMutation pattern in src/routes/todos.tsx.
   });
 
   const items = data?.items ?? [];
   const grouped = groupByDate(items);
-  const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+  const errorMessage =
+    error instanceof Error ? error.message : "An unknown error occurred";
 
   const handleDelete = (id: string) => {
     deleteHistoryMutation.mutate(id);
@@ -261,7 +293,9 @@ export function HistoryPage() {
         {/* Header */}
         <div className="mb-xl flex justify-between items-end">
           <div>
-            <p className="text-primary font-mono-label text-mono-label mb-xs">ACTIVITY</p>
+            <p className="text-primary font-mono-label text-mono-label mb-xs">
+              ACTIVITY
+            </p>
             <h2 className="font-display-xl text-display-xl">History</h2>
           </div>
           <Button
@@ -277,7 +311,9 @@ export function HistoryPage() {
         {isError ? (
           <ErrorState
             message={errorMessage}
-            onRetry={() => queryClient.invalidateQueries({ queryKey: ["history"] })}
+            onRetry={() =>
+              queryClient.invalidateQueries({ queryKey: ["history"] })
+            }
           />
         ) : isLoading ? (
           <div className="space-y-md">
@@ -289,22 +325,26 @@ export function HistoryPage() {
           <EmptyState />
         ) : (
           <div className="space-y-md">
-            {Array.from(grouped.entries()).map(([dateLabel, dateItems], groupIndex) => (
-              <div key={dateLabel}>
-                {groupIndex > 0 && <Separator className="my-md bg-border-glass/30" />}
-                <DateHeader label={dateLabel} />
-                <div className="space-y-sm mt-sm">
-                  {dateItems.map((item) => (
-                    <ActivityCard
-                      key={item.id}
-                      item={item}
-                      onDelete={handleDelete}
-                      isDeleting={deleteHistoryMutation.isPending}
-                    />
-                  ))}
+            {Array.from(grouped.entries())
+              .filter(([, dateItems]) => dateItems.length > 0)
+              .map(([dateLabel, dateItems], groupIndex) => (
+                <div key={dateLabel}>
+                  {groupIndex > 0 && (
+                    <Separator className="my-md bg-border-glass/30" />
+                  )}
+                  <DateHeader label={dateLabel} />
+                  <div className="space-y-sm mt-sm">
+                    {dateItems.map((item) => (
+                      <ActivityCard
+                        key={item.id}
+                        item={item}
+                        onDelete={handleDelete}
+                        isDeleting={deleteHistoryMutation.isPending}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </main>
