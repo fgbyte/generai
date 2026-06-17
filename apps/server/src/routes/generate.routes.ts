@@ -83,7 +83,7 @@ export const generateRoutes = new Hono<HonoEnv>()
     return c.json({ points }, 200);
   })
 
-  .delete("/api/generate/history/", async (c) => {
+  .delete("/api/generate/history", async (c) => {
     const user = c.get("user");
     const id = c.req.query("id");
     if (!id) {

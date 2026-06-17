@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { HistoryPage } from "./history-page";
+import { HistoryPage } from "./index";
 
 vi.mock("@/components/top-app-bar", () => ({
   TopAppBar: () => <div data-testid="top-app-bar" />,
@@ -71,7 +71,10 @@ describe("HistoryPage", () => {
     expect(await screen.findByText("Write a launch thread")).toBeInTheDocument();
     expect(screen.getByText("Write a hiring update")).toBeInTheDocument();
     expect(screen.getAllByText("5 pts")).toHaveLength(2);
-    expect(fetchMock).toHaveBeenCalledWith("/mock/api/generate/history.json");
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/api/generate/history"),
+      expect.objectContaining({ method: "GET" }),
+    );
   });
 
   it("renders the empty state when the endpoint returns no items", async () => {
