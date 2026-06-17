@@ -1,9 +1,15 @@
 import { useState } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Bookmark, Heart, MessageCircle, MoreHorizontal, Send } from "lucide-react";
+import {
+  Bookmark,
+  Heart,
+  MessageCircle,
+  MoreHorizontal,
+  Send,
+} from "lucide-react";
 
-import heroImageUrl from "@/assets/generai-login-hero.jpg";
+import { ImageEmptyState } from "@/components/previews/image-empty-state";
 
 type InstagramPreviewProps = {
   caption: string;
@@ -12,10 +18,6 @@ type InstagramPreviewProps = {
 
 export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
   const [liked, setLiked] = useState(false);
-  const [currentImageIndex, _setCurrentImageIndex] = useState(0);
-  const [images, _setImages] = useState([heroImageUrl]);
-
-  const displaySrc = image ?? images[currentImageIndex];
 
   // Format current date for display
   const formattedDate = new Date().toLocaleDateString("en-US", {
@@ -33,7 +35,9 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
             G
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-white">generai_art</span>
+            <span className="text-sm font-semibold text-white">
+              generai_art
+            </span>
             <span className="text-caption-xs text-text-dim">Sponsored</span>
           </div>
           <button
@@ -45,14 +49,17 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
         </div>
 
         {/* Post Image */}
-        <div className="relative aspect-square w-full">
-          <img src={displaySrc} alt="AI Generated Artwork" className="size-full object-cover" />
-          {!image && images.length > 1 && (
-            <div className="absolute text-white bottom-3 right-3 flex items-center gap-1.5 rounded-full border border-border-glass/50 bg-surface-thick/70 px-3 py-1.5 text-caption-xs backdrop-blur-md">
-              {currentImageIndex + 1}/{images.length}
-            </div>
-          )}
-        </div>
+        {image ? (
+          <div className="relative aspect-square w-full">
+            <img
+              src={image}
+              alt="AI Generated Artwork"
+              className="size-full object-cover"
+            />
+          </div>
+        ) : (
+          <ImageEmptyState message="Upload an image to preview your Instagram post here." />
+        )}
 
         {/* Interactions */}
         <div className="flex items-center gap-4 px-4">
@@ -62,7 +69,9 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
             aria-label={liked ? "Unlike" : "Like"}
             className="transition-transform active:scale-90"
           >
-            <Heart className={`size-6 ${liked ? "fill-red-400 text-red-400" : "text-white"}`} />
+            <Heart
+              className={`size-6 ${liked ? "fill-red-400 text-red-400" : "text-white"}`}
+            />
           </button>
           <button
             type="button"
