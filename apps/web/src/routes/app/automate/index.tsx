@@ -30,8 +30,10 @@ import {
  * page. `instagram` keeps its dedicated preview; `thread` and `linkedin` are
  * text-based and currently fall through to the Twitter placeholder mock
  * (their real previews are not yet implemented).
+ *
+ * Exported for unit testing in `-content-type.test.ts`.
  */
-function contentTypeToPlatformId(contentType: ContentTypeUnion): PlatformId {
+export function contentTypeToPlatformId(contentType: ContentTypeUnion): PlatformId {
   switch (contentType) {
     case "instagram":
       return "instagram";
