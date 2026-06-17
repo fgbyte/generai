@@ -3,12 +3,13 @@ import type { ComponentType } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
 import { generationStore } from "@/stores/generation-store";
-import { useGenerateContent } from "@/hooks/use-generate-content";
+import { useGenerateContent, type ContentTypeUnion } from "@/hooks/use-generate-content";
 import { Textarea } from "@/components/ui/textarea";
 
 import { CommingSoonMock } from "@/components/previews/comming-soon-mock";
 import { CommingSoonModal } from "@/components/modals/comming-soon-modal";
 import { InstagramPreview } from "@/components/previews/instagram-preview";
+import { ImageUpload } from "@/components/app/image-upload";
 import {
   X,
   Instagram as InstagramIcon,
@@ -21,7 +22,24 @@ import {
   CopyIcon,
   Check,
   SendHorizonal,
+  AlertCircle,
 } from "lucide-react";
+
+/**
+ * Maps a generation `contentType` to the corresponding platform tab in this
+ * page. `instagram` keeps its dedicated preview; `thread` and `linkedin` are
+ * text-based and currently fall through to the Twitter placeholder mock
+ * (their real previews are not yet implemented).
+ */
+function contentTypeToPlatformId(contentType: ContentTypeUnion): PlatformId {
+  switch (contentType) {
+    case "instagram":
+      return "instagram";
+    case "thread":
+    case "linkedin":
+      return "twitter";
+  }
+}
 
 /* ══ Route definition ═══════════════════════════════════━ */
 export const Route = createFileRoute("/app/automate/")({
@@ -121,6 +139,8 @@ function EditContent({
   setPrompt,
   onRegenerate,
   isRegenerating,
+  needsImage,
+  onImageReupload,
 }: {
   caption: string;
   setCaption: (value: string) => void;
@@ -128,6 +148,17 @@ function EditContent({
   setPrompt: (value: string) => void;
   onRegenerate: () => void;
   isRegenerating: boolean;
+  /**
+   * True when the current generation needs an image to call the generate
+   * endpoint (Instagram without a stored image). Disables Regenerate and
+   * surfaces a re-upload prompt.
+   */
+  needsImage: boolean;
+  /**
+   * Called with the new base64 string when the user re-uploads an image.
+   * Null is ignored — clearing is not supported from this control.
+   */
+  onImageReupload: (base64: string) => void;
 }) {
   const [editorOpen, setEditorOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -166,7 +197,9 @@ function EditContent({
         <div className="flex flex-col gap-3">
           {/* Caption editor (with copy) */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="caption" className="text-mono-label text-text-dim text-[11px]">Caption</label>
+            <label htmlFor="caption" className="text-mono-label text-text-dim text-[11px]">
+              Caption
+            </label>
             <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
               <button
                 type="button"
@@ -187,7 +220,9 @@ function EditContent({
           </div>
           {/* Prompt editor */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="prompt" className="text-mono-label text-text-dim text-[11px]">Prompt</label>
+            <label htmlFor="prompt" className="text-mono-label text-text-dim text-[11px]">
+              Prompt
+            </label>
             <div className="relative rounded-xl border border-border-glass bg-surface-material p-3">
               <Textarea
                 id="prompt"
@@ -201,11 +236,34 @@ function EditContent({
           </div>
         </div>
       )}
+      {needsImage && (
+        <div
+          role="alert"
+          className="mt-2 flex flex-col gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3"
+        >
+          <div className="flex items-center gap-2 text-amber-300">
+            <AlertCircle className="size-4" />
+            <span className="text-caption-xs font-medium">Image required to regenerate</span>
+          </div>
+          <p className="text-caption-xs text-text-dim">
+            The original image wasn&apos;t saved with this content. Re-upload the same image to
+            enable regeneration.
+          </p>
+          <ImageUpload onBase64Change={(b64) => b64 && onImageReupload(b64)} />
+        </div>
+      )}
       <div className="flex justify-end">
         <button
           type="button"
           onClick={onRegenerate}
-          disabled={isRegenerating}
+          disabled={isRegenerating || needsImage}
+          title={
+            needsImage
+              ? "Upload the image to enable regeneration"
+              : isRegenerating
+                ? "Regenerating…"
+                : "Regenerate caption with the same image"
+          }
           className="group flex items-center gap-1 px-3 py-2 hover:bg-primary/10 rounded-lg text-violet-brand transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <RefreshCw className={`size-4 text-primary ${isRegenerating ? "animate-spin" : ""}`} />
@@ -257,9 +315,14 @@ function CtaFooter({ caption }: { caption: string }) {
  ═══════════════════════════════════════════════════════════ */
 
 function AutomatePage() {
-  const [selected, setSelected] = useState<PlatformId>("instagram");
-  const [notification, setNotification] = useState(true);
   const generation = useStore(generationStore, (s) => s.current);
+  const [selected, setSelected] = useState<PlatformId>(() => {
+    if (generation?.contentType) {
+      return contentTypeToPlatformId(generation.contentType);
+    }
+    return "instagram";
+  });
+  const [notification, setNotification] = useState(true);
   const [caption, setCaption] = useState<string>(() => {
     if (generation?.content && generation.content.length > 0) {
       return generation.content.join("\n\n");
@@ -269,6 +332,19 @@ function AutomatePage() {
   const [prompt, setPrompt] = useState<string>(() => generation?.prompt ?? "");
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  // Sync the selected platform with the loaded generation's contentType.
+  // Covers two cases:
+  //   1. First mount: the lazy initializer above reads generation, but if the
+  //      store hydrates from localStorage slightly after mount this keeps it
+  //      in sync.
+  //   2. Subsequent updates: clicking a different history card while this
+  //      page is already mounted (or any code path that swaps `current` in
+  //      the store) should re-select the matching platform.
+  useEffect(() => {
+    if (!generation?.contentType) return;
+    setSelected(contentTypeToPlatformId(generation.contentType));
+  }, [generation?.contentType]);
 
   useEffect(() => {
     const base64 = generation?.imageBase64;
@@ -310,6 +386,25 @@ function AutomatePage() {
     });
   };
 
+  // Instagram posts require an image to call the generate endpoint
+  // (the vision model needs it). When the user opens an Instagram item
+  // from history the image is lost — flag it so the UI can prompt a
+  // re-upload and disable Regenerate.
+  const needsImage = generation?.contentType === "instagram" && !generation?.imageBase64;
+
+  const handleImageReupload = (base64: string) => {
+    generationStore.setState((prev) => {
+      if (!prev.current) return prev;
+      return {
+        ...prev,
+        current: {
+          ...prev.current,
+          imageBase64: base64,
+        },
+      };
+    });
+  };
+
   const currentPlatform = platforms.find((p) => p.id === selected);
   const PlatformPreview = previewRegistry[selected];
 
@@ -323,7 +418,11 @@ function AutomatePage() {
         {PlatformPreview ? (
           <PlatformPreview caption={caption} image={imageUrl ?? undefined} />
         ) : currentPlatform ? (
-          <CommingSoonMock label={currentPlatform.label} icon={currentPlatform.icon} />
+          <CommingSoonMock
+            label={currentPlatform.label}
+            icon={currentPlatform.icon}
+            caption={caption}
+          />
         ) : null}
 
         <EditContent
@@ -333,6 +432,8 @@ function AutomatePage() {
           setPrompt={setPrompt}
           onRegenerate={handleRegenerate}
           isRegenerating={generateMutation.isPending}
+          needsImage={needsImage}
+          onImageReupload={handleImageReupload}
         />
 
         {/* Notification Banner */}
