@@ -9,7 +9,6 @@
     }
   },
   "dependencies": {
-    "form-data": "^4.0.6",
     "postmark": "^4.0.7"
   },
   "devDependencies": {

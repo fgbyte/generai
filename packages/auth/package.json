@@ -13,7 +13,6 @@
   },
   "scripts": {},
   "dependencies": {
-    "@better-auth/drizzle-adapter": "^1.6.18",
     "@generai/db": "workspace:*",
     "@generai/env": "workspace:*",
     "@generai/mail": "workspace:*",

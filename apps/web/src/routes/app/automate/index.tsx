@@ -128,9 +128,6 @@ const previewRegistry: Partial<
   Record<PlatformId, ComponentType<{ caption: string; image?: string }>>
 > = {
   instagram: InstagramPreview,
-  // twitter: TwitterPreview,
-  // dribbble: DribbblePreview,
-  // pinterest: PinterestPreview,
 };
 
 /* ── Content Editor ──────────────────────────────────────── */

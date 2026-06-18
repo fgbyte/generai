@@ -6,9 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import "../index.css";
 
-export interface RouterAppContext {}
-
-export const Route = createRootRouteWithContext<RouterAppContext>()({
+export const Route = createRootRouteWithContext()({
   component: RootComponent,
   head: () => ({
     meta: [

@@ -20,8 +20,6 @@
     "@neondatabase/serverless": "^1.1.0",
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.2",
-    "drizzle-zod": "^0.8.3",
-    "vitest": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

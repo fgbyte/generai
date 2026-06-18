@@ -1,20 +1,11 @@
 import { useState } from "react";
-import {
-  // Bell,
-  ChevronRight,
-  Coins,
-  // Globe,
-  LogOut,
-  // Moon,
-  Sparkles,
-} from "lucide-react";
+import { ChevronRight, Coins, LogOut, Sparkles } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-// import { cn } from "@/lib/utils";
 
 function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
@@ -36,47 +27,13 @@ function SectionHeader({ children }: { children: string }) {
   );
 }
 
-// function IosToggle({
-//   checked,
-//   onChange,
-// }: {
-//   checked: boolean;
-//   onChange: (checked: boolean) => void;
-// }) {
-//   return (
-//     <button
-//       type="button"
-//       role="switch"
-//       aria-checked={checked}
-//       onClick={() => onChange(!checked)}
-//       className={cn(
-//         "relative inline-flex h-8 w-[3.25rem] shrink-0 rounded-full border border-transparent p-0 transition-[background-color,box-shadow] duration-200",
-//         checked
-//           ? "bg-linear-to-b from-primary to-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_0_1px_rgba(59,130,246,0.28)]"
-//           : "bg-white/14 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]",
-//       )}
-//     >
-//       <span
-//         className={cn(
-//           "pointer-events-none absolute top-[2px] block h-[1.625rem] w-[1.625rem] rounded-full bg-linear-to-b from-white to-white/95 shadow-[0_2px_8px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.78)] transition-transform duration-200 ease-out",
-//           checked ? "translate-x-[26px]" : "translate-x-[3px]",
-//         )}
-//       />
-//     </button>
-//   );
-// }
-
 const cardClassName =
   "overflow-hidden rounded-[1.5rem] border border-white/10 bg-linear-to-b from-[rgba(24,24,26,0.96)] to-[rgba(16,16,18,0.98)] py-0 ring-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_50px_rgba(0,0,0,0.35)] backdrop-blur-[18px]";
 
 const chevronClassName =
   "size-5 shrink-0 text-white/26 transition-[transform,color] duration-150 group-hover:translate-x-[2px] group-hover:text-white/42 group-active:translate-x-[2px]";
 
-// const appIconClassName =
-//   "flex size-10 shrink-0 items-center justify-center rounded-[0.95rem] border border-[rgba(124,58,237,0.18)] bg-[radial-gradient(circle_at_25%_25%,rgba(139,92,246,0.22),transparent_70%),rgba(88,49,183,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]";
-
 export function SettingsPage() {
-  // const [notifications, setNotifications] = useState(true);
   const navigate = useNavigate();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -200,63 +157,8 @@ export function SettingsPage() {
         </section>
 
         <section className="flex flex-col gap-md mt-10">
-          {/*<SectionHeader>App Settings</SectionHeader>*/}
           <Card className={cardClassName}>
             <CardContent className="p-0">
-              {/*Notifications / Appearance / Language*/}
-              {/*<div className="flex w-full items-center justify-between gap-4 px-xl py-lg hover:bg-white/[0.025]">
-                <div className="flex items-center gap-4">
-                  <div className={appIconClassName}>
-                    <Bell className="size-[17px] text-custom-violet" />
-                  </div>
-                  <span className="text-body-md font-body-md tracking-[-0.03em] text-white">
-                    Notifications
-                  </span>
-                </div>
-                <IosToggle
-                  checked={notifications}
-                  onChange={setNotifications}
-                />
-              </div>
-
-              <Separator className="bg-white/9" />
-
-              <SettingRow>
-                <div className="flex items-center gap-4">
-                  <div className={appIconClassName}>
-                    <Moon className="size-[17px] text-custom-violet" />
-                  </div>
-                  <span className="text-body-md font-body-md tracking-[-0.03em] text-white">
-                    Appearance
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[0.875rem] leading-tight font-body-md text-white/46">
-                    Dark
-                  </span>
-                  <ChevronRight className={chevronClassName} />
-                </div>
-              </SettingRow>
-
-              <Separator className="bg-white/9" />
-
-              <SettingRow>
-                <div className="flex items-center gap-4">
-                  <div className={appIconClassName}>
-                    <Globe className="size-[17px] text-custom-violet" />
-                  </div>
-                  <span className="text-body-md font-body-md tracking-[-0.03em] text-white">
-                    Language
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[0.875rem] leading-tight font-body-md text-white/46">
-                    English
-                  </span>
-                  <ChevronRight className={chevronClassName} />
-                </div>
-              </SettingRow>*/}
-
               <Separator className="bg-white/9" />
 
               <button

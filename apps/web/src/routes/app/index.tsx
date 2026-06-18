@@ -1,31 +1,24 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { env } from "@generai/env/web";
 import { hc } from "hono/client";
 import { useQuery } from "@tanstack/react-query";
 import type { AppType } from "@server/index";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ActivityHistoryLink } from "@/components/app/activity-history-link";
 import { ImageUpload } from "@/components/app/image-upload";
 
-import { CustomSelect } from "@/components/custom-select";
-import { PointsBalanceCard } from "@/components/app/points-balance-card";
-import { ProTipBanner } from "@/components/app/pro-tip-banner";
-import { Instagram } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
+import { ChevronDown, ChevronRight, Coins, History, Instagram, Lightbulb, Loader2 } from "lucide-react";
 import { useGenerateContent } from "@/hooks/use-generate-content";
-import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/app/")({
   component: RouteComponent,
 });
 
 const CONTENT_TYPES = [
-  // { value: "thread", icon: <Twitter />, label: "Thread Format" },
-  // { value: "linkedin", icon: <Linkedin />, label: "LinkedIn Post" },
   { value: "instagram", icon: <Instagram />, label: "Instagram Caption" },
 ];
 
@@ -59,20 +52,32 @@ function RouteComponent() {
     <div className="font-body-md text-body-md min-h-screen bg-black text-white">
       <main className="max-w-container mx-auto px-lg flex flex-col gap-lg relative z-10">
         {/* Points Card */}
-        <PointsBalanceCard
-          balance={data?.points ?? "~"}
-          onGetMore={() => {
-            /* TODO: navigate to points purchase */
-            navigate({ to: "/app/settings" });
-          }}
-        />
+        <section className="bg-surface-material backdrop-blur-[20px] backdrop-saturate-[150%] border border-border-glass/50 rounded-xl p-lg relative overflow-hidden flex flex-col gap-md">
+          <div className="absolute top-lg right-lg text-secondary opacity-80">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[rgba(245,158,11,0.18)] bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.16),transparent_60%),rgba(255,204,0,0.03)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+              <Coins className="size-7 text-secondary" />
+            </div>
+          </div>
+          <div>
+            <p className="text-mono-label text-text-dim mb-xs">Available Balance</p>
+            <h2 className="text-display-xl text-white tracking-tight">
+              {data?.points ?? "~"}
+            </h2>
+          </div>
+          <Button
+            onClick={() => navigate({ to: "/app/settings" })}
+            className="w-full bg-white/10 text-white border border-border-glass/50 hover:bg-white/20 transition-colors mt-sm"
+          >
+            Get More Points
+          </Button>
+        </section>
 
         {/* Generation Form */}
         <section className="mt-md flex flex-col gap-lg">
           {/* Content Type Select */}
           <div className="flex flex-col gap-sm">
             <Label className="text-mono-label text-text-dim pl-xs">Content Type</Label>
-            <CustomSelect value={contentType} onChange={setContentType} options={CONTENT_TYPES} />
+            <ContentTypeSelect value={contentType} onChange={setContentType} options={CONTENT_TYPES} />
           </div>
 
           {/* Instagram Upload */}
@@ -92,10 +97,26 @@ function RouteComponent() {
           </div>
 
           {/* Activity Link */}
-          <ActivityHistoryLink />
+          <Link
+            to="/app/history"
+            className="bg-surface-material backdrop-blur-[20px] backdrop-saturate-150 border border-border-glass/50 rounded-lg px-lg py-md flex justify-between items-center hover:bg-white/10 transition-colors active:scale-[0.98]"
+          >
+            <div className="flex items-center gap-md">
+              <History className="size-5 text-primary" />
+              <span className="font-body-md text-white">Prompts Store</span>
+            </div>
+            <ChevronRight className="size-5 text-white/40" />
+          </Link>
 
           {/* Pro Tip Banner */}
-          <ProTipBanner tip="Specificity matters." highlight='"under 280 characters"' />
+          <div className="flex gap-md bg-primary/10 rounded-lg p-md items-start">
+            <Lightbulb className="size-5 text-primary flex-shrink-0 mt-0.5" />
+            <p className="text-caption-xs text-white/80 leading-snug">
+              Pro Tip: Specificity matters.{" "}
+              Try adding constraints like <span className="text-white font-medium">"under 280 characters"</span>{" "}
+              for better results.
+            </p>
+          </div>
 
           {/* Primary Action */}
           <button
@@ -121,6 +142,73 @@ function RouteComponent() {
           </button>
         </section>
       </main>
+    </div>
+  );
+}
+
+function ContentTypeSelect({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string; icon?: React.ReactNode }[];
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const selected = options.find((o) => o.value === value);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full rounded-lg px-lg py-md text-white text-left bg-surface-form focus:outline-none focus:ring-2 focus:ring-primary border-none flex items-center justify-between cursor-pointer"
+      >
+        <span className="flex items-center gap-2">
+          {selected?.icon}
+          {selected?.label}
+        </span>
+        <ChevronDown
+          className={`size-5 text-white/40 transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden="true"
+        />
+      </button>
+
+      {open && (
+        <div className="absolute z-50 w-full mt-1 rounded-lg overflow-hidden bg-surface-form backdrop-blur-[20px] border border-border-glass/50">
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                onChange(opt.value);
+                setOpen(false);
+              }}
+              className={`w-full text-left px-lg py-md text-white text-sm hover:bg-white/10 transition-colors ${
+                opt.value === value ? "bg-white/10" : ""
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                {opt.icon}
+                {opt.label}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

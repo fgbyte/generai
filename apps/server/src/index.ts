@@ -3,8 +3,6 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
 import { corsMiddleware } from "./middlewares/cors-middleware";
-import { peopleRoutes } from "./routes/people.routes";
-import { testRoute } from "./routes/test.routes";
 import { generateRoutes } from "./routes/generate.routes";
 
 const app = new OpenAPIHono();
@@ -24,8 +22,14 @@ const router = app
   .use(logger())
   //routes
   .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
-  .route("/api/people", peopleRoutes) //public route
-  .route("/api/test", testRoute) //public route
+  .get("/api/people", (c) =>
+    c.json([
+      { id: 1, name: "Alice" },
+      { id: 2, name: "Bob" },
+      { id: 3, name: "Charlie" },
+    ]),
+  )
+  .get("/api/test", (c) => c.json({ message: "test" }))
   .route("/", generateRoutes); //auth-protected generate routes
 
 // Global error handler

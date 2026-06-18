@@ -46,22 +46,19 @@ const client = hc<AppType>(env.VITE_SERVER_URL, {
 
 const CONTENT_TYPE_CONFIG: Record<
   string,
-  { label: string; icon: React.ReactNode; points: number }
+  { label: string; icon: React.ReactNode }
 > = {
   thread: {
     label: "Twitter Thread Generation",
     icon: <AtSign className="size-5" />,
-    points: 5,
   },
   instagram: {
     label: "Instagram Caption",
     icon: <InstagramIcon className="size-5" />,
-    points: 5,
   },
   linkedin: {
     label: "LinkedIn Post",
     icon: <BriefcaseBusiness className="size-5" />,
-    points: 5,
   },
 };
 
@@ -154,12 +151,10 @@ function ActivityCard({
       onClick={handleOpen}
       onKeyDown={handleKeyDown}
     >
-      {/* Icon */}
       <div className="w-10 h-10 rounded-lg bg-surface-form flex items-center justify-center flex-shrink-0 self-start">
         <span className="text-white">{config.icon}</span>
       </div>
 
-      {/* Content */}
       <div className="flex-grow min-w-0">
         <div className="flex justify-between items-start mb-xxs">
           <span className="text-white font-headline-md text-[15px]">
@@ -378,7 +373,6 @@ export function HistoryPage() {
         ) : (
           <div className="space-y-md">
             {Array.from(grouped.entries())
-              .filter(([, dateItems]) => dateItems.length > 0)
               .map(([dateLabel, dateItems], groupIndex) => (
                 <div key={dateLabel}>
                   {groupIndex > 0 && (

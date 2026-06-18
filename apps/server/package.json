@@ -13,16 +13,13 @@
     "@generai/db": "workspace:*",
     "@generai/env": "workspace:*",
     "@generai/mail": "workspace:*",
-    "@google/genai": "^2.6.0",
     "@hono/zod-openapi": "^1.4.0",
-    "@hono/zod-validator": "^0.8.0",
     "@langchain/core": "^1.1.49",
     "@langchain/openai": "^1.4.7",
     "@scalar/hono-api-reference": "^0.11.3",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "hono": "catalog:",
-    "kysely": "0.29.2",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -31,12 +28,8 @@
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
-    "alchemy": "catalog:",
-    "jsdom": "catalog:",
     "tsdown": "^0.22.2",
     "typescript": "catalog:",
-    "unrun": "^0.3.1",
-    "vitest": "catalog:",
-    "wrangler": "^4.100.0"
+    "vitest": "catalog:"
   }
 }
