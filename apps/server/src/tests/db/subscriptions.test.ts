@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { desc } from "drizzle-orm";
 import { subscriptions } from "@generai/db/schema/subscriptions";
 
 const dbMock = vi.hoisted(() => ({
@@ -14,6 +15,7 @@ vi.mock("@generai/db", () => ({
 import {
   createOrUpdateSubscription,
   getSubscriptionByStripeId,
+  getSubscriptionByUserId,
 } from "@generai/db/queries/subscriptions";
 
 describe("subscription queries", () => {
@@ -131,5 +133,50 @@ describe("subscription queries", () => {
       currentPeriodStart,
       currentPeriodEnd,
     });
+  });
+
+  it("returns the most recent subscription for a user ordered by currentPeriodEnd DESC", async () => {
+    const row = {
+      id: "sub_1",
+      userId: "user_123",
+      stripeSubscriptionId: "sub_stripe_1",
+      plan: "pro",
+      status: "active",
+      currentPeriodStart: new Date("2026-01-01T00:00:00.000Z"),
+      currentPeriodEnd: new Date("2026-02-01T00:00:00.000Z"),
+      cancelAtPeriodEnd: false,
+    };
+    const limit = vi.fn().mockResolvedValue([row]);
+    const orderBy = vi.fn().mockReturnValue({ limit });
+    const where = vi.fn().mockReturnValue({ orderBy });
+    const from = vi.fn().mockReturnValue({ where });
+    dbMock.select.mockReturnValue({ from });
+
+    await expect(getSubscriptionByUserId("user_123")).resolves.toEqual(row);
+    expect(from).toHaveBeenCalledWith(subscriptions);
+    expect(where).toHaveBeenCalled();
+    expect(orderBy).toHaveBeenCalledWith(desc(subscriptions.currentPeriodEnd));
+    expect(limit).toHaveBeenCalledWith(1);
+  });
+
+  it("returns null when the user has no subscription", async () => {
+    const limit = vi.fn().mockResolvedValue([]);
+    const orderBy = vi.fn().mockReturnValue({ limit });
+    const where = vi.fn().mockReturnValue({ orderBy });
+    const from = vi.fn().mockReturnValue({ where });
+    dbMock.select.mockReturnValue({ from });
+
+    await expect(getSubscriptionByUserId("missing_user")).resolves.toBeNull();
+  });
+
+  it("limits the result to a single row when multiple subscriptions exist for a user", async () => {
+    const limit = vi.fn().mockResolvedValue([{ id: "sub_latest" }]);
+    const orderBy = vi.fn().mockReturnValue({ limit });
+    const where = vi.fn().mockReturnValue({ orderBy });
+    const from = vi.fn().mockReturnValue({ where });
+    dbMock.select.mockReturnValue({ from });
+
+    await expect(getSubscriptionByUserId("user_123")).resolves.toEqual({ id: "sub_latest" });
+    expect(limit).toHaveBeenCalledWith(1);
   });
 });
