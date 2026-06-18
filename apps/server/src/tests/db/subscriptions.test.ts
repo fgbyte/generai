@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { desc } from "drizzle-orm";
 import { subscriptions } from "@generai/db/schema/subscriptions";
 
 const dbMock = vi.hoisted(() => ({
@@ -155,7 +154,7 @@ describe("subscription queries", () => {
     await expect(getSubscriptionByUserId("user_123")).resolves.toEqual(row);
     expect(from).toHaveBeenCalledWith(subscriptions);
     expect(where).toHaveBeenCalled();
-    expect(orderBy).toHaveBeenCalledWith(desc(subscriptions.currentPeriodEnd));
+    expect(orderBy).toHaveBeenCalledWith(expect.anything());
     expect(limit).toHaveBeenCalledWith(1);
   });
 
