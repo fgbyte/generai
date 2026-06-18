@@ -1,9 +1,17 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { BottomNavBar } from "@/components/bottom-nav-bar";
 import { TopAppBar } from "@/components/top-app-bar";
+import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/app")({
+  beforeLoad: async () => {
+    const session = await authClient.getSession().catch(() => null);
+
+    if (!session?.data) {
+      throw redirect({ to: "/" });
+    }
+  },
   component: RouteComponent,
 });
 
