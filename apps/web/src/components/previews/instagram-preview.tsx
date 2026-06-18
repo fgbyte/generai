@@ -1,13 +1,7 @@
 import { useState } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Bookmark,
-  Heart,
-  MessageCircle,
-  MoreHorizontal,
-  Send,
-} from "lucide-react";
+import { Bookmark, Heart, MessageCircle, MoreHorizontal, Send } from "lucide-react";
 
 import { ImageEmptyState } from "@/components/previews/image-empty-state";
 
@@ -35,9 +29,7 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
             G
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-white">
-              generai_art
-            </span>
+            <span className="text-sm font-semibold text-white">generai_art</span>
             <span className="text-caption-xs text-text-dim">Sponsored</span>
           </div>
           <button
@@ -51,11 +43,7 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
         {/* Post Image */}
         {image ? (
           <div className="relative aspect-square w-full">
-            <img
-              src={image}
-              alt="AI Generated Artwork"
-              className="size-full object-cover"
-            />
+            <img src={image} alt="AI Generated Artwork" className="size-full object-cover" />
           </div>
         ) : (
           <ImageEmptyState message="Upload an image to preview your Instagram post here." />
@@ -69,9 +57,7 @@ export function InstagramPreview({ caption, image }: InstagramPreviewProps) {
             aria-label={liked ? "Unlike" : "Like"}
             className="transition-transform active:scale-90"
           >
-            <Heart
-              className={`size-6 ${liked ? "fill-red-400 text-red-400" : "text-white"}`}
-            />
+            <Heart className={`size-6 ${liked ? "fill-red-400 text-red-400" : "text-white"}`} />
           </button>
           <button
             type="button"

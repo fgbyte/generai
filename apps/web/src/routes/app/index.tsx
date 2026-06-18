@@ -11,16 +11,22 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/app/image-upload";
 
-import { ChevronDown, ChevronRight, Coins, History, Instagram, Lightbulb, Loader2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Coins,
+  History,
+  Instagram,
+  Lightbulb,
+  Loader2,
+} from "lucide-react";
 import { useGenerateContent } from "@/hooks/use-generate-content";
 
 export const Route = createFileRoute("/app/")({
   component: RouteComponent,
 });
 
-const CONTENT_TYPES = [
-  { value: "instagram", icon: <Instagram />, label: "Instagram Caption" },
-];
+const CONTENT_TYPES = [{ value: "instagram", icon: <Instagram />, label: "Instagram Caption" }];
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
@@ -60,9 +66,7 @@ function RouteComponent() {
           </div>
           <div>
             <p className="text-mono-label text-text-dim mb-xs">Available Balance</p>
-            <h2 className="text-display-xl text-white tracking-tight">
-              {data?.points ?? "~"}
-            </h2>
+            <h2 className="text-display-xl text-white tracking-tight">{data?.points ?? "~"}</h2>
           </div>
           <Button
             onClick={() => navigate({ to: "/app/settings" })}
@@ -77,7 +81,11 @@ function RouteComponent() {
           {/* Content Type Select */}
           <div className="flex flex-col gap-sm">
             <Label className="text-mono-label text-text-dim pl-xs">Content Type</Label>
-            <ContentTypeSelect value={contentType} onChange={setContentType} options={CONTENT_TYPES} />
+            <ContentTypeSelect
+              value={contentType}
+              onChange={setContentType}
+              options={CONTENT_TYPES}
+            />
           </div>
 
           {/* Instagram Upload */}
@@ -112,9 +120,9 @@ function RouteComponent() {
           <div className="flex gap-md bg-primary/10 rounded-lg p-md items-start">
             <Lightbulb className="size-5 text-primary flex-shrink-0 mt-0.5" />
             <p className="text-caption-xs text-white/80 leading-snug">
-              Pro Tip: Specificity matters.{" "}
-              Try adding constraints like <span className="text-white font-medium">"under 280 characters"</span>{" "}
-              for better results.
+              Pro Tip: Specificity matters. Try adding constraints like{" "}
+              <span className="text-white font-medium">"under 280 characters"</span> for better
+              results.
             </p>
           </div>
 
