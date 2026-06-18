@@ -1,6 +1,6 @@
 import { db } from "@generai/db";
 import { subscriptions } from "@generai/db/schema/subscriptions";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 /**
  * Get subscription by Stripe subscription ID
@@ -58,4 +58,20 @@ export const createOrUpdateSubscription = async (
     })
     .returning();
   return created;
+};
+
+/**
+ * Get the most recent subscription for a user, ordered by currentPeriodEnd DESC.
+ * Returns null when the user has no subscription row.
+ */
+export const getSubscriptionByUserId = async (
+  userId: string,
+): Promise<typeof subscriptions.$inferSelect | null> => {
+  const [result] = await db
+    .select()
+    .from(subscriptions)
+    .where(eq(subscriptions.userId, userId))
+    .orderBy(desc(subscriptions.currentPeriodEnd))
+    .limit(1);
+  return result ?? null;
 };
