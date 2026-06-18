@@ -4,6 +4,7 @@ import { Scalar } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
 import { corsMiddleware } from "./middlewares/cors-middleware";
 import { generateRoutes } from "./routes/generate.routes";
+import { userRoutes } from "./routes/user.routes";
 
 const app = new OpenAPIHono();
 
@@ -30,7 +31,8 @@ const router = app
     ]),
   )
   .get("/api/test", (c) => c.json({ message: "test" }))
-  .route("/", generateRoutes); //auth-protected generate routes
+  .route("/", generateRoutes) //auth-protected generate routes
+  .route("/", userRoutes); // user routes for subscription + preferences
 
 // Global error handler
 app.onError((err, c) => {
