@@ -10,10 +10,7 @@ vi.mock("@generai/db", () => ({
   db: dbMock,
 }));
 
-import {
-  getUserPreferences,
-  upsertUserPreferences,
-} from "@generai/db/queries/user-preferences";
+import { getUserPreferences, upsertUserPreferences } from "@generai/db/queries/user-preferences";
 
 describe("user preferences queries", () => {
   beforeEach(() => {
@@ -83,9 +80,9 @@ describe("user preferences queries", () => {
     const values = vi.fn().mockReturnValue({ onConflictDoUpdate });
     dbMock.insert.mockReturnValue({ values });
 
-    await expect(
-      upsertUserPreferences("user_123", { aiTone: "Casual" }),
-    ).resolves.toEqual(updatedRow);
+    await expect(upsertUserPreferences("user_123", { aiTone: "Casual" })).resolves.toEqual(
+      updatedRow,
+    );
 
     expect(onConflictDoUpdate).toHaveBeenCalledWith(
       expect.objectContaining({ target: userPreferences.userId }),

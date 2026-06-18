@@ -13,9 +13,7 @@ export const userPreferences = pgTable("user_preferences", {
     .primaryKey()
     .references(() => user.id, { onDelete: "cascade" }),
   aiTone: varchar("ai_tone", { length: 32 }).notNull().default("Creative"),
-  defaultPlatform: varchar("default_platform", { length: 32 })
-    .notNull()
-    .default("Twitter (X)"),
+  defaultPlatform: varchar("default_platform", { length: 32 }).notNull().default("Twitter (X)"),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())

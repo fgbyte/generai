@@ -40,13 +40,7 @@ export const Route = createFileRoute("/app/settings/")({
   component: RouteComponent,
 });
 
-function SettingRow({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
+function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button
       type="button"
@@ -76,9 +70,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isSigningOut, setIsSigningOut] = useState(false);
-  const [openSheet, setOpenSheet] = useState<"aiTone" | "defaultPlatform" | null>(
-    null,
-  );
+  const [openSheet, setOpenSheet] = useState<"aiTone" | "defaultPlatform" | null>(null);
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
 
@@ -144,11 +136,7 @@ function RouteComponent() {
             <CardContent className="p-0">
               <SettingRow>
                 <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/18 bg-[radial-gradient(circle_at_65%_25%,rgba(72,203,255,0.5),transparent_28%),radial-gradient(circle_at_25%_80%,rgba(105,66,255,0.8),transparent_40%),linear-gradient(145deg,#121212,#081324_70%,#0d3b50)] text-base font-bold tracking-[-0.04em] text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_24px_rgba(5,12,24,0.45)]">
-                  {sessionLoading ? (
-                    <Skeleton className="size-full" />
-                  ) : (
-                    initials(userName)
-                  )}
+                  {sessionLoading ? <Skeleton className="size-full" /> : initials(userName)}
                 </div>
                 <div className="min-w-0 flex-1">
                   {sessionLoading ? (
@@ -161,9 +149,7 @@ function RouteComponent() {
                       <div className="text-headline-md font-headline-md tracking-[-0.03em] text-white">
                         {userName}
                       </div>
-                      <div className="mt-1 text-caption-xs text-white/42">
-                        {userEmail}
-                      </div>
+                      <div className="mt-1 text-caption-xs text-white/42">{userEmail}</div>
                     </>
                   )}
                 </div>
@@ -177,9 +163,7 @@ function RouteComponent() {
           <SectionHeader>Studio Preferences</SectionHeader>
           <Card className={cardClassName}>
             <CardContent className="p-0">
-              <SettingRow
-                onClick={() => setOpenSheet("aiTone")}
-              >
+              <SettingRow onClick={() => setOpenSheet("aiTone")}>
                 <div className="min-w-0 flex-1">
                   <div className="text-body-md font-body-md tracking-[-0.03em] text-white">
                     Default AI Tone
@@ -191,9 +175,7 @@ function RouteComponent() {
                 <ChevronRight className={chevronClassName} />
               </SettingRow>
               <Separator className="bg-white/9" />
-              <SettingRow
-                onClick={() => setOpenSheet("defaultPlatform")}
-              >
+              <SettingRow onClick={() => setOpenSheet("defaultPlatform")}>
                 <div className="min-w-0 flex-1">
                   <div className="text-body-md font-body-md tracking-[-0.03em] text-white">
                     Default Platform
@@ -300,7 +282,12 @@ function RouteComponent() {
       </main>
 
       {/* Preference Edit Sheet */}
-      <Sheet open={openSheet !== null} onOpenChange={(open) => { if (!open) setOpenSheet(null); }}>
+      <Sheet
+        open={openSheet !== null}
+        onOpenChange={(open) => {
+          if (!open) setOpenSheet(null);
+        }}
+      >
         <SheetContent side="bottom" className="bg-popover border-white/10">
           <SheetHeader>
             <SheetTitle>
@@ -354,10 +341,7 @@ function RouteComponent() {
                   onClick={() => {
                     updatePrefsMutation.mutate(
                       {
-                        aiTone: currentAiTone as
-                          | "Creative"
-                          | "Professional"
-                          | "Casual",
+                        aiTone: currentAiTone as "Creative" | "Professional" | "Casual",
                         defaultPlatform: platform,
                       },
                       {
