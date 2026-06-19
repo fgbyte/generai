@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LogOut, Pencil, KeyRound, Trash2, X } from "lucide-react";
+import { LogOut, KeyRound, Trash2, X } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
 import { authClient } from "@/lib/auth-client";
@@ -7,10 +7,11 @@ import { authClient } from "@/lib/auth-client";
 interface AccountOptionsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onDeleteAccount: () => void;
 }
 
 interface AccountOption {
-  id: "edit-profile" | "change-password" | "delete-account";
+  id: "change-password" | "delete-account";
   label: string;
   description: string;
   icon: React.ReactNode;
@@ -18,7 +19,11 @@ interface AccountOption {
   onClick: () => void;
 }
 
-export function AccountOptionsModal({ open, onOpenChange }: AccountOptionsModalProps) {
+export function AccountOptionsModal({
+  open,
+  onOpenChange,
+  onDeleteAccount,
+}: AccountOptionsModalProps) {
   const navigate = useNavigate();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -38,15 +43,6 @@ export function AccountOptionsModal({ open, onOpenChange }: AccountOptionsModalP
 
   const options: AccountOption[] = [
     {
-      id: "edit-profile",
-      label: "Edit profile",
-      description: "Update your name and email",
-      icon: <Pencil className="size-5" />,
-      onClick: () => {
-        // TODO: navigate to edit profile flow
-      },
-    },
-    {
       id: "change-password",
       label: "Change password",
       description: "Update your account password",
@@ -62,7 +58,7 @@ export function AccountOptionsModal({ open, onOpenChange }: AccountOptionsModalP
       icon: <Trash2 className="size-5" />,
       destructive: true,
       onClick: () => {
-        // TODO: open delete account confirmation
+        onDeleteAccount();
       },
     },
   ];
@@ -92,39 +88,42 @@ export function AccountOptionsModal({ open, onOpenChange }: AccountOptionsModalP
         </div>
 
         <div className="flex flex-col gap-3">
-          {options.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              onClick={() => {
-                option.onClick();
-                onOpenChange(false);
-              }}
-              className={`w-full rounded-lg border px-lg py-md text-left transition-colors flex items-center gap-md ${
-                option.destructive
-                  ? "border-[#ff5a52]/20 bg-[#ff5a52]/5 text-[#ff5a52] hover:bg-[#ff5a52]/10"
-                  : "border-white/10 bg-surface-deep text-white hover:bg-white/5"
-              }`}
-            >
-              <span
-                className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
-                  option.destructive ? "bg-[#ff5a52]/10" : "bg-white/5"
+          {options.map((option) => {
+            const keepsOpen = option.id === "delete-account";
+            return (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => {
+                  option.onClick();
+                  if (!keepsOpen) onOpenChange(false);
+                }}
+                className={`w-full rounded-lg border px-lg py-md text-left transition-colors flex items-center gap-md ${
+                  option.destructive
+                    ? "border-[#ff5a52]/20 bg-[#ff5a52]/5 text-[#ff5a52] hover:bg-[#ff5a52]/10"
+                    : "border-white/10 bg-surface-deep text-white hover:bg-white/5"
                 }`}
               >
-                {option.icon}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold">{option.label}</span>
                 <span
-                  className={`block text-caption-xs mt-1 ${
-                    option.destructive ? "text-[#ff5a52]/70" : "text-white/46"
+                  className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
+                    option.destructive ? "bg-[#ff5a52]/10" : "bg-white/5"
                   }`}
                 >
-                  {option.description}
+                  {option.icon}
                 </span>
-              </span>
-            </button>
-          ))}
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-semibold">{option.label}</span>
+                  <span
+                    className={`block text-caption-xs mt-1 ${
+                      option.destructive ? "text-[#ff5a52]/70" : "text-white/46"
+                    }`}
+                  >
+                    {option.description}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
 
           <button
             type="button"

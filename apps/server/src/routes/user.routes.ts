@@ -3,6 +3,7 @@ import { z } from "zod";
 import { authMiddleware, type HonoEnv } from "../middlewares/auth-middleware";
 import { getUserPreferences, upsertUserPreferences } from "@generai/db/queries/user-preferences";
 import { getSubscriptionByUserId } from "@generai/db/queries/subscriptions";
+import { deleteUser } from "@generai/db/queries/users";
 
 const preferencesBodySchema = z.object({
   aiTone: z.enum(["Creative", "Professional", "Casual"]),
@@ -67,4 +68,13 @@ export const userRoutes = new Hono<HonoEnv>()
       },
       200,
     );
+  })
+
+  .delete("/api/user/account", async (c) => {
+    const user = c.get("user");
+    const deleted = await deleteUser(user.id);
+    if (!deleted) {
+      return c.json({ error: "Failed to delete account" }, 500);
+    }
+    return c.json({ success: true }, 200);
   });

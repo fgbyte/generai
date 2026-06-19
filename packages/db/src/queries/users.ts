@@ -48,3 +48,18 @@ export const getUserPoints = async (userId: string) => {
     return 0;
   }
 };
+
+/**
+ * Delete a user account. Related rows (sessions, accounts, generated content,
+ * subscriptions, preferences) are removed automatically via the schema's
+ * `onDelete: "cascade"` foreign keys.
+ * @param userId - The Better-Auth user ID
+ * @returns The deleted user row, or undefined if no user matched
+ */
+export const deleteUser = async (userId: string) => {
+  const [result] = await db
+    .delete(user)
+    .where(eq(user.id, userId))
+    .returning();
+  return result;
+};

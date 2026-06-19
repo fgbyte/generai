@@ -4,6 +4,7 @@ import { user } from "@generai/db/schema/auth";
 const dbMock = vi.hoisted(() => ({
   select: vi.fn(),
   update: vi.fn(),
+  delete: vi.fn(),
 }));
 
 vi.mock("@generai/db", () => ({
@@ -11,6 +12,7 @@ vi.mock("@generai/db", () => ({
 }));
 
 import {
+  deleteUser,
   getUserByStripeCustomerId,
   getUserPoints,
   updateUserPoints,
@@ -81,5 +83,24 @@ describe("user queries", () => {
     expect(errorSpy).toHaveBeenCalledWith("Error fetching user points:", error);
 
     errorSpy.mockRestore();
+  });
+
+  it("deletes a user and returns the deleted row", async () => {
+    const deletedUser = { id: "user_123", email: "x@example.com" };
+    const returning = vi.fn().mockResolvedValue([deletedUser]);
+    const where = vi.fn().mockReturnValue({ returning });
+    dbMock.delete.mockReturnValue({ where });
+
+    await expect(deleteUser("user_123")).resolves.toEqual(deletedUser);
+    expect(dbMock.delete).toHaveBeenCalledWith(user);
+    expect(where).toHaveBeenCalled();
+  });
+
+  it("returns undefined when deleting a user that does not exist", async () => {
+    const returning = vi.fn().mockResolvedValue([]);
+    const where = vi.fn().mockReturnValue({ returning });
+    dbMock.delete.mockReturnValue({ where });
+
+    await expect(deleteUser("missing_user")).resolves.toBeUndefined();
   });
 });

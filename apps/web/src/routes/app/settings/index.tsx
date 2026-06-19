@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronRight, Coins, Sparkles } from "lucide-react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";
 import { env } from "@generai/env/web";
@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PreferenceSheet } from "@/components/settings-preference-sheet";
 import { AccountOptionsModal } from "@/components/modals/account-options-modal";
+import { DeleteAccountConfirmationModal } from "@/components/modals/delete-account-confirmation-modal";
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
@@ -76,10 +77,12 @@ const chevronClassName =
 
 function RouteComponent() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [openSheet, setOpenSheet] = useState<
     "aiTone" | "defaultPlatform" | null
   >(null);
   const [accountModalOpen, setAccountModalOpen] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
 
@@ -118,6 +121,25 @@ function RouteComponent() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["preferences"] });
+    },
+  });
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: async () => {
+      const res = await client.api.user.account.$delete();
+      if (!res.ok) throw new Error("Failed to delete account");
+      return res.json();
+    },
+    onSuccess: async () => {
+      queryClient.clear();
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("Account deleted");
+            navigate({ to: "/" });
+          },
+        },
+      });
     },
   });
 
@@ -305,6 +327,25 @@ function RouteComponent() {
       <AccountOptionsModal
         open={accountModalOpen}
         onOpenChange={setAccountModalOpen}
+        onDeleteAccount={() => {
+          setAccountModalOpen(false);
+          setDeleteConfirmOpen(true);
+        }}
+      />
+
+      <DeleteAccountConfirmationModal
+        open={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        onConfirm={async () => {
+          try {
+            await deleteAccountMutation.mutateAsync();
+            setDeleteConfirmOpen(false);
+          } catch (error) {
+            toast.error(
+              error instanceof Error ? error.message : "Failed to delete account",
+            );
+          }
+        }}
       />
     </div>
   );
