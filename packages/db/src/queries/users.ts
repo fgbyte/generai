@@ -57,9 +57,6 @@ export const getUserPoints = async (userId: string) => {
  * @returns The deleted user row, or undefined if no user matched
  */
 export const deleteUser = async (userId: string) => {
-  const [result] = await db
-    .delete(user)
-    .where(eq(user.id, userId))
-    .returning();
+  const [result] = await db.delete(user).where(eq(user.id, userId)).returning();
   return result;
 };
