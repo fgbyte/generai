@@ -12,21 +12,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { PreferenceSheet } from "@/components/settings-preference-sheet";
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
 });
 
 const AI_TONES = ["Creative", "Professional", "Casual"] as const;
-const PLATFORMS = ["Twitter (X)", "Instagram", "LinkedIn"] as const;
+const PLATFORMS = [
+  "Instagram",
+  "Twitter (X)",
+  "Dribbble",
+  "Pinterest",
+] as const;
+
+type AiTone = (typeof AI_TONES)[number];
+type Platform = (typeof PLATFORMS)[number];
 
 const initials = (name: string) =>
   name
@@ -40,7 +41,13 @@ export const Route = createFileRoute("/app/settings/")({
   component: RouteComponent,
 });
 
-function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+function SettingRow({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
   return (
     <button
       type="button"
@@ -70,7 +77,9 @@ function RouteComponent() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isSigningOut, setIsSigningOut] = useState(false);
-  const [openSheet, setOpenSheet] = useState<"aiTone" | "defaultPlatform" | null>(null);
+  const [openSheet, setOpenSheet] = useState<
+    "aiTone" | "defaultPlatform" | null
+  >(null);
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
 
@@ -93,10 +102,7 @@ function RouteComponent() {
   });
 
   const updatePrefsMutation = useMutation({
-    mutationFn: async (data: {
-      aiTone: "Creative" | "Professional" | "Casual";
-      defaultPlatform: "Twitter (X)" | "Instagram" | "LinkedIn";
-    }) => {
+    mutationFn: async (data: { aiTone: AiTone; defaultPlatform: Platform }) => {
       const res = await client.api.user.preferences.$put({ json: data });
       if (!res.ok) throw new Error("Failed to update preferences");
       return res.json();
@@ -124,7 +130,7 @@ function RouteComponent() {
   const subscription = subData?.subscription ?? null;
   const preferences = prefsData?.preferences ?? null;
   const currentAiTone = preferences?.aiTone ?? "Creative";
-  const currentPlatform = preferences?.defaultPlatform ?? "Twitter (X)";
+  const currentPlatform = preferences?.defaultPlatform ?? "Instagram";
 
   return (
     <div className="bg-black font-body-md text-body-md text-white">
@@ -136,7 +142,11 @@ function RouteComponent() {
             <CardContent className="p-0">
               <SettingRow>
                 <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/18 bg-[radial-gradient(circle_at_65%_25%,rgba(72,203,255,0.5),transparent_28%),radial-gradient(circle_at_25%_80%,rgba(105,66,255,0.8),transparent_40%),linear-gradient(145deg,#121212,#081324_70%,#0d3b50)] text-base font-bold tracking-[-0.04em] text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_24px_rgba(5,12,24,0.45)]">
-                  {sessionLoading ? <Skeleton className="size-full" /> : initials(userName)}
+                  {sessionLoading ? (
+                    <Skeleton className="size-full" />
+                  ) : (
+                    initials(userName)
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   {sessionLoading ? (
@@ -149,7 +159,9 @@ function RouteComponent() {
                       <div className="text-headline-md font-headline-md tracking-[-0.03em] text-white">
                         {userName}
                       </div>
-                      <div className="mt-1 text-caption-xs text-white/42">{userEmail}</div>
+                      <div className="mt-1 text-caption-xs text-white/42">
+                        {userEmail}
+                      </div>
                     </>
                   )}
                 </div>
@@ -244,7 +256,9 @@ function RouteComponent() {
               <div className="text-headline-md font-headline-md tracking-[-0.04em] text-secondary">
                 {userPoints.toLocaleString()}
               </div>
-              <div className="mt-1 text-caption-xs text-white/46">Remaining</div>
+              <div className="mt-1 text-caption-xs text-white/46">
+                Remaining
+              </div>
             </div>
           </div>
         </section>
@@ -259,7 +273,7 @@ function RouteComponent() {
                 type="button"
                 onClick={handleSignOut}
                 disabled={isSigningOut}
-                className="flex w-full cursor-pointer items-center justify-center gap-[0.65rem] px-xl py-[1.2rem] border-none bg-transparent transition-[background-color,transform] duration-150 hover:bg-[#ff5a52]/5 active:scale-[0.992] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex w-full cursor-pointer items-center justify-center gap-[0.65rem] px-xl py-[1.2rem] border-none bg-surface transition-[background-color,transform] duration-150 hover:bg-[#ff5a52]/5 active:scale-[0.992] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <LogOut className="size-5 text-[#ff5a52]" />
                 <span className="font-body-md text-body-md text-[#ff5a52]">
@@ -281,95 +295,35 @@ function RouteComponent() {
         </div>
       </main>
 
-      {/* Preference Edit Sheet */}
-      <Sheet
-        open={openSheet !== null}
-        onOpenChange={(open) => {
-          if (!open) setOpenSheet(null);
+      <PreferenceSheet
+        open={openSheet}
+        onOpenChange={setOpenSheet}
+        currentAiTone={currentAiTone as AiTone}
+        currentPlatform={currentPlatform as Platform}
+        isPending={updatePrefsMutation.isPending}
+        onSelectAiTone={(tone, platform) => {
+          updatePrefsMutation.mutate(
+            { aiTone: tone, defaultPlatform: platform },
+            {
+              onSuccess: () => {
+                toast.success("AI tone updated");
+                setOpenSheet(null);
+              },
+            },
+          );
         }}
-      >
-        <SheetContent side="bottom" className="bg-popover border-white/10">
-          <SheetHeader>
-            <SheetTitle>
-              {openSheet === "aiTone" ? "Default AI Tone" : "Default Platform"}
-            </SheetTitle>
-            <SheetDescription>
-              {openSheet === "aiTone"
-                ? "Select the default tone for AI-generated content."
-                : "Select your default social media platform."}
-            </SheetDescription>
-          </SheetHeader>
-          <div className="mt-4 flex flex-col gap-3">
-            {openSheet === "aiTone" &&
-              AI_TONES.map((tone) => (
-                <button
-                  key={tone}
-                  type="button"
-                  disabled={updatePrefsMutation.isPending}
-                  onClick={() => {
-                    updatePrefsMutation.mutate(
-                      {
-                        aiTone: tone,
-                        defaultPlatform: currentPlatform as
-                          | "Twitter (X)"
-                          | "Instagram"
-                          | "LinkedIn",
-                      },
-                      {
-                        onSuccess: () => {
-                          toast.success("AI tone updated");
-                          setOpenSheet(null);
-                        },
-                      },
-                    );
-                  }}
-                  className={`w-full rounded-lg border px-lg py-md text-left text-sm font-medium transition-colors ${
-                    currentAiTone === tone
-                      ? "border-[#7c5ce6] bg-[#7c5ce6]/15 text-white"
-                      : "border-white/10 bg-transparent text-white/70 hover:bg-white/5"
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
-                >
-                  {tone}
-                </button>
-              ))}
-            {openSheet === "defaultPlatform" &&
-              PLATFORMS.map((platform) => (
-                <button
-                  key={platform}
-                  type="button"
-                  disabled={updatePrefsMutation.isPending}
-                  onClick={() => {
-                    updatePrefsMutation.mutate(
-                      {
-                        aiTone: currentAiTone as "Creative" | "Professional" | "Casual",
-                        defaultPlatform: platform,
-                      },
-                      {
-                        onSuccess: () => {
-                          toast.success("Platform updated");
-                          setOpenSheet(null);
-                        },
-                      },
-                    );
-                  }}
-                  className={`w-full rounded-lg border px-lg py-md text-left text-sm font-medium transition-colors ${
-                    currentPlatform === platform
-                      ? "border-[#7c5ce6] bg-[#7c5ce6]/15 text-white"
-                      : "border-white/10 bg-transparent text-white/70 hover:bg-white/5"
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
-                >
-                  {platform}
-                </button>
-              ))}
-            <SheetClose
-              type="button"
-              className="mt-2 w-full cursor-pointer rounded-lg border border-white/10 bg-transparent px-lg py-md text-sm text-white/50 hover:bg-white/5 transition-colors"
-            >
-              Cancel
-            </SheetClose>
-          </div>
-        </SheetContent>
-      </Sheet>
+        onSelectPlatform={(tone, platform) => {
+          updatePrefsMutation.mutate(
+            { aiTone: tone, defaultPlatform: platform },
+            {
+              onSuccess: () => {
+                toast.success("Platform updated");
+                setOpenSheet(null);
+              },
+            },
+          );
+        }}
+      />
     </div>
   );
 }

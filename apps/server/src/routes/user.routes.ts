@@ -6,7 +6,7 @@ import { getSubscriptionByUserId } from "@generai/db/queries/subscriptions";
 
 const preferencesBodySchema = z.object({
   aiTone: z.enum(["Creative", "Professional", "Casual"]),
-  defaultPlatform: z.enum(["Twitter (X)", "Instagram", "LinkedIn"]),
+  defaultPlatform: z.enum(["Instagram", "Twitter (X)", "Dribbble", "Pinterest"]),
 });
 
 export const userRoutes = new Hono<HonoEnv>()
