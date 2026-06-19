@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ChevronRight, Coins, LogOut, Sparkles } from "lucide-react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { ChevronRight, Coins, Sparkles } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";
 import { env } from "@generai/env/web";
@@ -13,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PreferenceSheet } from "@/components/settings-preference-sheet";
+import { AccountOptionsModal } from "@/components/modals/account-options-modal";
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
@@ -74,12 +75,11 @@ const chevronClassName =
   "size-5 shrink-0 text-white/26 transition-[transform,color] duration-150 group-hover:translate-x-[2px] group-hover:text-white/42 group-active:translate-x-[2px]";
 
 function RouteComponent() {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [isSigningOut, setIsSigningOut] = useState(false);
   const [openSheet, setOpenSheet] = useState<
     "aiTone" | "defaultPlatform" | null
   >(null);
+  const [accountModalOpen, setAccountModalOpen] = useState(false);
 
   const { data: session, isPending: sessionLoading } = authClient.useSession();
 
@@ -101,6 +101,15 @@ function RouteComponent() {
     },
   });
 
+  const { data: pointsData } = useQuery({
+    queryKey: ["points"],
+    queryFn: async () => {
+      const res = await client.api.generate.points.$get();
+      if (!res.ok) throw new Error("Failed to fetch points");
+      return res.json();
+    },
+  });
+
   const updatePrefsMutation = useMutation({
     mutationFn: async (data: { aiTone: AiTone; defaultPlatform: Platform }) => {
       const res = await client.api.user.preferences.$put({ json: data });
@@ -112,21 +121,9 @@ function RouteComponent() {
     },
   });
 
-  const handleSignOut = async () => {
-    setIsSigningOut(true);
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          navigate({ to: "/" });
-        },
-      },
-    });
-    setIsSigningOut(false);
-  };
-
   const userName = session?.user.name ?? "";
   const userEmail = session?.user.email ?? "";
-  const userPoints = session?.user.points ?? 0;
+  const userPoints = pointsData?.points ?? 0;
   const subscription = subData?.subscription ?? null;
   const preferences = prefsData?.preferences ?? null;
   const currentAiTone = preferences?.aiTone ?? "Creative";
@@ -140,7 +137,7 @@ function RouteComponent() {
           <SectionHeader>Account</SectionHeader>
           <Card className={cardClassName}>
             <CardContent className="p-0">
-              <SettingRow>
+              <SettingRow onClick={() => setAccountModalOpen(true)}>
                 <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/18 bg-[radial-gradient(circle_at_65%_25%,rgba(72,203,255,0.5),transparent_28%),radial-gradient(circle_at_25%_80%,rgba(105,66,255,0.8),transparent_40%),linear-gradient(145deg,#121212,#081324_70%,#0d3b50)] text-base font-bold tracking-[-0.04em] text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_24px_rgba(5,12,24,0.45)]">
                   {sessionLoading ? (
                     <Skeleton className="size-full" />
@@ -165,6 +162,7 @@ function RouteComponent() {
                     </>
                   )}
                 </div>
+                <ChevronRight className={chevronClassName} />
               </SettingRow>
             </CardContent>
           </Card>
@@ -263,27 +261,6 @@ function RouteComponent() {
           </div>
         </section>
 
-        {/* Sign Out */}
-        <section className="flex flex-col gap-md mt-10">
-          <Card className={cardClassName}>
-            <CardContent className="p-0">
-              <Separator className="bg-white/9" />
-
-              <button
-                type="button"
-                onClick={handleSignOut}
-                disabled={isSigningOut}
-                className="flex w-full cursor-pointer items-center justify-center gap-[0.65rem] px-xl py-[1.2rem] border-none bg-surface transition-[background-color,transform] duration-150 hover:bg-[#ff5a52]/5 active:scale-[0.992] disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <LogOut className="size-5 text-[#ff5a52]" />
-                <span className="font-body-md text-body-md text-[#ff5a52]">
-                  {isSigningOut ? "Signing out..." : "Sign Out"}
-                </span>
-              </button>
-            </CardContent>
-          </Card>
-        </section>
-
         {/* Footer */}
         <div className="mt-md text-center opacity-90">
           <p className="font-mono-label text-[10px] uppercase tracking-[0.28em] text-white/60">
@@ -323,6 +300,11 @@ function RouteComponent() {
             },
           );
         }}
+      />
+
+      <AccountOptionsModal
+        open={accountModalOpen}
+        onOpenChange={setAccountModalOpen}
       />
     </div>
   );

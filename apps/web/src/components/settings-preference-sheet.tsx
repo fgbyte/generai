@@ -1,5 +1,4 @@
 import { X } from "lucide-react";
-import { toast } from "sonner";
 
 const AI_TONES = ["Creative", "Professional", "Casual"] as const;
 const PLATFORMS = ["Instagram", "Twitter (X)", "Dribbble", "Pinterest"] as const;
