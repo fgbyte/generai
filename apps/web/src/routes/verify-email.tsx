@@ -2,7 +2,7 @@ import heroImageUrl from "@/assets/generai-login-hero.jpg";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
-import { Loader2, Mail } from "lucide-react";
+import { CheckCircle, Loader2, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -20,6 +20,17 @@ function RouteComponent() {
   const { email } = useSearch({ from: "/verify-email" });
   const [cooldown, setCooldown] = useState(0);
   const [sending, setSending] = useState(false);
+  const [isAlreadyVerified, setIsAlreadyVerified] = useState(false);
+
+  // Check if user's email is already verified on mount
+  useEffect(() => {
+    if (!email) return;
+    authClient.getSession().then(({ data }) => {
+      if (data?.user?.emailVerified && data.user.email === email) {
+        setIsAlreadyVerified(true);
+      }
+    });
+  }, [email]);
 
   // Countdown timer
   useEffect(() => {
@@ -63,59 +74,86 @@ function RouteComponent() {
       <section className="mx-auto flex min-h-svh w-full max-w-[1280px] flex-col items-center justify-center px-6 py-16 sm:px-8">
         <div className="w-full max-w-md">
           <div className="rounded-3xl border border-white/15 bg-black/35 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl">
-            {/* Header with back button */}
-            <div className="mb-6">
-              <h2 className="text-lg text-center font-bold">Verify Email</h2>
-              <span className="size-10" />
-            </div>
+            {isAlreadyVerified ? (
+              <>
+                {/* Already Verified State */}
+                <div className="flex flex-col items-center text-center">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20">
+                    <CheckCircle className="h-6 w-6 text-emerald-400" />
+                  </div>
+                  <h3 className="text-xl font-bold">Email Already Verified</h3>
+                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/70">
+                    Your email has already been verified. You can sign in to your account.
+                  </p>
+                </div>
 
-            {/* Icon + Text */}
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#6d5df2]/20">
-                <Mail className="h-6 w-6 text-[#6d5df2]" />
-              </div>
-              <h3 className="text-xl font-bold">Check your email</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/70 max-w-xs">
-                {email ? (
-                  <>
-                    We've sent a verification link to{" "}
-                    <span className="font-semibold text-white">{email}</span>. Please click the link
-                    to verify your account before signing in.
-                  </>
-                ) : (
-                  "We've sent a verification link to your email address. Please click the link to verify your account before signing in."
-                )}
-              </p>
-            </div>
+                {/* Actions */}
+                <div className="mt-8">
+                  <Button
+                    className="h-12 w-full rounded-full bg-[#6d5df2] font-bold text-white shadow-lg shadow-black/30 hover:bg-[#7d70f4]"
+                    onClick={() => navigate({ to: "/" })}
+                  >
+                    Go to Sign In
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Header with back button */}
+                <div className="mb-6">
+                  <h2 className="text-lg text-center font-bold">Verify Email</h2>
+                  <span className="size-10" />
+                </div>
 
-            {/* Actions */}
-            <div className="mt-8 flex flex-col gap-3">
-              {showResend && (
-                <Button
-                  className="h-12 w-full rounded-full bg-[#6d5df2] font-bold text-white shadow-lg shadow-black/30 hover:bg-[#7d70f4]"
-                  disabled={cooldown > 0 || sending}
-                  onClick={handleResend}
-                >
-                  {sending ? (
-                    <span className="inline-flex items-center gap-2">
-                      <Loader2 className="size-4 animate-spin" />
-                      Sending...
-                    </span>
-                  ) : cooldown > 0 ? (
-                    `Resend in ${cooldown}s`
-                  ) : (
-                    "Resend verification email"
+                {/* Icon + Text */}
+                <div className="flex flex-col items-center text-center">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#6d5df2]/20">
+                    <Mail className="h-6 w-6 text-[#6d5df2]" />
+                  </div>
+                  <h3 className="text-xl font-bold">Check your email</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/70 max-w-xs">
+                    {email ? (
+                      <>
+                        We've sent a verification link to{" "}
+                        <span className="font-semibold text-white">{email}</span>. Please click the
+                        link to verify your account before signing in.
+                      </>
+                    ) : (
+                      "We've sent a verification link to your email address. Please click the link to verify your account before signing in."
+                    )}
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className="mt-8 flex flex-col gap-3">
+                  {showResend && (
+                    <Button
+                      className="h-12 w-full rounded-full bg-[#6d5df2] font-bold text-white shadow-lg shadow-black/30 hover:bg-[#7d70f4]"
+                      disabled={cooldown > 0 || sending}
+                      onClick={handleResend}
+                    >
+                      {sending ? (
+                        <span className="inline-flex items-center gap-2">
+                          <Loader2 className="size-4 animate-spin" />
+                          Sending...
+                        </span>
+                      ) : cooldown > 0 ? (
+                        `Resend in ${cooldown}s`
+                      ) : (
+                        "Resend verification email"
+                      )}
+                    </Button>
                   )}
-                </Button>
-              )}
-              <Button
-                className="h-12 w-full rounded-full border border-white/30 bg-transparent font-bold text-white hover:bg-white/10"
-                onClick={() => navigate({ to: "/" })}
-                variant="outline"
-              >
-                Back to Sign In
-              </Button>
-            </div>
+                  <Button
+                    className="h-12 w-full rounded-full border border-white/30 bg-transparent font-bold text-white hover:bg-white/10"
+                    onClick={() => navigate({ to: "/" })}
+                    variant="outline"
+                  >
+                    Back to Sign In
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Footer */}
