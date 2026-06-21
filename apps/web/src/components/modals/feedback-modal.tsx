@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useSubmitFeedback } from "@/hooks/use-submit-feedback";
 
@@ -53,9 +54,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
         }}
       >
         <div className="flex items-center justify-between">
-          <span className="text-mono-label text-text-dim uppercase">
-            Send feedback
-          </span>
+          <Label className="text-mono-label text-text-dim pl-xs">Send feedback</Label>
           <button
             type="button"
             onClick={() => onOpenChange(false)}
@@ -66,7 +65,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
           </button>
         </div>
 
-        <p className="text-sm text-muted-foreground">
+        <p className="text-text-muted text-sm">
           Help us improve. Your feedback goes directly to the team.
         </p>
 
@@ -78,7 +77,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
             onChange={(e) => setContent(e.target.value)}
             minLength={1}
             maxLength={2000}
-            className="text-white placeholder:text-white/50"
+            className="bg-surface-form border-none text-white placeholder:text-text-muted focus:ring-2 focus:ring-primary resize-none rounded-lg px-lg py-md min-h-32"
           />
 
           <div className="flex items-center justify-between">
