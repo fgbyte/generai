@@ -36,6 +36,8 @@ export const server = await Worker("server", {
     AI_PROVIDER_BASE_URL: requireEnv("AI_PROVIDER_BASE_URL"),
     AI_TEXT_MODEL: requireEnv("AI_TEXT_MODEL"),
     AI_VISION_MODEL: requireEnv("AI_VISION_MODEL"),
+    TELEGRAM_BOT_TOKEN: requireEnv("TELEGRAM_BOT_TOKEN"),
+    TELEGRAM_CHAT_ID: requireEnv("TELEGRAM_CHAT_ID"),
   },
   dev: {
     port: 3000,

@@ -14,6 +14,8 @@ vi.mock("cloudflare:workers", () => ({
     AI_PROVIDER_BASE_URL: "https://integrate.api.nvidia.com/v1",
     AI_TEXT_MODEL: "google/gemma-3n-e4b-it",
     AI_VISION_MODEL: "google/gemma-3n-e4b-it",
+    TELEGRAM_BOT_TOKEN: "test-bot-token",
+    TELEGRAM_CHAT_ID: "test-chat-id",
     VITE_SERVER_URL: "http://localhost:3000",
   },
 }));
