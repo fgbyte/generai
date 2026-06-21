@@ -4,6 +4,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
 import { corsMiddleware } from "./middlewares/cors-middleware";
+import { feedbackRoutes } from "./routes/feedback.routes";
 import { generateRoutes } from "./routes/generate.routes";
 import { userRoutes } from "./routes/user.routes";
 
@@ -48,7 +49,8 @@ const router = app
   )
   .get("/api/test", (c) => c.json({ message: "test" }))
   .route("/", generateRoutes) //auth-protected generate routes
-  .route("/", userRoutes); // user routes for subscription + preferences
+  .route("/", userRoutes) // user routes for subscription + preferences
+  .route("/", feedbackRoutes); // auth-protected feedback route
 
 // Global error handler
 app.onError((err, c) => {
