@@ -78,6 +78,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
             onChange={(e) => setContent(e.target.value)}
             minLength={1}
             maxLength={2000}
+            className="text-white placeholder:text-white/50"
           />
 
           <div className="flex items-center justify-between">
