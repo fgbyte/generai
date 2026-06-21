@@ -1,4 +1,5 @@
 import { auth } from "@generai/auth";
+import { env } from "@generai/env/server";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
@@ -22,6 +23,14 @@ const router = app
   .use("/*", corsMiddleware) //enabled cors for all routes
   .use(logger())
   //routes
+  // email verification redirect — must be before wildcard auth handler
+  .get("/api/auth/verify-email", async (c) => {
+    const response = await auth.handler(c.req.raw);
+    if (response.ok) {
+      return c.redirect(`${env.CORS_ORIGIN}/email-verified`, 302);
+    }
+    return c.redirect(`${env.CORS_ORIGIN}/email-verification-error`, 302);
+  })
   .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
   .get("/api/people", (c) =>
     c.json([
