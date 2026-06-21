@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as TodosRouteImport } from './routes/todos'
+import { Route as EmailVerifiedRouteImport } from './routes/email-verified'
+import { Route as EmailVerificationErrorRouteImport } from './routes/email-verification-error'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
@@ -28,6 +30,16 @@ const VerifyEmailRoute = VerifyEmailRouteImport.update({
 const TodosRoute = TodosRouteImport.update({
   id: '/todos',
   path: '/todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailVerifiedRoute = EmailVerifiedRouteImport.update({
+  id: '/email-verified',
+  path: '/email-verified',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailVerificationErrorRoute = EmailVerificationErrorRouteImport.update({
+  id: '/email-verification-error',
+  path: '/email-verification-error',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRouteRoute = AppRouteRouteImport.update({
@@ -74,6 +86,8 @@ const AppAutomateIndexRoute = AppAutomateIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
+  '/email-verification-error': typeof EmailVerificationErrorRoute
+  '/email-verified': typeof EmailVerifiedRoute
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -85,6 +99,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/email-verification-error': typeof EmailVerificationErrorRoute
+  '/email-verified': typeof EmailVerifiedRoute
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -98,6 +114,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
+  '/email-verification-error': typeof EmailVerificationErrorRoute
+  '/email-verified': typeof EmailVerifiedRoute
   '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -112,6 +130,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/email-verification-error'
+    | '/email-verified'
     | '/todos'
     | '/verify-email'
     | '/demo/tanstack-query'
@@ -123,6 +143,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/email-verification-error'
+    | '/email-verified'
     | '/todos'
     | '/verify-email'
     | '/demo/tanstack-query'
@@ -135,6 +157,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/email-verification-error'
+    | '/email-verified'
     | '/todos'
     | '/verify-email'
     | '/demo/tanstack-query'
@@ -148,6 +172,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRouteRoute: typeof AppRouteRouteWithChildren
+  EmailVerificationErrorRoute: typeof EmailVerificationErrorRoute
+  EmailVerifiedRoute: typeof EmailVerifiedRoute
   TodosRoute: typeof TodosRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
@@ -167,6 +193,20 @@ declare module '@tanstack/react-router' {
       path: '/todos'
       fullPath: '/todos'
       preLoaderRoute: typeof TodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email-verified': {
+      id: '/email-verified'
+      path: '/email-verified'
+      fullPath: '/email-verified'
+      preLoaderRoute: typeof EmailVerifiedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email-verification-error': {
+      id: '/email-verification-error'
+      path: '/email-verification-error'
+      fullPath: '/email-verification-error'
+      preLoaderRoute: typeof EmailVerificationErrorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -251,6 +291,8 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
+  EmailVerificationErrorRoute: EmailVerificationErrorRoute,
+  EmailVerifiedRoute: EmailVerifiedRoute,
   TodosRoute: TodosRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,

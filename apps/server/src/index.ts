@@ -26,7 +26,14 @@ const router = app
   // email verification redirect — must be before wildcard auth handler
   .get("/api/auth/verify-email", async (c) => {
     const response = await auth.handler(c.req.raw);
-    if (response.ok) {
+    // Better Auth behavior with callbackURL (which is always present on email links):
+    //   - Success: 302 redirect to callbackURL (no `error=` param)
+    //   - Failure: 302 redirect to callbackURL?error=CODE
+    //   - Without callbackURL: 200 (success) or 4xx (failure)
+    const location = response.headers.get("location") ?? "";
+    const isErrorRedirect = response.status === 302 && location.includes("error=");
+    const isSuccess = response.ok || (response.status === 302 && !isErrorRedirect);
+    if (isSuccess) {
       return c.redirect(`${env.CORS_ORIGIN}/email-verified`, 302);
     }
     return c.redirect(`${env.CORS_ORIGIN}/email-verification-error`, 302);
