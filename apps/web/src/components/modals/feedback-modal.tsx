@@ -82,7 +82,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
 
           <div className="flex items-center justify-between">
             <span
-              className={`text-xs ${charCount > 1800 ? "text-destructive" : "text-muted-foreground"}`}
+              className={`text-xs ${charCount > 1800 ? "text-destructive" : "text-text-muted"}`}
             >
               {charCount} / 2000
             </span>
@@ -92,6 +92,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
                 variant="ghost"
                 onClick={() => onOpenChange(false)}
                 disabled={isPending}
+                className="text-white"
               >
                 Cancel
               </Button>
