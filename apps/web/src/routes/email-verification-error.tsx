@@ -33,7 +33,8 @@ function RouteComponent() {
               </div>
               <h3 className="text-xl font-bold">Verification Link Invalid</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/70 max-w-xs">
-                The verification link is invalid or has expired. Please try signing in to request a new verification email.
+                The verification link is invalid or has expired. Please try signing in to request a
+                new verification email.
               </p>
             </div>
 
