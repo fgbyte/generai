@@ -28,7 +28,7 @@
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
-    "tsdown": "^0.22.2",
+    "tsdown": "^0.22.3",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
