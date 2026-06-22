@@ -14,9 +14,9 @@
     "@generai/env": "workspace:*",
     "@generai/mail": "workspace:*",
     "@hono/zod-openapi": "^1.4.0",
-    "@langchain/core": "^1.1.49",
-    "@langchain/openai": "^1.4.7",
-    "@scalar/hono-api-reference": "^0.11.3",
+    "@langchain/core": "^1.2.0",
+    "@langchain/openai": "^1.5.1",
+    "@scalar/hono-api-reference": "^0.11.4",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "hono": "catalog:",
@@ -28,7 +28,7 @@
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
-    "tsdown": "^0.22.2",
+    "tsdown": "^0.22.3",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
