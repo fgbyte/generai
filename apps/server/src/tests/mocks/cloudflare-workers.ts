@@ -9,5 +9,7 @@ export const env = {
   POSTMARK_SERVER_TOKEN: "test-token",
   POSTMARK_FROM_EMAIL: "test@test.com",
   GEMINI_API_KEY: "test-api-key",
+  TELEGRAM_BOT_TOKEN: "test-bot-token",
+  TELEGRAM_CHAT_ID: "test-chat-id",
   VITE_SERVER_URL: "http://localhost:3000",
 };
