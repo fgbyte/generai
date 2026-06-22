@@ -45,8 +45,7 @@ export function ImageEmptyState({
   className,
 }: ImageEmptyStateProps) {
   return (
-    <div
-      role="status"
+    <output
       aria-label={label}
       className={
         "relative aspect-square w-full bg-surface-thick/40 border-y border-border-glass/30 flex flex-col items-center justify-center gap-4 px-6 " +
@@ -69,6 +68,6 @@ export function ImageEmptyState({
         </span>
         <p className="text-[13px] leading-relaxed text-text-dim">{message}</p>
       </div>
-    </div>
+    </output>
   );
 }

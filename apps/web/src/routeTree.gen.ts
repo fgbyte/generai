@@ -10,13 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
-import { Route as TodosRouteImport } from './routes/todos'
 import { Route as EmailVerifiedRouteImport } from './routes/email-verified'
 import { Route as EmailVerificationErrorRouteImport } from './routes/email-verification-error'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
 import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
 import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
 import { Route as AppCalendarIndexRouteImport } from './routes/app/calendar/index'
@@ -25,11 +23,6 @@ import { Route as AppAutomateIndexRouteImport } from './routes/app/automate/inde
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TodosRoute = TodosRouteImport.update({
-  id: '/todos',
-  path: '/todos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailVerifiedRoute = EmailVerifiedRouteImport.update({
@@ -57,11 +50,6 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
@@ -88,9 +76,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
   '/email-verification-error': typeof EmailVerificationErrorRoute
   '/email-verified': typeof EmailVerifiedRoute
-  '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app/': typeof AppIndexRoute
   '/app/automate/': typeof AppAutomateIndexRoute
   '/app/calendar/': typeof AppCalendarIndexRoute
@@ -101,9 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/email-verification-error': typeof EmailVerificationErrorRoute
   '/email-verified': typeof EmailVerifiedRoute
-  '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app': typeof AppIndexRoute
   '/app/automate': typeof AppAutomateIndexRoute
   '/app/calendar': typeof AppCalendarIndexRoute
@@ -116,9 +100,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteRouteWithChildren
   '/email-verification-error': typeof EmailVerificationErrorRoute
   '/email-verified': typeof EmailVerifiedRoute
-  '/todos': typeof TodosRoute
   '/verify-email': typeof VerifyEmailRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/app/': typeof AppIndexRoute
   '/app/automate/': typeof AppAutomateIndexRoute
   '/app/calendar/': typeof AppCalendarIndexRoute
@@ -132,9 +114,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/email-verification-error'
     | '/email-verified'
-    | '/todos'
     | '/verify-email'
-    | '/demo/tanstack-query'
     | '/app/'
     | '/app/automate/'
     | '/app/calendar/'
@@ -145,9 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/email-verification-error'
     | '/email-verified'
-    | '/todos'
     | '/verify-email'
-    | '/demo/tanstack-query'
     | '/app'
     | '/app/automate'
     | '/app/calendar'
@@ -159,9 +137,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/email-verification-error'
     | '/email-verified'
-    | '/todos'
     | '/verify-email'
-    | '/demo/tanstack-query'
     | '/app/'
     | '/app/automate/'
     | '/app/calendar/'
@@ -174,9 +150,7 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   EmailVerificationErrorRoute: typeof EmailVerificationErrorRoute
   EmailVerifiedRoute: typeof EmailVerifiedRoute
-  TodosRoute: typeof TodosRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -186,13 +160,6 @@ declare module '@tanstack/react-router' {
       path: '/verify-email'
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/todos': {
-      id: '/todos'
-      path: '/todos'
-      fullPath: '/todos'
-      preLoaderRoute: typeof TodosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email-verified': {
@@ -229,13 +196,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
-    }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/app/settings/': {
       id: '/app/settings/'
@@ -293,9 +253,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   EmailVerificationErrorRoute: EmailVerificationErrorRoute,
   EmailVerifiedRoute: EmailVerifiedRoute,
-  TodosRoute: TodosRoute,
   VerifyEmailRoute: VerifyEmailRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

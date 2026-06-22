@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";
 import { env } from "@generai/env/web";
 import type { AppType } from "@server/index";
@@ -9,6 +9,7 @@ const client = hc<AppType>(env.VITE_SERVER_URL, {
 });
 
 export function useSubmitFeedback() {
+  const queryClient = useQueryClient();
   return useMutation<{ success: boolean }, Error, string>({
     mutationFn: async (content: string) => {
       const trimmed = content.trim();
@@ -21,6 +22,10 @@ export function useSubmitFeedback() {
     },
     onSuccess: () => {
       toast.success("Feedback sent, thanks!");
+      // Refresh points/history so cached data stays in sync after the user
+      // submits feedback (forward-compatible if feedback ever affects either).
+      queryClient.invalidateQueries({ queryKey: ["points"] });
+      queryClient.invalidateQueries({ queryKey: ["history"] });
     },
     onError: (err) => {
       toast.error(err.message || "Failed to send feedback");

@@ -122,55 +122,56 @@ function ActivityCard({
     onOpen(item);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key !== "Enter" && e.key !== " ") return;
     e.preventDefault();
     handleOpen();
   };
 
   return (
-    <div
-      className="list-item cursor-pointer transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-      role="button"
-      tabIndex={0}
-      aria-label={`Open "${item.prompt}" in preview`}
-      onClick={handleOpen}
-      onKeyDown={handleKeyDown}
-    >
-      <div className="w-10 h-10 rounded-lg bg-surface-form flex items-center justify-center flex-shrink-0 self-start">
-        <span className="text-white">{config.icon}</span>
-      </div>
+    <div className="relative list-item transition-colors hover:bg-white/[0.04] focus-within:outline-none focus-within:ring-2 focus-within:ring-primary/50 rounded-lg">
+      <button
+        type="button"
+        onClick={handleOpen}
+        onKeyDown={handleKeyDown}
+        aria-label={`Open "${item.prompt}" in preview`}
+        className="w-full text-left flex items-center gap-md rounded-lg focus:outline-none"
+      >
+        <div className="w-10 h-10 rounded-lg bg-surface-form flex items-center justify-center flex-shrink-0 self-start">
+          <span className="text-white">{config.icon}</span>
+        </div>
 
-      <div className="flex-grow min-w-0">
-        <div className="flex justify-between items-start mb-xxs">
-          <span className="text-white font-headline-md text-[15px]">{item.prompt}</span>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(item.id);
-            }}
-            disabled={isDeleting}
-            className="cursor-pointer h-8 w-8 hover:bg-destructive/10"
-            aria-label={isDeleting ? `Deleting "${item.prompt}"` : `Delete "${item.prompt}"`}
-          >
-            <Trash2 className="text-red-500 size-5" />
-          </Button>
-        </div>
-        <p className="text-text-dim text-caption-xs line-clamp-2 mb-sm leading-snug">
-          {item.content}
-        </p>
-        <div className="flex justify-between items-center">
-          <div className="flex gap-4">
-            <span className="text-text-muted text-caption-xs italic">
-              {formatTime(item.createdAt)}
-            </span>
-            <span className="text-text-muted text-caption-xs">{config.label}</span>
+        <div className="flex-grow min-w-0 pr-10">
+          <div className="flex justify-between items-start mb-xxs">
+            <span className="text-white font-headline-md text-[15px]">{item.prompt}</span>
           </div>
-          <ChevronRight className="size-[18px] text-text-muted" />
+          <p className="text-text-dim text-caption-xs line-clamp-2 mb-sm leading-snug">
+            {item.content}
+          </p>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-4">
+              <span className="text-text-muted text-caption-xs italic">
+                {formatTime(item.createdAt)}
+              </span>
+              <span className="text-text-muted text-caption-xs">{config.label}</span>
+            </div>
+            <ChevronRight className="size-[18px] text-text-muted" />
+          </div>
         </div>
-      </div>
+      </button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(item.id);
+        }}
+        disabled={isDeleting}
+        className="cursor-pointer h-8 w-8 hover:bg-destructive/10 absolute top-3 right-3"
+        aria-label={isDeleting ? `Deleting "${item.prompt}"` : `Delete "${item.prompt}"`}
+      >
+        <Trash2 className="text-red-500 size-5" />
+      </Button>
     </div>
   );
 }

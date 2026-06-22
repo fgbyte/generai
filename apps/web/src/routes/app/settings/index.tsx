@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SettingRow } from "@/components/app/setting-row";
+import { SectionHeader } from "@/components/app/section-header";
 import { PreferenceSheet } from "@/components/settings-preference-sheet";
 import { AccountOptionsModal } from "@/components/modals/account-options-modal";
 import { DeleteAccountConfirmationModal } from "@/components/modals/delete-account-confirmation-modal";
@@ -37,26 +39,6 @@ const initials = (name: string) =>
 export const Route = createFileRoute("/app/settings/")({
   component: RouteComponent,
 });
-
-function SettingRow({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
-  return (
-    <button
-      type="button"
-      className="group cursor-pointer flex w-full items-center gap-lg justify-between border-none bg-transparent px-xl py-lg text-left text-white transition-[background-color,transform] duration-150 active:scale-[0.992] active:bg-white/2.5"
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-
-function SectionHeader({ children }: { children: string }) {
-  return (
-    <h2 className="px-[0.625rem] text-text-dim font-mono-label text-mono-label uppercase tracking-[0.26em]">
-      {children}
-    </h2>
-  );
-}
 
 const cardClassName =
   "overflow-hidden rounded-[1.5rem] border border-white/10 bg-linear-to-b from-[rgba(24,24,26,0.96)] to-[rgba(16,16,18,0.98)] py-0 ring-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_50px_rgba(0,0,0,0.35)] backdrop-blur-[18px]";

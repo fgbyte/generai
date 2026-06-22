@@ -63,7 +63,6 @@
         "better-auth": "catalog:",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "dotenv": "catalog:",
         "hono": "catalog:",
         "lucide-react": "^0.577.0",
         "next-themes": "^0.4.6",

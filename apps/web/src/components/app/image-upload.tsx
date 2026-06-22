@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { Upload, Loader2, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -43,11 +43,15 @@ export function ImageUpload({
   }, [previewUrl]);
 
   // Notify parent of removal on unmount so stale base64 isn't kept.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // `useEffectEvent` (React 19+) gives us a stable function that always
+  // reads the latest `onBase64Change` prop, so the unmount cleanup
+  // calls the freshest callback without re-subscribing the effect.
+  const onUnmountNotify = useEffectEvent(() => {
+    onBase64Change?.(null);
+  });
+
   useEffect(() => {
-    return () => {
-      onBase64Change?.(null);
-    };
+    return onUnmountNotify;
   }, []);
 
   const resetInput = () => {
@@ -128,14 +132,13 @@ export function ImageUpload({
       )}
 
       {state === "uploading" && (
-        <div
-          role="status"
+        <output
           aria-live="polite"
           className="w-full border border-dashed border-white/20 text-white/60 py-md rounded-lg gap-2 flex items-center justify-center"
         >
           <Loader2 className="size-5 animate-spin" />
           <span>Uploading…</span>
-        </div>
+        </output>
       )}
 
       {state === "uploaded" && previewUrl && (
