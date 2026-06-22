@@ -166,11 +166,19 @@ function EditContent({
     try {
       await navigator.clipboard.writeText(caption);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
     } catch {
       // noop
     }
   };
+
+  // Auto-reset the "Copied!" state after 1.5s. Cleanup prevents
+  // stale state updates if the component unmounts or the user
+  // clicks again before the timer fires.
+  useEffect(() => {
+    if (!copied) return;
+    const timeoutId = setTimeout(() => setCopied(false), 1500);
+    return () => clearTimeout(timeoutId);
+  }, [copied]);
 
   return (
     <section className="flex flex-col gap-2">
@@ -283,17 +291,34 @@ function CtaFooter({ caption }: { caption: string }) {
     try {
       await navigator.clipboard.writeText(caption);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
     } catch {
       // noop
     }
   };
 
+  // Auto-reset the "Copied!" state after 1.5s. Cleanup prevents
+  // stale state updates if the component unmounts or the user
+  // clicks again before the timer fires.
+  useEffect(() => {
+    if (!copied) return;
+    const timeoutId = setTimeout(() => setCopied(false), 1500);
+    return () => clearTimeout(timeoutId);
+  }, [copied]);
+
   return (
     <div className="grid grid-cols-2 gap-3">
-      <button type="button" onClick={handleCopy} className=" btn-secondary">
-        {copied ? <Check className="size-4" /> : <CopyIcon className="size-4" />}
-        {copied ? "Copied!" : "Copy"}
+      <button type="button" onClick={handleCopy} className="btn-secondary">
+        {copied ? (
+          <span className="inline-flex items-center gap-2">
+            <Check className="size-4" />
+            Copied!
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-2">
+            <CopyIcon className="size-4" />
+            Copy
+          </span>
+        )}
       </button>
       <button
         type="button"
