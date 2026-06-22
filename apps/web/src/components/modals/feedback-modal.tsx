@@ -53,9 +53,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
         }}
       >
         <div className="flex items-center justify-between">
-          <span className="text-mono-label text-text-dim uppercase">
-            Send feedback
-          </span>
+          <span className="text-mono-label text-text-dim uppercase">Send feedback</span>
           <button
             type="button"
             onClick={() => onOpenChange(false)}
@@ -97,10 +95,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={content.trim().length === 0 || charCount > 2000}
-              >
+              <Button type="submit" disabled={content.trim().length === 0 || charCount > 2000}>
                 {isPending ? "Sending..." : "Send"}
               </Button>
             </div>

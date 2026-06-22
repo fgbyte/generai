@@ -8,10 +8,7 @@ function escapeHtml(text: string): string {
     .replace(/"/g, "&quot;");
 }
 
-export async function sendFeedbackNotification(
-  userId: string,
-  content: string,
-): Promise<void> {
+export async function sendFeedbackNotification(userId: string, content: string): Promise<void> {
   const escapedContent = escapeHtml(content);
   const message = `💬 Nuevo feedback
 

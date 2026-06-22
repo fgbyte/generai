@@ -14,7 +14,7 @@ export function useSubmitFeedback() {
       const trimmed = content.trim();
       const res = await client.api.feedback.$post({ json: { content: trimmed } });
       if (!res.ok) {
-        const errBody = await res.json().catch(() => ({} as Record<string, string>));
+        const errBody = await res.json().catch(() => ({}) as Record<string, string>);
         throw new Error(errBody.error ?? `Failed to send feedback (${res.status})`);
       }
       return res.json() as Promise<{ success: boolean }>;
