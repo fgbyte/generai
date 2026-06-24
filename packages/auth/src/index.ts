@@ -1,6 +1,6 @@
 import { db } from "@generai/db";
 import * as schema from "@generai/db/schema/auth";
-import { env } from "@generai/env/server";
+import { env, getTrustedOrigins } from "@generai/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { sendEmail } from "@generai/mail";
@@ -19,7 +19,7 @@ export const auth = betterAuth({
       },
     },
   }),
-  trustedOrigins: [env.CORS_ORIGIN],
+  trustedOrigins: getTrustedOrigins(),
   emailAndPassword: {
     enabled: true,
     password: {
