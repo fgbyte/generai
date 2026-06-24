@@ -21,6 +21,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useGenerateContent } from "@/hooks/use-generate-content";
+import { authFetch } from "@/lib/api-client";
 
 export const Route = createFileRoute("/app/")({
   component: RouteComponent,
@@ -30,6 +31,7 @@ const CONTENT_TYPES = [{ value: "instagram", icon: <Instagram />, label: "Instag
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
+  fetch: authFetch,
 });
 
 function RouteComponent() {

@@ -17,5 +17,5 @@ export const corsMiddleware = cors({
   allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization"],
   credentials: true,
-  exposeHeaders: ["Set-Cookie", "Content-Length"],
+  exposeHeaders: ["Set-Cookie", "set-auth-token", "Content-Length"],
 });

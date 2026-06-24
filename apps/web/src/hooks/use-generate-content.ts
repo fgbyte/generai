@@ -1,13 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { hc } from "hono/client";
 import { env } from "@generai/env/web";
+import { hc } from "hono/client";
 import type { AppType } from "@server/index";
 import { toast } from "sonner";
 
 import { generationStore } from "@/stores/generation-store";
+import { authFetch } from "@/lib/api-client";
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
+  fetch: authFetch,
 });
 
 export type ContentTypeUnion = "thread" | "instagram" | "linkedin";

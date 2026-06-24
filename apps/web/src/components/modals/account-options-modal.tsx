@@ -3,6 +3,7 @@ import { LogOut, KeyRound, Trash2, X } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
 import { authClient } from "@/lib/auth-client";
+import { clearAuthToken } from "@/lib/auth-token";
 
 interface AccountOptionsModalProps {
   open: boolean;
@@ -34,6 +35,7 @@ export function AccountOptionsModal({
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          clearAuthToken();
           navigate({ to: "/" });
         },
       },

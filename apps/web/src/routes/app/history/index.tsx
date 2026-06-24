@@ -20,6 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { generationStore, type GenerationResult } from "@/stores/generation-store";
 import type { ContentTypeUnion } from "@/hooks/use-generate-content";
+import { authFetch } from "@/lib/api-client";
 
 interface HistoryItem {
   id: string;
@@ -39,6 +40,7 @@ interface HistoryMutationContext {
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
+  fetch: authFetch,
 });
 
 const CONTENT_TYPE_CONFIG: Record<string, { label: string; icon: React.ReactNode }> = {

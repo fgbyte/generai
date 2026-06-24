@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -8,6 +8,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { getAuthToken, persistAuthTokenFromHeaders } from "@/lib/auth-token";
+
+const SESSION_RETRY_COUNT = 5;
+const SESSION_RETRY_DELAY_MS = 150;
+
+async function waitForSession() {
+  for (let attempt = 0; attempt < SESSION_RETRY_COUNT; attempt += 1) {
+    const token = getAuthToken();
+    const session = await authClient
+      .getSession({
+        fetchOptions: token
+          ? {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          : undefined,
+      })
+      .catch(() => null);
+
+    if (session?.data) {
+      return true;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, SESSION_RETRY_DELAY_MS));
+  }
+
+  return false;
+}
 
 /**
  * Email + password sign-in form. Uses TanStack Form for validation
@@ -18,6 +47,25 @@ import { authClient } from "@/lib/auth-client";
  */
 export function InlineSignInForm() {
   const navigate = useNavigate({ from: "/" });
+  const router = useRouter();
+
+  const handleSignInSuccess = async (hasBearerToken: boolean) => {
+    toast.success("Sign in successful");
+
+    const hasSession = await waitForSession();
+
+    if (!hasSession) {
+      toast.error(
+        hasBearerToken
+          ? "Sign in completed, but the session was not ready. Please try again."
+          : "Sign in completed, but the auth token was not returned by the server.",
+      );
+      return;
+    }
+
+    await router.invalidate();
+    await navigate({ to: "/app", replace: true });
+  };
 
   const form = useForm({
     defaultValues: {
@@ -33,9 +81,9 @@ export function InlineSignInForm() {
           password: value.password,
         },
         {
-          onSuccess: () => {
-            toast.success("Sign in successful");
-            navigate({ to: "/app" });
+          onSuccess: (ctx) => {
+            const token = persistAuthTokenFromHeaders(ctx.response.headers);
+            void handleSignInSuccess(Boolean(token || getAuthToken()));
           },
           onError: (error) => {
             const errorMessage = error.error.message || error.error.statusText || "";

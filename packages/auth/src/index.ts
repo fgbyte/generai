@@ -4,7 +4,7 @@ import { env, getTrustedOrigins } from "@generai/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { sendEmail } from "@generai/mail";
-import { openAPI } from "better-auth/plugins";
+import { bearer, openAPI } from "better-auth/plugins";
 import bcrypt from "bcryptjs";
 
 export const auth = betterAuth({
@@ -33,7 +33,7 @@ export const auth = betterAuth({
     },
     requireEmailVerification: true, // Require email verification before login
   },
-  plugins: [openAPI()], //Activate OpenAPI DOCS 👈
+  plugins: [openAPI(), bearer()], //Activate OpenAPI DOCS and bearer auth for Tauri clients
   emailVerification: {
     sendOnSignUp: true,
     sendOnSignIn: false,

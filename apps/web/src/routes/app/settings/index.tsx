@@ -2,12 +2,14 @@ import { useState } from "react";
 import { ChevronRight, Coins, Sparkles } from "lucide-react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { hc } from "hono/client";
 import { env } from "@generai/env/web";
+import { hc } from "hono/client";
 import type { AppType } from "@server/index";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
+import { authFetch } from "@/lib/api-client";
+import { clearAuthToken } from "@/lib/auth-token";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -18,12 +20,13 @@ import { PreferenceSheet } from "@/components/settings-preference-sheet";
 import { AccountOptionsModal } from "@/components/modals/account-options-modal";
 import { DeleteAccountConfirmationModal } from "@/components/modals/delete-account-confirmation-modal";
 
-const client = hc<AppType>(env.VITE_SERVER_URL, {
-  init: { credentials: "include" },
-});
-
 const AI_TONES = ["Creative", "Professional", "Casual"] as const;
 const PLATFORMS = ["Instagram", "Twitter (X)", "Dribbble", "Pinterest"] as const;
+
+const client = hc<AppType>(env.VITE_SERVER_URL, {
+  init: { credentials: "include" },
+  fetch: authFetch,
+});
 
 type AiTone = (typeof AI_TONES)[number];
 type Platform = (typeof PLATFORMS)[number];
@@ -102,10 +105,11 @@ function RouteComponent() {
     onSuccess: async () => {
       queryClient.clear();
       await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            toast.success("Account deleted");
-            navigate({ to: "/" });
+          fetchOptions: {
+            onSuccess: () => {
+              clearAuthToken();
+              toast.success("Account deleted");
+              navigate({ to: "/" });
           },
         },
       });
