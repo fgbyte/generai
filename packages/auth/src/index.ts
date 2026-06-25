@@ -67,9 +67,17 @@ export const auth = betterAuth({
     },
   },
   session: {
+    // cookieCache must be disabled when using the bearer() plugin in a
+    // Tauri Android client. With cookieCache enabled Better Auth rotates
+    // the short-lived cookie token against the long-lived DB session, so
+    // the value returned in the sign-in response body (and serialized into
+    // the `set-auth-token` header) does not match the row in the DB. Web
+    // and Tauri desktop clients hide this because their persistent
+    // session cookies always carry the real DB token; the Android client,
+    // which has no usable cookie storage in the WebView, falls back to the
+    // rotated token and the server rejects it on `get-session`.
     cookieCache: {
-      enabled: true,
-      maxAge: 60 * 5, // 5 minutes — matches client staleTime
+      enabled: false,
     },
   },
   secret: env.BETTER_AUTH_SECRET, //sacadas de alchemy

@@ -8,35 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import { getAuthToken, persistAuthToken } from "@/lib/auth-token";
-
-const SESSION_RETRY_COUNT = 5;
-const SESSION_RETRY_DELAY_MS = 150;
-
-async function waitForSession() {
-  for (let attempt = 0; attempt < SESSION_RETRY_COUNT; attempt += 1) {
-    const token = getAuthToken();
-    const session = await authClient
-      .getSession({
-        fetchOptions: token
-          ? {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          : undefined,
-      })
-      .catch(() => null);
-
-    if (session?.data) {
-      return true;
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, SESSION_RETRY_DELAY_MS));
-  }
-
-  return false;
-}
 
 /**
  * Email + password sign-in form. Uses TanStack Form for validation
@@ -49,20 +20,8 @@ export function InlineSignInForm() {
   const navigate = useNavigate({ from: "/" });
   const router = useRouter();
 
-  const handleSignInSuccess = async (hasBearerToken: boolean) => {
+  const handleSignInSuccess = async () => {
     toast.success("Sign in successful");
-
-    const hasSession = await waitForSession();
-
-    if (!hasSession) {
-      toast.error(
-        hasBearerToken
-          ? "Sign in completed, but the session was not ready. Please try again."
-          : "Sign in completed, but the auth token was not returned by the server.",
-      );
-      return;
-    }
-
     await router.invalidate();
     await navigate({ to: "/app", replace: true });
   };
@@ -81,18 +40,10 @@ export function InlineSignInForm() {
           password: value.password,
         },
         {
-          onSuccess: (ctx) => {
-            // Better Auth's bearer() plugin exposes the token via
-            // the `set-auth-token` response header.
-            const headerToken = ctx.response.headers.get("set-auth-token");
-            console.log("[auth] sign-in success headers:", {
-              setAuthToken: headerToken,
-              allHeaders: Object.fromEntries(ctx.response.headers.entries()),
-            });
-            if (headerToken) {
-              persistAuthToken(headerToken);
-            }
-            void handleSignInSuccess(Boolean(headerToken || getAuthToken()));
+          // Token persistence happens in auth-client.ts's global onSuccess.
+          // Here we only react to navigation.
+          onSuccess: () => {
+            void handleSignInSuccess();
           },
           onError: (error) => {
             const errorMessage =

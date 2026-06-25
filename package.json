@@ -42,7 +42,7 @@
     "dev": "turbo -F @generai/infra dev",
     "dev:native": "turbo -F native dev",
     "dev:web": "VITE_SERVER_URL=https://generai-server-dev.fgbyte.workers.dev turbo -F web dev",
-    "dev:desk": "turbo -F web tauri:dev",
+    "dev:desk": "VITE_SERVER_URL=https://generai-server-dev.fgbyte.workers.dev turbo -F web tauri:dev",
     "dev:android": "cd apps/web && bun run android:dev",
     "dev:server": "turbo -F server dev",
     "deploy:dev": "bun run --filter @generai/infra deploy:dev",
