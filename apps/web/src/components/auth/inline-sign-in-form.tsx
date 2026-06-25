@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import { getAuthToken, persistAuthTokenFromHeaders } from "@/lib/auth-token";
+import { getAuthToken, persistAuthToken } from "@/lib/auth-token";
 
 const SESSION_RETRY_COUNT = 5;
 const SESSION_RETRY_DELAY_MS = 150;
@@ -82,11 +82,21 @@ export function InlineSignInForm() {
         },
         {
           onSuccess: (ctx) => {
-            const token = persistAuthTokenFromHeaders(ctx.response.headers);
-            void handleSignInSuccess(Boolean(token || getAuthToken()));
+            // Better Auth's bearer() plugin exposes the token via
+            // the `set-auth-token` response header.
+            const headerToken = ctx.response.headers.get("set-auth-token");
+            console.log("[auth] sign-in success headers:", {
+              setAuthToken: headerToken,
+              allHeaders: Object.fromEntries(ctx.response.headers.entries()),
+            });
+            if (headerToken) {
+              persistAuthToken(headerToken);
+            }
+            void handleSignInSuccess(Boolean(headerToken || getAuthToken()));
           },
           onError: (error) => {
-            const errorMessage = error.error.message || error.error.statusText || "";
+            const errorMessage =
+              error.error.message || error.error.statusText || "";
 
             if (
               errorMessage.toLowerCase().includes("email") &&

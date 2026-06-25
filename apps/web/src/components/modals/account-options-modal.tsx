@@ -35,7 +35,7 @@ export function AccountOptionsModal({
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          clearAuthToken();
+          void clearAuthToken();
           navigate({ to: "/" });
         },
       },
@@ -80,7 +80,9 @@ export function AccountOptionsModal({
         }}
       >
         <div className="flex items-center justify-between">
-          <span className="text-mono-label text-text-dim uppercase">Account</span>
+          <span className="text-mono-label text-text-dim uppercase">
+            Account
+          </span>
           <button
             type="button"
             onClick={() => onOpenChange(false)}
@@ -116,7 +118,9 @@ export function AccountOptionsModal({
                   {option.icon}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-semibold">{option.label}</span>
+                  <span className="block text-sm font-semibold">
+                    {option.label}
+                  </span>
                   <span
                     className={`block text-caption-xs mt-1 ${
                       option.destructive ? "text-[#ff5a52]/70" : "text-white/46"

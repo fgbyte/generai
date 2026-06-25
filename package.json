@@ -37,8 +37,8 @@
   "scripts": {
     "build": "turbo build",
     "build:desk": "turbo -F web tauri:build",
-    "build:android": "cd apps/web && bun run android:build-debug",
-    "build:phone": "cd apps/web && bun run android:build-release-phone",
+    "build:android": "cd apps/web && VITE_SERVER_URL=https://generai-server-staging.fgbyte.workers.dev bun run android:build-debug",
+    "build:phone": "cd apps/web && VITE_SERVER_URL=https://generai-server-staging.fgbyte.workers.dev bun run android:build-release-phone",
     "dev": "turbo -F @generai/infra dev",
     "dev:native": "turbo -F native dev",
     "dev:web": "VITE_SERVER_URL=https://generai-server-dev.fgbyte.workers.dev turbo -F web dev",
