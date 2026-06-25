@@ -10,14 +10,7 @@ import bcrypt from "bcryptjs";
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
-
     schema: schema,
-    user: {
-      additionalFields: {
-        points: { type: "number", default: 50 },
-        stripeCustomerId: { type: "string", required: false },
-      },
-    },
   }),
   trustedOrigins: getTrustedOrigins(),
   emailAndPassword: {

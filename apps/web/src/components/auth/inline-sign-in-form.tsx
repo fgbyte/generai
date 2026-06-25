@@ -46,8 +46,7 @@ export function InlineSignInForm() {
             void handleSignInSuccess();
           },
           onError: (error) => {
-            const errorMessage =
-              error.error.message || error.error.statusText || "";
+            const errorMessage = error.error.message || error.error.statusText || "";
 
             if (
               errorMessage.toLowerCase().includes("email") &&

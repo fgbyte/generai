@@ -21,12 +21,7 @@ import { AccountOptionsModal } from "@/components/modals/account-options-modal";
 import { DeleteAccountConfirmationModal } from "@/components/modals/delete-account-confirmation-modal";
 
 const AI_TONES = ["Creative", "Professional", "Casual"] as const;
-const PLATFORMS = [
-  "Instagram",
-  "Twitter (X)",
-  "Dribbble",
-  "Pinterest",
-] as const;
+const PLATFORMS = ["Instagram", "Twitter (X)", "Dribbble", "Pinterest"] as const;
 
 const client = hc<AppType>(env.VITE_SERVER_URL, {
   init: { credentials: "include" },
@@ -57,9 +52,7 @@ const chevronClassName =
 function RouteComponent() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [openSheet, setOpenSheet] = useState<
-    "aiTone" | "defaultPlatform" | null
-  >(null);
+  const [openSheet, setOpenSheet] = useState<"aiTone" | "defaultPlatform" | null>(null);
   const [accountModalOpen, setAccountModalOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
@@ -141,11 +134,7 @@ function RouteComponent() {
             <CardContent className="p-0">
               <SettingRow onClick={() => setAccountModalOpen(true)}>
                 <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/18 bg-[radial-gradient(circle_at_65%_25%,rgba(72,203,255,0.5),transparent_28%),radial-gradient(circle_at_25%_80%,rgba(105,66,255,0.8),transparent_40%),linear-gradient(145deg,#121212,#081324_70%,#0d3b50)] text-base font-bold tracking-[-0.04em] text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_24px_rgba(5,12,24,0.45)]">
-                  {sessionLoading ? (
-                    <Skeleton className="size-full" />
-                  ) : (
-                    initials(userName)
-                  )}
+                  {sessionLoading ? <Skeleton className="size-full" /> : initials(userName)}
                 </div>
                 <div className="min-w-0 flex-1">
                   {sessionLoading ? (
@@ -158,9 +147,7 @@ function RouteComponent() {
                       <div className="text-headline-md font-headline-md tracking-[-0.03em] text-white">
                         {userName}
                       </div>
-                      <div className="mt-1 text-caption-xs text-white/42">
-                        {userEmail}
-                      </div>
+                      <div className="mt-1 text-caption-xs text-white/42">{userEmail}</div>
                     </>
                   )}
                 </div>
@@ -256,9 +243,7 @@ function RouteComponent() {
               <div className="text-headline-md font-headline-md tracking-[-0.04em] text-secondary">
                 {userPoints.toLocaleString()}
               </div>
-              <div className="mt-1 text-caption-xs text-white/46">
-                Remaining
-              </div>
+              <div className="mt-1 text-caption-xs text-white/46">Remaining</div>
             </div>
           </div>
         </section>
@@ -321,11 +306,7 @@ function RouteComponent() {
             await deleteAccountMutation.mutateAsync();
             setDeleteConfirmOpen(false);
           } catch (error) {
-            toast.error(
-              error instanceof Error
-                ? error.message
-                : "Failed to delete account",
-            );
+            toast.error(error instanceof Error ? error.message : "Failed to delete account");
           }
         }}
       />

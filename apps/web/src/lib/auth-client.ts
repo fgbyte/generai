@@ -14,9 +14,7 @@ import { getAuthToken, persistAuthToken } from "@/lib/auth-token";
  *   1) parse the response body we shadow-clone
  *   2) fall back to the `set-auth-token` header
  */
-async function readTokenFromResponse(
-  response: Response,
-): Promise<string | null> {
+async function readTokenFromResponse(response: Response): Promise<string | null> {
   // 1) Read the body. We do this FIRST because on Android the WebView can
   //    surface a `null` `ctx.data` even when the actual JSON body is fine,
   //    but the underlying `Response` is still readable.
