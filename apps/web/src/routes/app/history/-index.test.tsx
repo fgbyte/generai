@@ -13,6 +13,12 @@ vi.mock("@/components/bottom-nav-bar", () => ({
   BottomNavBar: () => <div data-testid="bottom-nav-bar" />,
 }));
 
+// Mock api-client to avoid auth-token.ts touching window.localStorage
+// (Bun's jsdom throws "Cannot initialize local storage without a --localstorage-file path").
+vi.mock("@/lib/api-client", () => ({
+  authFetch: (...args: unknown[]) => fetch(...(args as Parameters<typeof fetch>)),
+}));
+
 // Hoist the navigate mock so it's available inside the vi.mock factory below
 // (vi.mock is hoisted above all imports and runs before the module body).
 const { navigateMock } = vi.hoisted(() => ({

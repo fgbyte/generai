@@ -24,6 +24,7 @@ vi.mock("@generai/env/server", () => ({
     CORS_ORIGIN: "http://localhost:3000",
     DATABASE_URL: "postgresql://test:test@localhost:5432/test",
   },
+  getTrustedOrigins: () => ["http://localhost:3000"],
 }));
 
 vi.mock("@generai/auth", () => ({
