@@ -26,23 +26,50 @@ export const generateRoutes = new Hono<HonoEnv>()
     try {
       body = await c.req.json();
     } catch {
+      console.error("[generate] /api/generate — could not parse JSON body");
       return c.json({ error: "Invalid request body" }, 400);
     }
     const parsed = generateBodySchema.safeParse(body);
 
     if (!parsed.success) {
+      console.error(
+        "[generate] /api/generate — schema validation failed",
+        JSON.stringify(parsed.error.flatten()),
+      );
       return c.json({ error: "Invalid request body", details: parsed.error.flatten() }, 400);
     }
 
     const { contentType, prompt, imageBase64 } = parsed.data;
+    const promptPreview = prompt.length > 100 ? `${prompt.slice(0, 100)}…` : prompt;
+    const imageKB = imageBase64 ? +(imageBase64.length / 1024).toFixed(1) : null;
+    console.log(
+      `[generate] /api/generate received userId=${user.id} contentType=${contentType} ` +
+        `prompt=${JSON.stringify(promptPreview)} ` +
+        `imageBase64=${imageKB ? `${imageKB}KB` : "none"}`,
+    );
 
     const points = await getUserPoints(user.id);
     if (points < 5) {
+      console.error(
+        `[generate] rejected — insufficient points for userId=${user.id} (have ${points})`,
+      );
       return c.json({ error: "Insufficient points" }, 400);
     }
 
     try {
+      console.log(
+        `[generate] calling NVIDIA NIM — contentType=${contentType} hasImage=${Boolean(imageBase64)}`,
+      );
+      const t0 = Date.now();
       const result = await generateContent(contentType, prompt, imageBase64);
+      const elapsedMs = Date.now() - t0;
+
+      console.log(
+        `[generate] NVIDIA NIM responded in ${elapsedMs}ms — ${result.content.length} caption(s)`,
+      );
+      console.log(
+        `[generate] raw captions:\n${result.content.map((c, i) => `  #${i + 1}: ${c}`).join("\n")}`,
+      );
 
       await updateUserPoints(user.id, -5);
 
@@ -51,6 +78,10 @@ export const generateRoutes = new Hono<HonoEnv>()
         result.content.join("\n\n"),
         prompt,
         contentType,
+      );
+
+      console.log(
+        `[generate] saved id=${saved?.id ?? "(none)"} userId=${user.id} elapsed=${elapsedMs}ms`,
       );
 
       return c.json(
@@ -62,8 +93,9 @@ export const generateRoutes = new Hono<HonoEnv>()
         200,
       );
     } catch (error) {
-      console.error("[Generate] Error generating content:", error);
-      return c.json({ error: "Failed to generate content" }, 500);
+      console.error("[generate] Error generating content:", error);
+      const message = error instanceof Error ? error.message : String(error);
+      return c.json({ error: "Failed to generate content", detail: message }, 500);
     }
   })
 

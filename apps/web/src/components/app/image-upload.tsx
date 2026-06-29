@@ -1,39 +1,52 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { Upload, Loader2, X } from "lucide-react";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
+import { useImageUpload } from "@/hooks/use-image-upload";
 
 type UploadState = "idle" | "uploading" | "uploaded";
 
 interface ImageUploadProps {
   /**
-   * Simulated upload latency in ms. Placeholder for the future R2 PUT
-   * — replace with a real mutation when the bucket is wired up.
+   * Compression knobs forwarded to `compressToBase64`. Defaults inside the
+   * hook are `maxPx: 1024, quality: 0.75` — the sweet spot for vision
+   * models on Instagram-style photo content.
    */
-  simulateLatencyMs?: number;
+  compressOptions?: {
+    maxPx?: number;
+    quality?: number;
+  };
   className?: string;
-  /** Called with a data:image/...;base64,... string when a file is selected,
-   *  or null when the selection is removed / component unmounts. */
+  /** Called with a data:image/jpeg;base64,... string when a file is
+   *  successfully compressed, or null when the selection is removed /
+   *  component unmounts / compression fails. */
   onBase64Change?: (base64: string | null) => void;
 }
 
 /**
  * Self-contained image upload UI with three states:
- *  - idle:     dashed-border picker button
- *  - uploading: spinner + "Uploading…" (placeholder for real R2 PUT)
- *  - uploaded:  thumbnail (left) + green "UPLOADED" label (right)
+ *  - idle:      dashed-border picker button
+ *  - uploading: spinner + "Compressing…" (matches `useMutation` pending)
+ *  - uploaded:  thumbnail (left) + green "Uploaded" label (right)
+ *
+ * The actual base64 handed to the parent is produced by `useImageUpload`,
+ * which scales the file down (max 1024px on the longest side) and re-encodes
+ * it as JPEG q=0.75 — yielding ~150–250 KB payloads from phone photos that
+ * would otherwise be several MB. Backend / store payload shape is
+ * unchanged: parents still receive a `data:image/...;base64,...` string.
  *
  * Clicking the uploaded body reopens the file picker to replace the image.
  * The trailing X button clears the selection.
  */
-export function ImageUpload({
-  simulateLatencyMs = 1200,
-  className,
-  onBase64Change,
-}: ImageUploadProps) {
+export function ImageUpload({ compressOptions, className, onBase64Change }: ImageUploadProps) {
   const [state, setState] = useState<UploadState>("idle");
+  // Thumbnail is rendered from the *original* file blob so the user sees
+  // exactly what they picked; the parent receives the *compressed* base64.
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { mutate: compress, reset } = useImageUpload(compressOptions);
 
   // Revoke object URL on unmount or when replaced/cleared.
   useEffect(() => {
@@ -58,30 +71,28 @@ export function ImageUpload({
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const handleFile = async (file: File) => {
-    setState("uploading");
-
+  const handleFile = (file: File) => {
+    // Show the original pick as the thumbnail immediately so the user gets
+    // instant feedback even while compression runs.
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+    setState("uploading");
 
-    // Fire-and-forget FileReader: converts file to base64 for parent consumption.
-    // Runs in parallel with the simulated upload delay below.
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        onBase64Change?.(reader.result);
-      } else {
-        console.warn("[ImageUpload] FileReader returned non-string result");
+    compress(file, {
+      onSuccess: (base64) => {
+        setState("uploaded");
+        onBase64Change?.(base64);
+      },
+      onError: (err) => {
+        // Compression failed — drop the pick so the user can retry.
+        URL.revokeObjectURL(url);
+        setPreviewUrl(null);
+        setState("idle");
+        resetInput();
+        toast.error(err.message || "Could not process image");
         onBase64Change?.(null);
-      }
-    };
-    reader.readAsDataURL(file);
-
-    // Placeholder for the real R2 PUT — keep the loader visible long enough
-    // to demo the state. Swap for an `await uploadToR2(file)` later.
-    await new Promise((resolve) => setTimeout(resolve, simulateLatencyMs));
-
-    setState("uploaded");
+      },
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +102,7 @@ export function ImageUpload({
       resetInput();
       return;
     }
-    void handleFile(file);
+    handleFile(file);
   };
 
   const openPicker = () => {
@@ -105,6 +116,7 @@ export function ImageUpload({
     setPreviewUrl(null);
     setState("idle");
     resetInput();
+    reset(); // clear mutation state so a re-pick doesn't race stale errors
     onBase64Change?.(null);
   };
 
@@ -137,7 +149,7 @@ export function ImageUpload({
           className="w-full border border-dashed border-white/20 text-white/60 py-md rounded-lg gap-2 flex items-center justify-center"
         >
           <Loader2 className="size-5 animate-spin" />
-          <span>Uploading…</span>
+          <span>Compressing…</span>
         </output>
       )}
 

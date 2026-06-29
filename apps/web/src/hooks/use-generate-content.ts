@@ -51,6 +51,7 @@ export function useGenerateContent(options: UseGenerateContentOptions = {}) {
       if (!input.prompt.trim()) {
         throw new Error("Prompt is required");
       }
+
       const res = await client.api.generate.$post({
         json: {
           contentType: input.contentType,
@@ -58,11 +59,20 @@ export function useGenerateContent(options: UseGenerateContentOptions = {}) {
           imageBase64: input.imageBase64 ?? undefined,
         },
       });
+
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({}) as Record<string, string>);
-        throw new Error(errBody.error ?? `Generation failed (${res.status})`);
+        // Server wraps the underlying cause in `detail` — surface it to the
+        // toast so the user (and devs reading screenshots) see *why* it failed.
+        const detail = (errBody as { detail?: unknown }).detail ?? errBody.error ?? null;
+        const message =
+          typeof detail === "string" && detail.length > 0
+            ? detail
+            : `Generation failed (${res.status})`;
+        throw new Error(message);
       }
-      return res.json() as Promise<GenerateContentResponse>;
+
+      return (await res.json()) as GenerateContentResponse;
     },
     onSuccess: (data, variables) => {
       // Write the new content to the store using the variables that produced it

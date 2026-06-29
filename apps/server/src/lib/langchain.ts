@@ -7,6 +7,7 @@ let visionClient: ChatOpenAI | null = null;
 function getEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
+    console.error(`[langchain] missing required env var: ${name}`);
     throw new Error(`${name} is not configured`);
   }
   return value;
@@ -96,6 +97,12 @@ export async function generateContent(
   const needsVision = contentType === "instagram" && imageBase64;
   const model = needsVision ? getNVIDIAVisionClient() : getNVIDIATextClient();
 
+  console.log(
+    `[langchain] building messages — contentType=${contentType} model=${
+      needsVision ? "vision" : "text"
+    } hasImage=${Boolean(imageBase64)} imageBytes=${imageBase64 ? imageBase64.length : 0}`,
+  );
+
   const systemPrompt = CONTENT_PROMPTS[contentType];
   const messages: Array<SystemMessage | HumanMessage> = [new SystemMessage(systemPrompt)];
 
@@ -121,11 +128,33 @@ export async function generateContent(
     messages.push(new HumanMessage(`Topic: ${prompt}`));
   }
 
-  const response = await model.invoke(messages);
+  console.log(
+    `[langchain] invoking model — ${messages.length} message(s), ` +
+      `systemPromptChars=${systemPrompt.length} promptChars=${prompt.length}`,
+  );
+  const t0 = Date.now();
+  let response;
+  try {
+    response = await model.invoke(messages);
+  } catch (err) {
+    console.error(`[langchain] model.invoke threw after ${Date.now() - t0}ms:`, err);
+    throw err;
+  }
+  const elapsed = Date.now() - t0;
 
   const text = response.content as string;
+  const usage = (response as { usage_metadata?: unknown }).usage_metadata;
+  console.log(
+    `[langchain] model responded in ${elapsed}ms — rawTextChars=${
+      typeof text === "string" ? text.length : "<non-string>"
+    } usage=${JSON.stringify(usage ?? null)}`,
+  );
+  console.log(
+    `[langchain] raw model output:\n---\n${typeof text === "string" ? text : JSON.stringify(text)}\n---`,
+  );
 
   if (!text) {
+    console.error("[langchain] response content was empty — model returned nothing");
     throw new Error("No content generated from NVIDIA NIM API");
   }
 
@@ -136,6 +165,13 @@ export async function generateContent(
       .split("---TWEET---")
       .map((t) => t.trim())
       .filter(Boolean);
+    console.log(`[langchain] parsed thread — ${content.length} tweet(s) (split by ---TWEET---)`);
+    if (content.length <= 1) {
+      console.warn(
+        '[langchain] thread produced 0 separators — model probably did not use "---TWEET---". ' +
+          "Falling back to treating the whole response as a single tweet.",
+      );
+    }
   } else {
     content = [text.trim()];
   }
