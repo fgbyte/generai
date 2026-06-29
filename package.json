@@ -21,11 +21,11 @@
     "catalog": {
       "dotenv": "^17.4.2",
       "zod": "^4.4.3",
-      "hono": "^4.12.26",
+      "hono": "^4.12.27",
       "typescript": "^6.0.3",
       "@types/node": "^25.9.3",
       "@cloudflare/workers-types": "^4.20260621.1",
-      "better-auth": "^1.6.20",
+      "better-auth": "^1.6.22",
       "alchemy": "^0.93.12",
       "vitest": "^4.1.9",
       "@vitest/ui": "^4.1.9",
