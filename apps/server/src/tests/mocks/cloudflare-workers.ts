@@ -6,6 +6,8 @@ export const env = {
   CORS_ORIGIN: "http://localhost:3000",
   BETTER_AUTH_SECRET: "test-secret",
   BETTER_AUTH_URL: "http://localhost:3000",
+  GOOGLE_CLIENT_ID: "test-google-client-id",
+  GOOGLE_CLIENT_SECRET: "test-google-client-secret",
   POSTMARK_SERVER_TOKEN: "test-token",
   POSTMARK_FROM_EMAIL: "test@test.com",
   GEMINI_API_KEY: "test-api-key",

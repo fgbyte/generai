@@ -13,6 +13,20 @@ export const auth = betterAuth({
     schema: schema,
   }),
   trustedOrigins: getTrustedOrigins(),
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID as string,
+      clientSecret: env.GOOGLE_CLIENT_SECRET as string,
+      prompt: "select_account",
+    },
+  },
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google"],
+      requireLocalEmailVerified: false,
+    },
+  },
   emailAndPassword: {
     enabled: true,
     password: {
