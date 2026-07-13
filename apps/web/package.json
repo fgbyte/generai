@@ -22,7 +22,7 @@
     "@generai/auth": "workspace:*",
     "@generai/env": "workspace:*",
     "@tailwindcss/vite": "^4.3.2",
-    "@tanstack/react-form": "^1.33.0",
+    "@tanstack/react-form": "^1.33.1",
     "@tanstack/react-query": "^5.101.2",
     "@tanstack/react-router": "^1.170.17",
     "@tanstack/react-store": "^0.11.0",
