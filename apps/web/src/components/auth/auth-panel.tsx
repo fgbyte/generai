@@ -38,7 +38,7 @@ export function AuthPanel({ mode, onBack }: AuthPanelProps) {
           try {
             await authClient.signIn.social({
               provider: "google",
-              callbackURL: "/app",
+              callbackURL: `${import.meta.env.VITE_APP_URL}/app`,
             });
           } catch {
             toast.error("Error al iniciar sesión con Google");
