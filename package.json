@@ -21,7 +21,7 @@
     "catalog": {
       "dotenv": "^17.4.2",
       "zod": "^4.4.3",
-      "hono": "^4.12.27",
+      "hono": "^4.12.31",
       "typescript": "^6.0.3",
       "@types/node": "^25.9.3",
       "@cloudflare/workers-types": "^4.20260621.1",
