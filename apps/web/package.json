@@ -27,7 +27,7 @@
     "@tanstack/react-router": "^1.170.17",
     "@tanstack/react-store": "^0.11.0",
     "@tanstack/store": "^0.11.0",
-    "@tauri-apps/plugin-store": "^2.4.3",
+    "@tauri-apps/plugin-store": "^2.4.4",
     "better-auth": "catalog:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
