@@ -90,17 +90,25 @@ export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET, //sacadas de alchemy
   baseURL: env.BETTER_AUTH_URL, //sacadas de alchemy
   advanced: {
+    crossSubDomainCookies: {
+      enabled: !!env.BETTER_AUTH_URL?.startsWith("https://"),
+      domain: (() => {
+        if (!env.BETTER_AUTH_URL) return undefined;
+        const hostname = new URL(env.BETTER_AUTH_URL).hostname;
+        const parts = hostname.split(".");
+        // workers.dev is a Public Suffix List domain — browsers reject cookies on it.
+        // We need the org subdomain: generai-server-staging.fgbyte.workers.dev → fgbyte.workers.dev
+        if (parts.slice(-2).join(".") === "workers.dev" && parts.length >= 3) {
+          return parts.slice(-3).join(".");
+        }
+        return parts.slice(-2).join(".");
+      })(),
+    },
     defaultCookieAttributes: {
-      sameSite: env.BETTER_AUTH_URL?.startsWith("https://") ? "none" : "lax",
+      sameSite: "lax",
       secure: env.BETTER_AUTH_URL?.startsWith("https://") ?? false,
       httpOnly: true,
       path: "/",
     },
-    // uncomment crossSubDomainCookies setting when ready to deploy and replace <your-workers-subdomain> with your actual workers subdomain
-    // https://developers.cloudflare.com/workers/wrangler/configuration/#workersdev
-    // crossSubDomainCookies: {
-    //   enabled: true,
-    //   domain: "<your-workers-subdomain>",
-    // },
   },
 });
