@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "postmark": "^4.0.7"
+    "postmark": "^5.1.0"
   },
   "devDependencies": {
     "@generai/config": "workspace:*",
