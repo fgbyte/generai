@@ -83,7 +83,12 @@ function withOAuthBearerRedirectFallback(request: Request, response: Response): 
   const location = response.headers.get("location");
   const authToken = response.headers.get("set-auth-token");
 
-  if (!url.pathname.startsWith("/api/auth/callback/") || response.status !== 302 || !location || !authToken) {
+  if (
+    !url.pathname.startsWith("/api/auth/callback/") ||
+    response.status !== 302 ||
+    !location ||
+    !authToken
+  ) {
     return response;
   }
 
