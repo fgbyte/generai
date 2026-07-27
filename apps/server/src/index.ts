@@ -10,6 +10,50 @@ import { userRoutes } from "./routes/user.routes";
 
 const app = new OpenAPIHono();
 
+function getCookieNames(cookieHeader: string | null): string[] {
+  if (!cookieHeader) return [];
+
+  return cookieHeader
+    .split(";")
+    .map((cookie) => cookie.trim().split("=")[0])
+    .filter((name): name is string => Boolean(name));
+}
+
+function getSetCookieHeaders(headers: Headers): string[] {
+  type HeadersWithGetSetCookie = Headers & {
+    getSetCookie: () => string[];
+  };
+
+  if ("getSetCookie" in headers && typeof headers.getSetCookie === "function") {
+    return (headers as HeadersWithGetSetCookie).getSetCookie();
+  }
+
+  const setCookie = headers.get("set-cookie");
+  return setCookie ? [setCookie] : [];
+}
+
+function getSetCookieNames(headers: Headers): string[] {
+  return getSetCookieHeaders(headers)
+    .map((cookie) => cookie.split("=")[0])
+    .filter((name): name is string => Boolean(name));
+}
+
+async function handleAuthRequest(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const response = await auth.handler(request);
+
+  console.info("[auth-debug]", {
+    path: url.pathname,
+    method: request.method,
+    status: response.status,
+    location: response.headers.get("location"),
+    requestCookieNames: getCookieNames(request.headers.get("cookie")),
+    responseSetCookieNames: getSetCookieNames(response.headers),
+  });
+
+  return response;
+}
+
 const router = app
   // RAW OpenAPI en /doc
   .doc("/doc", {
@@ -26,7 +70,7 @@ const router = app
   //routes
   // email verification redirect — must be before wildcard auth handler
   .get("/api/auth/verify-email", async (c) => {
-    const response = await auth.handler(c.req.raw);
+    const response = await handleAuthRequest(c.req.raw);
     // Better Auth behavior with callbackURL (which is always present on email links):
     //   - Success: 302 redirect to callbackURL (no `error=` param)
     //   - Failure: 302 redirect to callbackURL?error=CODE
@@ -39,7 +83,7 @@ const router = app
     }
     return c.redirect(`${env.CORS_ORIGIN}/email-verification-error`, 302);
   })
-  .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
+  .on(["POST", "GET"], "/api/auth/*", (c) => handleAuthRequest(c.req.raw))
   .get("/api/people", (c) =>
     c.json([
       { id: 1, name: "Alice" },

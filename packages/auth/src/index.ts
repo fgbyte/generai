@@ -105,7 +105,7 @@ export const auth = betterAuth({
       })(),
     },
     defaultCookieAttributes: {
-      sameSite: "lax",
+      sameSite: "none",
       secure: env.BETTER_AUTH_URL?.startsWith("https://") ?? false,
       httpOnly: true,
       path: "/",

@@ -9,30 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VerifyEmailRouteImport } from './routes/verify-email'
-import { Route as EmailVerifiedRouteImport } from './routes/email-verified'
-import { Route as EmailVerificationErrorRouteImport } from './routes/email-verification-error'
-import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteRouteImport } from './routes/app/route'
+import { Route as EmailVerificationErrorRouteImport } from './routes/email-verification-error'
+import { Route as EmailVerifiedRouteImport } from './routes/email-verified'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AppIndexRouteImport } from './routes/app/index'
-import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
-import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
-import { Route as AppCalendarIndexRouteImport } from './routes/app/calendar/index'
 import { Route as AppAutomateIndexRouteImport } from './routes/app/automate/index'
+import { Route as AppCalendarIndexRouteImport } from './routes/app/calendar/index'
+import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
+import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
 
-const VerifyEmailRoute = VerifyEmailRouteImport.update({
-  id: '/verify-email',
-  path: '/verify-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EmailVerifiedRoute = EmailVerifiedRouteImport.update({
-  id: '/email-verified',
-  path: '/email-verified',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EmailVerificationErrorRoute = EmailVerificationErrorRouteImport.update({
-  id: '/email-verification-error',
-  path: '/email-verification-error',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRouteRoute = AppRouteRouteImport.update({
@@ -40,9 +30,19 @@ const AppRouteRoute = AppRouteRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const EmailVerificationErrorRoute = EmailVerificationErrorRouteImport.update({
+  id: '/email-verification-error',
+  path: '/email-verification-error',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailVerifiedRoute = EmailVerifiedRouteImport.update({
+  id: '/email-verified',
+  path: '/email-verified',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -50,14 +50,9 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
-  id: '/settings/',
-  path: '/settings/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppHistoryIndexRoute = AppHistoryIndexRouteImport.update({
-  id: '/history/',
-  path: '/history/',
+const AppAutomateIndexRoute = AppAutomateIndexRouteImport.update({
+  id: '/automate/',
+  path: '/automate/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppCalendarIndexRoute = AppCalendarIndexRouteImport.update({
@@ -65,9 +60,14 @@ const AppCalendarIndexRoute = AppCalendarIndexRouteImport.update({
   path: '/calendar/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppAutomateIndexRoute = AppAutomateIndexRouteImport.update({
-  id: '/automate/',
-  path: '/automate/',
+const AppHistoryIndexRoute = AppHistoryIndexRouteImport.update({
+  id: '/history/',
+  path: '/history/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 
@@ -155,25 +155,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/verify-email': {
-      id: '/verify-email'
-      path: '/verify-email'
-      fullPath: '/verify-email'
-      preLoaderRoute: typeof VerifyEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/email-verified': {
-      id: '/email-verified'
-      path: '/email-verified'
-      fullPath: '/email-verified'
-      preLoaderRoute: typeof EmailVerifiedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/email-verification-error': {
-      id: '/email-verification-error'
-      path: '/email-verification-error'
-      fullPath: '/email-verification-error'
-      preLoaderRoute: typeof EmailVerificationErrorRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -183,11 +169,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/email-verification-error': {
+      id: '/email-verification-error'
+      path: '/email-verification-error'
+      fullPath: '/email-verification-error'
+      preLoaderRoute: typeof EmailVerificationErrorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email-verified': {
+      id: '/email-verified'
+      path: '/email-verified'
+      fullPath: '/email-verified'
+      preLoaderRoute: typeof EmailVerifiedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -197,18 +197,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/settings/': {
-      id: '/app/settings/'
-      path: '/settings'
-      fullPath: '/app/settings/'
-      preLoaderRoute: typeof AppSettingsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/history/': {
-      id: '/app/history/'
-      path: '/history'
-      fullPath: '/app/history/'
-      preLoaderRoute: typeof AppHistoryIndexRouteImport
+    '/app/automate/': {
+      id: '/app/automate/'
+      path: '/automate'
+      fullPath: '/app/automate/'
+      preLoaderRoute: typeof AppAutomateIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/calendar/': {
@@ -218,11 +211,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCalendarIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/automate/': {
-      id: '/app/automate/'
-      path: '/automate'
-      fullPath: '/app/automate/'
-      preLoaderRoute: typeof AppAutomateIndexRouteImport
+    '/app/history/': {
+      id: '/app/history/'
+      path: '/history'
+      fullPath: '/app/history/'
+      preLoaderRoute: typeof AppHistoryIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/settings/': {
+      id: '/app/settings/'
+      path: '/settings'
+      fullPath: '/app/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
   }
