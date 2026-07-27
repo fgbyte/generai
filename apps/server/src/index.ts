@@ -10,6 +10,114 @@ import { userRoutes } from "./routes/user.routes";
 
 const app = new OpenAPIHono();
 
+function getCookieNames(cookieHeader: string | null): string[] {
+  if (!cookieHeader) return [];
+
+  return cookieHeader
+    .split(";")
+    .map((cookie) => cookie.trim().split("=")[0])
+    .filter((name): name is string => Boolean(name));
+}
+
+function getSetCookieHeaders(headers: Headers): string[] {
+  type HeadersWithGetSetCookie = Headers & {
+    getSetCookie: () => string[];
+  };
+
+  if ("getSetCookie" in headers && typeof headers.getSetCookie === "function") {
+    return (headers as HeadersWithGetSetCookie).getSetCookie();
+  }
+
+  const setCookie = headers.get("set-cookie");
+  return setCookie ? [setCookie] : [];
+}
+
+function getSetCookieNames(headers: Headers): string[] {
+  return getSetCookieHeaders(headers)
+    .map((cookie) => cookie.split("=")[0])
+    .filter((name): name is string => Boolean(name));
+}
+
+function getSetCookieDiagnostics(headers: Headers) {
+  return getSetCookieHeaders(headers).map((cookie) => {
+    const [nameValue, ...attributes] = cookie.split(";").map((part) => part.trim());
+    const name = nameValue?.split("=")[0] ?? "";
+    const parsedAttributes = new Map<string, string | true>();
+
+    for (const attribute of attributes) {
+      const [rawKey, ...rawValue] = attribute.split("=");
+      const key = rawKey?.toLowerCase();
+      if (!key) continue;
+      parsedAttributes.set(key, rawValue.length > 0 ? rawValue.join("=") : true);
+    }
+
+    return {
+      name,
+      domain: parsedAttributes.get("domain") ?? null,
+      path: parsedAttributes.get("path") ?? null,
+      sameSite: parsedAttributes.get("samesite") ?? null,
+      secure: parsedAttributes.has("secure"),
+      httpOnly: parsedAttributes.has("httponly"),
+      maxAge: parsedAttributes.get("max-age") ?? null,
+      expires: parsedAttributes.get("expires") ?? null,
+    };
+  });
+}
+
+function getSafeLocation(location: string | null): string | null {
+  if (!location) return null;
+
+  try {
+    const url = new URL(location);
+    if (url.hash.includes("auth_token=")) {
+      url.hash = "auth_token=REDACTED";
+    }
+    return url.toString();
+  } catch {
+    return location.includes("auth_token=") ? "REDACTED_AUTH_TOKEN_LOCATION" : location;
+  }
+}
+
+function withOAuthBearerRedirectFallback(request: Request, response: Response): Response {
+  const url = new URL(request.url);
+  const location = response.headers.get("location");
+  const authToken = response.headers.get("set-auth-token");
+
+  if (!url.pathname.startsWith("/api/auth/callback/") || response.status !== 302 || !location || !authToken) {
+    return response;
+  }
+
+  const redirectUrl = new URL(location);
+  redirectUrl.hash = new URLSearchParams({ auth_token: authToken }).toString();
+
+  const headers = new Headers(response.headers);
+  headers.set("location", redirectUrl.toString());
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+async function handleAuthRequest(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const response = withOAuthBearerRedirectFallback(request, await auth.handler(request));
+
+  console.info("[auth-debug]", {
+    path: url.pathname,
+    method: request.method,
+    status: response.status,
+    location: getSafeLocation(response.headers.get("location")),
+    requestCookieNames: getCookieNames(request.headers.get("cookie")),
+    responseSetCookieNames: getSetCookieNames(response.headers),
+    responseHasAuthTokenHeader: response.headers.has("set-auth-token"),
+    responseSetCookieDiagnostics: getSetCookieDiagnostics(response.headers),
+  });
+
+  return response;
+}
+
 const router = app
   // RAW OpenAPI en /doc
   .doc("/doc", {
@@ -26,7 +134,7 @@ const router = app
   //routes
   // email verification redirect — must be before wildcard auth handler
   .get("/api/auth/verify-email", async (c) => {
-    const response = await auth.handler(c.req.raw);
+    const response = await handleAuthRequest(c.req.raw);
     // Better Auth behavior with callbackURL (which is always present on email links):
     //   - Success: 302 redirect to callbackURL (no `error=` param)
     //   - Failure: 302 redirect to callbackURL?error=CODE
@@ -39,7 +147,7 @@ const router = app
     }
     return c.redirect(`${env.CORS_ORIGIN}/email-verification-error`, 302);
   })
-  .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
+  .on(["POST", "GET"], "/api/auth/*", (c) => handleAuthRequest(c.req.raw))
   .get("/api/people", (c) =>
     c.json([
       { id: 1, name: "Alice" },
