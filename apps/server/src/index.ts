@@ -38,17 +38,81 @@ function getSetCookieNames(headers: Headers): string[] {
     .filter((name): name is string => Boolean(name));
 }
 
+function getSetCookieDiagnostics(headers: Headers) {
+  return getSetCookieHeaders(headers).map((cookie) => {
+    const [nameValue, ...attributes] = cookie.split(";").map((part) => part.trim());
+    const name = nameValue?.split("=")[0] ?? "";
+    const parsedAttributes = new Map<string, string | true>();
+
+    for (const attribute of attributes) {
+      const [rawKey, ...rawValue] = attribute.split("=");
+      const key = rawKey?.toLowerCase();
+      if (!key) continue;
+      parsedAttributes.set(key, rawValue.length > 0 ? rawValue.join("=") : true);
+    }
+
+    return {
+      name,
+      domain: parsedAttributes.get("domain") ?? null,
+      path: parsedAttributes.get("path") ?? null,
+      sameSite: parsedAttributes.get("samesite") ?? null,
+      secure: parsedAttributes.has("secure"),
+      httpOnly: parsedAttributes.has("httponly"),
+      maxAge: parsedAttributes.get("max-age") ?? null,
+      expires: parsedAttributes.get("expires") ?? null,
+    };
+  });
+}
+
+function getSafeLocation(location: string | null): string | null {
+  if (!location) return null;
+
+  try {
+    const url = new URL(location);
+    if (url.hash.includes("auth_token=")) {
+      url.hash = "auth_token=REDACTED";
+    }
+    return url.toString();
+  } catch {
+    return location.includes("auth_token=") ? "REDACTED_AUTH_TOKEN_LOCATION" : location;
+  }
+}
+
+function withOAuthBearerRedirectFallback(request: Request, response: Response): Response {
+  const url = new URL(request.url);
+  const location = response.headers.get("location");
+  const authToken = response.headers.get("set-auth-token");
+
+  if (!url.pathname.startsWith("/api/auth/callback/") || response.status !== 302 || !location || !authToken) {
+    return response;
+  }
+
+  const redirectUrl = new URL(location);
+  redirectUrl.hash = new URLSearchParams({ auth_token: authToken }).toString();
+
+  const headers = new Headers(response.headers);
+  headers.set("location", redirectUrl.toString());
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 async function handleAuthRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
-  const response = await auth.handler(request);
+  const response = withOAuthBearerRedirectFallback(request, await auth.handler(request));
 
   console.info("[auth-debug]", {
     path: url.pathname,
     method: request.method,
     status: response.status,
-    location: response.headers.get("location"),
+    location: getSafeLocation(response.headers.get("location")),
     requestCookieNames: getCookieNames(request.headers.get("cookie")),
     responseSetCookieNames: getSetCookieNames(response.headers),
+    responseHasAuthTokenHeader: response.headers.has("set-auth-token"),
+    responseSetCookieDiagnostics: getSetCookieDiagnostics(response.headers),
   });
 
   return response;
