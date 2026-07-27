@@ -72,9 +72,9 @@
     "@generai/config": "workspace:*",
     "@types/node": "catalog:",
     "open-cli": "^9.0.0",
-    "oxfmt": "^0.59.0",
-    "oxlint": "^1.74.0",
-    "turbo": "^2.10.5",
+    "oxfmt": "^0.60.0",
+    "oxlint": "^1.75.0",
+    "turbo": "^2.10.7",
     "typescript": "catalog:"
   },
   "overrides": {
