@@ -3,6 +3,13 @@ import { Vite } from "alchemy/cloudflare";
 import { Worker } from "alchemy/cloudflare";
 import { requireEnv, stage } from "./utils/stageEnv";
 
+// Bind optional provider vars only when configured, so deploys don't fail
+// for users who haven't set up Groq/Gemini fallbacks.
+function optionalEnv(name: string): Record<string, string> {
+  const value = process.env[name];
+  return value ? { [name]: value } : {};
+}
+
 const app = await alchemy("generai");
 console.log(`(detected: ${stage})`);
 
@@ -39,6 +46,14 @@ export const server = await Worker("server", {
     AI_VISION_MODEL: requireEnv("AI_VISION_MODEL"),
     TELEGRAM_BOT_TOKEN: requireEnv("TELEGRAM_BOT_TOKEN"),
     TELEGRAM_CHAT_ID: requireEnv("TELEGRAM_CHAT_ID"),
+    ...optionalEnv("GROQ_API_KEY"),
+    ...optionalEnv("GROQ_BASE_URL"),
+    ...optionalEnv("GROQ_TEXT_MODEL"),
+    ...optionalEnv("GROQ_VISION_MODEL"),
+    ...optionalEnv("GEMINI_API_KEY"),
+    ...optionalEnv("GEMINI_BASE_URL"),
+    ...optionalEnv("GEMINI_TEXT_MODEL"),
+    ...optionalEnv("GEMINI_VISION_MODEL"),
   },
   dev: {
     port: 3000,

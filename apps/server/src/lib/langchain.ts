@@ -1,59 +1,12 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-
-let textClient: ChatOpenAI | null = null;
-let visionClient: ChatOpenAI | null = null;
-
-function getEnvVar(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    console.error(`[langchain] missing required env var: ${name}`);
-    throw new Error(`${name} is not configured`);
-  }
-  return value;
-}
-
-function getNVIDIATextClient() {
-  const apiKey = getEnvVar("AI_PROVIDER_API_KEY");
-  const baseUrl = getEnvVar("AI_PROVIDER_BASE_URL");
-  const model = getEnvVar("AI_TEXT_MODEL");
-
-  if (!textClient) {
-    textClient = new ChatOpenAI({
-      model,
-      apiKey,
-      configuration: {
-        baseURL: baseUrl,
-      },
-      temperature: 0.7,
-      maxTokens: 2048,
-      streamUsage: false,
-    });
-  }
-  return textClient;
-}
-
-function getNVIDIAVisionClient() {
-  const apiKey = getEnvVar("AI_PROVIDER_API_KEY");
-  const baseUrl = getEnvVar("AI_PROVIDER_BASE_URL");
-  const model = getEnvVar("AI_VISION_MODEL");
-
-  if (!visionClient) {
-    visionClient = new ChatOpenAI({
-      model,
-      apiKey,
-      configuration: {
-        baseURL: baseUrl,
-      },
-      temperature: 0.7,
-      maxTokens: 2048,
-      streamUsage: false,
-    });
-  }
-  return visionClient;
-}
+import { getProviderConfigs } from "./providers";
+import { generateWithChain } from "./provider-chain";
 
 type ContentType = "thread" | "instagram" | "linkedin";
+
+function stripThinkingBlocks(text: string): string {
+  return text.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+}
 
 interface GenerateContentResult {
   content: string[];
@@ -94,13 +47,10 @@ export async function generateContent(
   prompt: string,
   imageBase64?: string,
 ): Promise<GenerateContentResult> {
-  const needsVision = contentType === "instagram" && imageBase64;
-  const model = needsVision ? getNVIDIAVisionClient() : getNVIDIATextClient();
+  const modelType = contentType === "instagram" && imageBase64 ? "vision" : "text";
 
   console.log(
-    `[langchain] building messages — contentType=${contentType} model=${
-      needsVision ? "vision" : "text"
-    } hasImage=${Boolean(imageBase64)} imageBytes=${imageBase64 ? imageBase64.length : 0}`,
+    `[langchain] building messages — contentType=${contentType} model=${modelType} hasImage=${Boolean(imageBase64)} imageBytes=${imageBase64 ? imageBase64.length : 0}`,
   );
 
   const systemPrompt = CONTENT_PROMPTS[contentType];
@@ -128,34 +78,30 @@ export async function generateContent(
     messages.push(new HumanMessage(`Topic: ${prompt}`));
   }
 
+  const providers = getProviderConfigs();
+
   console.log(
-    `[langchain] invoking model — ${messages.length} message(s), ` +
-      `systemPromptChars=${systemPrompt.length} promptChars=${prompt.length}`,
+    `[langchain] invoking provider chain — ${messages.length} message(s), ` +
+      `systemPromptChars=${systemPrompt.length} promptChars=${prompt.length} providers=${providers.length}`,
   );
-  const t0 = Date.now();
-  let response;
+
+  let text: string;
   try {
-    response = await model.invoke(messages);
+    text = await generateWithChain({ providers, messages, modelType });
   } catch (err) {
-    console.error(`[langchain] model.invoke threw after ${Date.now() - t0}ms:`, err);
+    console.error(`[langchain] generateWithChain threw:`, err);
     throw err;
   }
-  const elapsed = Date.now() - t0;
 
-  const text = response.content as string;
-  const usage = (response as { usage_metadata?: unknown }).usage_metadata;
   console.log(
-    `[langchain] model responded in ${elapsed}ms — rawTextChars=${
-      typeof text === "string" ? text.length : "<non-string>"
-    } usage=${JSON.stringify(usage ?? null)}`,
+    `[langchain] raw model output:\n---\n${text}\n---`,
   );
-  console.log(
-    `[langchain] raw model output:\n---\n${typeof text === "string" ? text : JSON.stringify(text)}\n---`,
-  );
+
+  text = stripThinkingBlocks(text);
 
   if (!text) {
     console.error("[langchain] response content was empty — model returned nothing");
-    throw new Error("No content generated from NVIDIA NIM API");
+    throw new Error("No content generated from AI provider");
   }
 
   let content: string[];

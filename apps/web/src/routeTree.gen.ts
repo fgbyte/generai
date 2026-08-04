@@ -8,232 +8,232 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as AppRouteRouteImport } from "./routes/app/route";
-import { Route as EmailVerificationErrorRouteImport } from "./routes/email-verification-error";
-import { Route as EmailVerifiedRouteImport } from "./routes/email-verified";
-import { Route as VerifyEmailRouteImport } from "./routes/verify-email";
-import { Route as AppIndexRouteImport } from "./routes/app/index";
-import { Route as AppAutomateIndexRouteImport } from "./routes/app/automate/index";
-import { Route as AppCalendarIndexRouteImport } from "./routes/app/calendar/index";
-import { Route as AppHistoryIndexRouteImport } from "./routes/app/history/index";
-import { Route as AppSettingsIndexRouteImport } from "./routes/app/settings/index";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteRouteImport } from './routes/app/route'
+import { Route as EmailVerificationErrorRouteImport } from './routes/email-verification-error'
+import { Route as EmailVerifiedRouteImport } from './routes/email-verified'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppAutomateIndexRouteImport } from './routes/app/automate/index'
+import { Route as AppCalendarIndexRouteImport } from './routes/app/calendar/index'
+import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
+import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
 
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AppRouteRoute = AppRouteRouteImport.update({
-  id: "/app",
-  path: "/app",
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const EmailVerificationErrorRoute = EmailVerificationErrorRouteImport.update({
-  id: "/email-verification-error",
-  path: "/email-verification-error",
+  id: '/email-verification-error',
+  path: '/email-verification-error',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const EmailVerifiedRoute = EmailVerifiedRouteImport.update({
-  id: "/email-verified",
-  path: "/email-verified",
+  id: '/email-verified',
+  path: '/email-verified',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
-  id: "/verify-email",
-  path: "/verify-email",
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppAutomateIndexRoute = AppAutomateIndexRouteImport.update({
-  id: "/automate/",
-  path: "/automate/",
+  id: '/automate/',
+  path: '/automate/',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppCalendarIndexRoute = AppCalendarIndexRouteImport.update({
-  id: "/calendar/",
-  path: "/calendar/",
+  id: '/calendar/',
+  path: '/calendar/',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppHistoryIndexRoute = AppHistoryIndexRouteImport.update({
-  id: "/history/",
-  path: "/history/",
+  id: '/history/',
+  path: '/history/',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
-  id: "/settings/",
-  path: "/settings/",
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/app": typeof AppRouteRouteWithChildren;
-  "/email-verification-error": typeof EmailVerificationErrorRoute;
-  "/email-verified": typeof EmailVerifiedRoute;
-  "/verify-email": typeof VerifyEmailRoute;
-  "/app/": typeof AppIndexRoute;
-  "/app/automate/": typeof AppAutomateIndexRoute;
-  "/app/calendar/": typeof AppCalendarIndexRoute;
-  "/app/history/": typeof AppHistoryIndexRoute;
-  "/app/settings/": typeof AppSettingsIndexRoute;
+  '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/email-verification-error': typeof EmailVerificationErrorRoute
+  '/email-verified': typeof EmailVerifiedRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/': typeof AppIndexRoute
+  '/app/automate/': typeof AppAutomateIndexRoute
+  '/app/calendar/': typeof AppCalendarIndexRoute
+  '/app/history/': typeof AppHistoryIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/email-verification-error": typeof EmailVerificationErrorRoute;
-  "/email-verified": typeof EmailVerifiedRoute;
-  "/verify-email": typeof VerifyEmailRoute;
-  "/app": typeof AppIndexRoute;
-  "/app/automate": typeof AppAutomateIndexRoute;
-  "/app/calendar": typeof AppCalendarIndexRoute;
-  "/app/history": typeof AppHistoryIndexRoute;
-  "/app/settings": typeof AppSettingsIndexRoute;
+  '/': typeof IndexRoute
+  '/email-verification-error': typeof EmailVerificationErrorRoute
+  '/email-verified': typeof EmailVerifiedRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app': typeof AppIndexRoute
+  '/app/automate': typeof AppAutomateIndexRoute
+  '/app/calendar': typeof AppCalendarIndexRoute
+  '/app/history': typeof AppHistoryIndexRoute
+  '/app/settings': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/app": typeof AppRouteRouteWithChildren;
-  "/email-verification-error": typeof EmailVerificationErrorRoute;
-  "/email-verified": typeof EmailVerifiedRoute;
-  "/verify-email": typeof VerifyEmailRoute;
-  "/app/": typeof AppIndexRoute;
-  "/app/automate/": typeof AppAutomateIndexRoute;
-  "/app/calendar/": typeof AppCalendarIndexRoute;
-  "/app/history/": typeof AppHistoryIndexRoute;
-  "/app/settings/": typeof AppSettingsIndexRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/email-verification-error': typeof EmailVerificationErrorRoute
+  '/email-verified': typeof EmailVerifiedRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/': typeof AppIndexRoute
+  '/app/automate/': typeof AppAutomateIndexRoute
+  '/app/calendar/': typeof AppCalendarIndexRoute
+  '/app/history/': typeof AppHistoryIndexRoute
+  '/app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/"
-    | "/app"
-    | "/email-verification-error"
-    | "/email-verified"
-    | "/verify-email"
-    | "/app/"
-    | "/app/automate/"
-    | "/app/calendar/"
-    | "/app/history/"
-    | "/app/settings/";
-  fileRoutesByTo: FileRoutesByTo;
+    | '/'
+    | '/app'
+    | '/email-verification-error'
+    | '/email-verified'
+    | '/verify-email'
+    | '/app/'
+    | '/app/automate/'
+    | '/app/calendar/'
+    | '/app/history/'
+    | '/app/settings/'
+  fileRoutesByTo: FileRoutesByTo
   to:
-    | "/"
-    | "/email-verification-error"
-    | "/email-verified"
-    | "/verify-email"
-    | "/app"
-    | "/app/automate"
-    | "/app/calendar"
-    | "/app/history"
-    | "/app/settings";
+    | '/'
+    | '/email-verification-error'
+    | '/email-verified'
+    | '/verify-email'
+    | '/app'
+    | '/app/automate'
+    | '/app/calendar'
+    | '/app/history'
+    | '/app/settings'
   id:
-    | "__root__"
-    | "/"
-    | "/app"
-    | "/email-verification-error"
-    | "/email-verified"
-    | "/verify-email"
-    | "/app/"
-    | "/app/automate/"
-    | "/app/calendar/"
-    | "/app/history/"
-    | "/app/settings/";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/email-verification-error'
+    | '/email-verified'
+    | '/verify-email'
+    | '/app/'
+    | '/app/automate/'
+    | '/app/calendar/'
+    | '/app/history/'
+    | '/app/settings/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AppRouteRoute: typeof AppRouteRouteWithChildren;
-  EmailVerificationErrorRoute: typeof EmailVerificationErrorRoute;
-  EmailVerifiedRoute: typeof EmailVerifiedRoute;
-  VerifyEmailRoute: typeof VerifyEmailRoute;
+  IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  EmailVerificationErrorRoute: typeof EmailVerificationErrorRoute
+  EmailVerifiedRoute: typeof EmailVerifiedRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/app": {
-      id: "/app";
-      path: "/app";
-      fullPath: "/app";
-      preLoaderRoute: typeof AppRouteRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/email-verification-error": {
-      id: "/email-verification-error";
-      path: "/email-verification-error";
-      fullPath: "/email-verification-error";
-      preLoaderRoute: typeof EmailVerificationErrorRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/email-verified": {
-      id: "/email-verified";
-      path: "/email-verified";
-      fullPath: "/email-verified";
-      preLoaderRoute: typeof EmailVerifiedRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/verify-email": {
-      id: "/verify-email";
-      path: "/verify-email";
-      fullPath: "/verify-email";
-      preLoaderRoute: typeof VerifyEmailRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/app/": {
-      id: "/app/";
-      path: "/";
-      fullPath: "/app/";
-      preLoaderRoute: typeof AppIndexRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/app/automate/": {
-      id: "/app/automate/";
-      path: "/automate";
-      fullPath: "/app/automate/";
-      preLoaderRoute: typeof AppAutomateIndexRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/app/calendar/": {
-      id: "/app/calendar/";
-      path: "/calendar";
-      fullPath: "/app/calendar/";
-      preLoaderRoute: typeof AppCalendarIndexRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/app/history/": {
-      id: "/app/history/";
-      path: "/history";
-      fullPath: "/app/history/";
-      preLoaderRoute: typeof AppHistoryIndexRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/app/settings/": {
-      id: "/app/settings/";
-      path: "/settings";
-      fullPath: "/app/settings/";
-      preLoaderRoute: typeof AppSettingsIndexRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email-verification-error': {
+      id: '/email-verification-error'
+      path: '/email-verification-error'
+      fullPath: '/email-verification-error'
+      preLoaderRoute: typeof EmailVerificationErrorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email-verified': {
+      id: '/email-verified'
+      path: '/email-verified'
+      fullPath: '/email-verified'
+      preLoaderRoute: typeof EmailVerifiedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/automate/': {
+      id: '/app/automate/'
+      path: '/automate'
+      fullPath: '/app/automate/'
+      preLoaderRoute: typeof AppAutomateIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/calendar/': {
+      id: '/app/calendar/'
+      path: '/calendar'
+      fullPath: '/app/calendar/'
+      preLoaderRoute: typeof AppCalendarIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/history/': {
+      id: '/app/history/'
+      path: '/history'
+      fullPath: '/app/history/'
+      preLoaderRoute: typeof AppHistoryIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/settings/': {
+      id: '/app/settings/'
+      path: '/settings'
+      fullPath: '/app/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
 interface AppRouteRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute;
-  AppAutomateIndexRoute: typeof AppAutomateIndexRoute;
-  AppCalendarIndexRoute: typeof AppCalendarIndexRoute;
-  AppHistoryIndexRoute: typeof AppHistoryIndexRoute;
-  AppSettingsIndexRoute: typeof AppSettingsIndexRoute;
+  AppIndexRoute: typeof AppIndexRoute
+  AppAutomateIndexRoute: typeof AppAutomateIndexRoute
+  AppCalendarIndexRoute: typeof AppCalendarIndexRoute
+  AppHistoryIndexRoute: typeof AppHistoryIndexRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -242,9 +242,11 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppCalendarIndexRoute: AppCalendarIndexRoute,
   AppHistoryIndexRoute: AppHistoryIndexRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
-};
+}
 
-const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(AppRouteRouteChildren);
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -252,7 +254,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailVerificationErrorRoute: EmailVerificationErrorRoute,
   EmailVerifiedRoute: EmailVerifiedRoute,
   VerifyEmailRoute: VerifyEmailRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
