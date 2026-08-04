@@ -185,6 +185,22 @@ describe("generate routes", () => {
       expect(json.error).toBe("Invalid request body");
     });
 
+    it("returns 400 'Image too large' when imageBase64 exceeds 5MB", async () => {
+      const largeImage = "A".repeat(5 * 1024 * 1024 + 1);
+
+      const res = await makeRequest("POST", "/api/generate", {
+        contentType: "instagram",
+        prompt: "write a caption",
+        imageBase64: largeImage,
+      });
+
+      expect(res.status).toBe(400);
+      const json = await res.json();
+      expect(json.error).toBe("Image too large");
+      expect(mockGenerateContent).not.toHaveBeenCalled();
+      expect(mockGetUserPoints).not.toHaveBeenCalled();
+    });
+
     it("returns 400 for malformed json body", async () => {
       const res = await generateRoutes.request("/api/generate", {
         method: "POST",

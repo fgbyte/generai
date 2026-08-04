@@ -10,10 +10,12 @@ import {
   getGeneratedContentById,
 } from "@generai/db/queries/generated-content";
 
+const MAX_IMAGE_BASE64_SIZE = 5 * 1024 * 1024; // 5MB
+
 const generateBodySchema = z.object({
   contentType: z.enum(["thread", "instagram", "linkedin"]),
   prompt: z.string().min(1).max(1000),
-  imageBase64: z.string().optional(),
+  imageBase64: z.string().max(MAX_IMAGE_BASE64_SIZE, "Image too large").optional(),
 });
 
 export const generateRoutes = new Hono<HonoEnv>()
@@ -32,6 +34,13 @@ export const generateRoutes = new Hono<HonoEnv>()
     const parsed = generateBodySchema.safeParse(body);
 
     if (!parsed.success) {
+      const imageTooLarge = parsed.error.issues.find(
+        (issue) => issue.path[0] === "imageBase64" && issue.code === "too_big",
+      );
+      if (imageTooLarge) {
+        console.error("[generate] /api/generate — image too large");
+        return c.json({ error: "Image too large" }, 400);
+      }
       console.error(
         "[generate] /api/generate — schema validation failed",
         JSON.stringify(parsed.error.flatten()),
@@ -58,14 +67,14 @@ export const generateRoutes = new Hono<HonoEnv>()
 
     try {
       console.log(
-        `[generate] calling NVIDIA NIM — contentType=${contentType} hasImage=${Boolean(imageBase64)}`,
+        `[generate] calling AI provider chain — contentType=${contentType} hasImage=${Boolean(imageBase64)}`,
       );
       const t0 = Date.now();
       const result = await generateContent(contentType, prompt, imageBase64);
       const elapsedMs = Date.now() - t0;
 
       console.log(
-        `[generate] NVIDIA NIM responded in ${elapsedMs}ms — ${result.content.length} caption(s)`,
+        `[generate] AI provider chain responded in ${elapsedMs}ms — ${result.content.length} caption(s)`,
       );
       console.log(
         `[generate] raw captions:\n${result.content.map((c, i) => `  #${i + 1}: ${c}`).join("\n")}`,
