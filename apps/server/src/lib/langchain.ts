@@ -4,8 +4,34 @@ import { generateWithChain } from "./provider-chain";
 
 type ContentType = "thread" | "instagram" | "linkedin";
 
-function stripThinkingBlocks(text: string): string {
-  return text.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+/**
+ * Remove `<think>…</think>` blocks from model output (Groq's Qwen emits these).
+ *
+ * Handles:
+ *  - case-insensitive tags (`<THINK>`, `<Think>`, …)
+ *  - attributes on the opening tag (e.g. `<think mode="internal">`)
+ *  - multiple blocks and nested blocks (stripped innermost-first via a loop)
+ *  - newlines / whitespace inside tags and between tags and content
+ *  - loose spacing such as `</ think>`
+ *
+ * Malformed or unclosed blocks are left untouched — only complete
+ * `<think>…</think>` pairs are removed.
+ */
+export function stripThinkingBlocks(text: string): string {
+  // Match an innermost <think …>…</think> block. The negative lookahead
+  // rejects candidates whose content still contains a nested <think>,
+  // so nesting is unwound from the inside out; the loop repeats until no
+  // complete block remains.
+  const innermostThinkBlock =
+    /<\s*think[^>]*>(?![\s\S]*?<\s*think)[\s\S]*?<\s*\/\s*think[^>]*>/gi;
+
+  let result = text;
+  let stripped = result.replace(innermostThinkBlock, "");
+  while (stripped !== result) {
+    result = stripped;
+    stripped = result.replace(innermostThinkBlock, "");
+  }
+  return stripped.trim();
 }
 
 interface GenerateContentResult {
