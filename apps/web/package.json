@@ -20,6 +20,7 @@
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "@generai/auth": "workspace:*",
+    "@generai/config": "workspace:*",
     "@generai/env": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-form": "^1.33.3",
@@ -42,7 +43,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@generai/config": "workspace:*",
     "@tailwindcss/postcss": "^4.3.3",
     "@tanstack/react-query-devtools": "^5.101.4",
     "@tanstack/react-router-devtools": "^1.167.0",

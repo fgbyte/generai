@@ -39,6 +39,19 @@ const initials = (name: string) =>
     .slice(0, 2)
     .toUpperCase();
 
+const formatNextDrop = (nextResetAt?: string): string => {
+  if (!nextResetAt) return "—";
+  const daysUntil = Math.max(
+    0,
+    Math.ceil((new Date(nextResetAt).getTime() - Date.now()) / 86400000),
+  );
+  const formatted = new Intl.RelativeTimeFormat("en", { numeric: "auto" }).format(
+    daysUntil,
+    "day",
+  );
+  return `Next drop ${formatted}`;
+};
+
 export const Route = createFileRoute("/app/settings/")({
   component: RouteComponent,
 });
@@ -119,6 +132,7 @@ function RouteComponent() {
   const userName = session?.user.name ?? "";
   const userEmail = session?.user.email ?? "";
   const userPoints = pointsData?.points ?? 0;
+  const nextDropLabel = formatNextDrop(pointsData?.nextResetAt);
   const subscription = subData?.subscription ?? null;
   const preferences = prefsData?.preferences ?? null;
   const currentAiTone = preferences?.aiTone ?? "Creative";
@@ -235,7 +249,7 @@ function RouteComponent() {
                   Generai Points
                 </div>
                 <div className="mt-1 text-[0.875rem] leading-tight font-body-md italic text-white/46">
-                  Next drop in 4 days
+                  {nextDropLabel}
                 </div>
               </div>
             </div>

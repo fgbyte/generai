@@ -14,6 +14,13 @@ export const user = pgTable("user", {
     .notNull(),
   // === MIGRATED FROM old/ Users table ===
   points: integer("points").default(50).notNull(),
+  /**
+   * Last-applied reset boundary; initialized to signup time; on reset application
+   * advance to computeNextResetAt(previousBoundary, interval) — NEVER now().
+   */
+  pointsResetAt: timestamp("points_reset_at", { withTimezone: true, mode: "date" })
+    .notNull()
+    .defaultNow(),
   stripeCustomerId: text("stripe_customer_id").unique(),
 });
 

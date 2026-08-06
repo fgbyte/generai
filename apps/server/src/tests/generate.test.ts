@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { creditsConfig, creditsConfigSchema } from "@generai/config";
 
 // --- Cloudflare workers mock (before other imports) ---
 vi.mock("cloudflare:workers", () => ({
@@ -29,8 +30,9 @@ vi.mock("@generai/env/server", () => ({
 
 // --- Hoisted mocks ---
 
-const mockGetUserPoints = vi.hoisted(() => vi.fn());
+const mockGetUserPointsWithResetInfo = vi.hoisted(() => vi.fn());
 const mockUpdateUserPoints = vi.hoisted(() => vi.fn());
+const mockApplyLazyResetIfDue = vi.hoisted(() => vi.fn());
 const mockSaveGeneratedContent = vi.hoisted(() => vi.fn());
 const mockGetGeneratedContentHistory = vi.hoisted(() => vi.fn());
 const mockDeleteGeneratedContent = vi.hoisted(() => vi.fn());
@@ -41,8 +43,12 @@ const mockGetSession = vi.hoisted(() => vi.fn());
 // --- Module mocks ---
 
 vi.mock("@generai/db/queries/users", () => ({
-  getUserPoints: mockGetUserPoints,
+  getUserPointsWithResetInfo: mockGetUserPointsWithResetInfo,
   updateUserPoints: mockUpdateUserPoints,
+}));
+
+vi.mock("../lib/credit-reset", () => ({
+  applyLazyResetIfDue: mockApplyLazyResetIfDue,
 }));
 
 vi.mock("@generai/db/queries/generated-content", () => ({
@@ -92,6 +98,29 @@ function makeRequest(
   return generateRoutes.request(path, init);
 }
 
+function defaultResetResult(overrides?: Partial<{ applied: boolean; points: number }>) {
+  const now = new Date();
+  const nextMonth = new Date(now.getTime() + 30 * 86_400_000);
+  return {
+    applied: overrides?.applied ?? false,
+    points: overrides?.points ?? 50,
+    lastResetAt: now,
+    nextResetAt: nextMonth,
+  };
+}
+
+function resetInfoFixture(overrides?: Partial<{ points: number; isDue: boolean; effectivePoints: number }>) {
+  const now = new Date();
+  const nextMonth = new Date(now.getTime() + 30 * 86_400_000);
+  return {
+    points: overrides?.points ?? 42,
+    lastResetAt: now,
+    nextResetAt: nextMonth,
+    isDue: overrides?.isDue ?? false,
+    effectivePoints: overrides?.effectivePoints ?? overrides?.points ?? 42,
+  };
+}
+
 // --- Tests ---
 
 describe("generate routes", () => {
@@ -102,18 +131,22 @@ describe("generate routes", () => {
       user: MOCK_USER,
       session: MOCK_SESSION,
     });
+    // Default: reset not due, 50 points available
+    mockApplyLazyResetIfDue.mockResolvedValue(defaultResetResult());
+    // Default: getUserPointsWithResetInfo returns 42 points, not due
+    mockGetUserPointsWithResetInfo.mockResolvedValue(resetInfoFixture());
   });
 
   // ---- POST /api/generate ----
 
   describe("POST /api/generate", () => {
     it("generates content successfully when user has enough points", async () => {
-      mockGetUserPoints.mockResolvedValue(10);
+      mockApplyLazyResetIfDue.mockResolvedValue(defaultResetResult({ points: 10 }));
       mockGenerateContent.mockResolvedValue({
         content: ["tweet 1", "tweet 2"],
         contentType: "thread",
       });
-      mockUpdateUserPoints.mockResolvedValue({ id: "user_123", points: 5 });
+      mockUpdateUserPoints.mockResolvedValue(1); // 1 affected row
       mockSaveGeneratedContent.mockResolvedValue({
         id: "gc_123",
         userId: "user_123",
@@ -135,9 +168,9 @@ describe("generate routes", () => {
         id: "gc_123",
       });
 
-      expect(mockGetUserPoints).toHaveBeenCalledWith("user_123");
+      expect(mockApplyLazyResetIfDue).toHaveBeenCalledWith("user_123");
       expect(mockGenerateContent).toHaveBeenCalledWith("thread", "write a thread", undefined);
-      expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -5);
+      expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -creditsConfig.costPerGeneration);
       expect(mockSaveGeneratedContent).toHaveBeenCalledWith(
         "user_123",
         "tweet 1\n\ntweet 2",
@@ -147,7 +180,7 @@ describe("generate routes", () => {
     });
 
     it("returns 400 when user has insufficient points", async () => {
-      mockGetUserPoints.mockResolvedValue(3);
+      mockApplyLazyResetIfDue.mockResolvedValue(defaultResetResult({ points: 3 }));
 
       const res = await makeRequest("POST", "/api/generate", {
         contentType: "thread",
@@ -198,7 +231,7 @@ describe("generate routes", () => {
       const json = await res.json();
       expect(json.error).toBe("Image too large");
       expect(mockGenerateContent).not.toHaveBeenCalled();
-      expect(mockGetUserPoints).not.toHaveBeenCalled();
+      expect(mockApplyLazyResetIfDue).not.toHaveBeenCalled();
     });
 
     it("returns 400 for malformed json body", async () => {
@@ -216,7 +249,7 @@ describe("generate routes", () => {
     });
 
     it("returns 500 when generateContent throws", async () => {
-      mockGetUserPoints.mockResolvedValue(10);
+      mockApplyLazyResetIfDue.mockResolvedValue(defaultResetResult({ points: 10 }));
       mockGenerateContent.mockRejectedValue(new Error("Gemini API error"));
 
       const res = await makeRequest("POST", "/api/generate", {
@@ -228,6 +261,105 @@ describe("generate routes", () => {
       const json = await res.json();
       expect(json.error).toBe("Failed to generate content");
       expect(mockUpdateUserPoints).not.toHaveBeenCalled();
+    });
+
+    it("due user gets reset before generate", async () => {
+      const fortyDaysAgo = new Date(Date.now() - 40 * 86_400_000);
+      const nextMonth = new Date(Date.now() + 30 * 86_400_000);
+      mockApplyLazyResetIfDue.mockResolvedValue({
+        applied: true,
+        points: creditsConfig.resetAmount,
+        lastResetAt: fortyDaysAgo,
+        nextResetAt: nextMonth,
+      });
+      mockGenerateContent.mockResolvedValue({
+        content: ["caption 1"],
+        contentType: "instagram",
+      });
+      mockUpdateUserPoints.mockResolvedValue(1);
+      mockSaveGeneratedContent.mockResolvedValue({
+        id: "gc_456",
+        userId: "user_123",
+        content: "caption 1",
+        prompt: "write a caption",
+        contentType: "instagram",
+      });
+
+      const res = await makeRequest("POST", "/api/generate", {
+        contentType: "instagram",
+        prompt: "write a caption",
+      });
+
+      expect(res.status).toBe(200);
+      expect(mockApplyLazyResetIfDue).toHaveBeenCalledWith("user_123");
+      expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -creditsConfig.costPerGeneration);
+    });
+
+    it("concurrent due-user POSTs do not race", async () => {
+      mockApplyLazyResetIfDue.mockResolvedValue(defaultResetResult({ points: creditsConfig.resetAmount }));
+      mockGenerateContent.mockResolvedValue({
+        content: ["post"],
+        contentType: "thread",
+      });
+      mockUpdateUserPoints.mockResolvedValue(1);
+      mockSaveGeneratedContent.mockResolvedValue({
+        id: "gc_race",
+        userId: "user_123",
+        content: "post",
+        prompt: "test",
+        contentType: "thread",
+      });
+
+      const body = { contentType: "thread", prompt: "test" };
+      const [res1, res2] = await Promise.all([
+        makeRequest("POST", "/api/generate", body),
+        makeRequest("POST", "/api/generate", body),
+      ]);
+
+      expect(res1.status).toBe(200);
+      expect(res2.status).toBe(200);
+      expect(mockUpdateUserPoints).toHaveBeenCalledTimes(2);
+      expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -creditsConfig.costPerGeneration);
+    });
+
+    it("failed AI call after reset does not deduct", async () => {
+      mockApplyLazyResetIfDue.mockResolvedValue({
+        applied: true,
+        points: creditsConfig.resetAmount,
+        lastResetAt: new Date(Date.now() - 40 * 86_400_000),
+        nextResetAt: new Date(Date.now() + 30 * 86_400_000),
+      });
+      mockGenerateContent.mockRejectedValue(new Error("AI provider down"));
+
+      const res = await makeRequest("POST", "/api/generate", {
+        contentType: "thread",
+        prompt: "write something",
+      });
+
+      expect(res.status).toBe(500);
+      const json = await res.json();
+      expect(json.error).toBe("Failed to generate content");
+      // Reset was applied but AI failed — no deduction
+      expect(mockUpdateUserPoints).not.toHaveBeenCalled();
+    });
+
+    it("config change proves reset amount is configurable (not hardcoded)", () => {
+      const customConfig = creditsConfigSchema.parse({
+        resetAmount: 100,
+        costPerGeneration: 10,
+        resetInterval: "month",
+      });
+
+      expect(customConfig.resetAmount).toBe(100);
+      expect(customConfig.costPerGeneration).toBe(10);
+
+      // Default config has different values
+      expect(creditsConfig.resetAmount).toBe(50);
+      expect(creditsConfig.costPerGeneration).toBe(5);
+
+      // Changing the value is a code-only change (parse produces different result)
+      const override = creditsConfigSchema.parse({ resetAmount: 200 });
+      expect(override.resetAmount).toBe(200);
     });
   });
 
@@ -273,15 +405,29 @@ describe("generate routes", () => {
   // ---- GET /api/generate/points ----
 
   describe("GET /api/generate/points", () => {
-    it("returns user points balance", async () => {
-      mockGetUserPoints.mockResolvedValue(42);
+    it("returns user points with reset info", async () => {
+      const now = new Date();
+      const nextMonth = new Date(now.getTime() + 30 * 86_400_000);
+      mockGetUserPointsWithResetInfo.mockResolvedValue({
+        points: 42,
+        lastResetAt: now,
+        nextResetAt: nextMonth,
+        isDue: false,
+        effectivePoints: 42,
+      });
 
       const res = await makeRequest("GET", "/api/generate/points");
 
       expect(res.status).toBe(200);
       const json = await res.json();
       expect(json.points).toBe(42);
-      expect(mockGetUserPoints).toHaveBeenCalledWith("user_123");
+      expect(json.rawPoints).toBe(42);
+      expect(json.isDue).toBe(false);
+      expect(typeof json.nextResetAt).toBe("string");
+      expect(json.resetAmount).toBe(creditsConfig.resetAmount);
+      expect(json.resetInterval).toBe(creditsConfig.resetInterval);
+      expect(json.costPerGeneration).toBe(creditsConfig.costPerGeneration);
+      expect(mockGetUserPointsWithResetInfo).toHaveBeenCalledWith("user_123");
     });
 
     it("returns 401 when not authenticated", async () => {

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@generai/auth": "workspace:*",
+    "@generai/config": "workspace:*",
     "@generai/db": "workspace:*",
     "@generai/env": "workspace:*",
     "@generai/mail": "workspace:*",
@@ -24,7 +25,6 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "catalog:",
-    "@generai/config": "workspace:*",
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",

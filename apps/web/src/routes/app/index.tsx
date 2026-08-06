@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { env } from "@generai/env/web";
+import { creditsConfig } from "@generai/config";
 import { hc } from "hono/client";
 import { useQuery } from "@tanstack/react-query";
 import type { AppType } from "@server/index";
@@ -147,7 +148,7 @@ function RouteComponent() {
                 Generating…
               </>
             ) : (
-              "Generate Content (5 points)"
+              `Generate Content (${creditsConfig.costPerGeneration} points)`
             )}
           </button>
         </section>
