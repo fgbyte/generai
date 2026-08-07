@@ -1,11 +1,5 @@
-import {
-  creditsConfig,
-  computeNextResetAt,
-} from "@generai/config";
-import {
-  getUserPointsWithResetInfo,
-  setUserPointsAbsolute,
-} from "@generai/db/queries/users";
+import { creditsConfig, computeNextResetAt } from "@generai/config";
+import { getUserPointsWithResetInfo, setUserPointsAbsolute } from "@generai/db/queries/users";
 
 export type LazyResetResult = {
   applied: boolean;

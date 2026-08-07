@@ -30,9 +30,7 @@ export const getUserByStripeCustomerId = async (stripeCustomerId: string) => {
  */
 export const updateUserPoints = async (userId: string, delta: number) => {
   const where =
-    delta < 0
-      ? and(eq(user.id, userId), gte(user.points, sql`${-delta}`))
-      : eq(user.id, userId);
+    delta < 0 ? and(eq(user.id, userId), gte(user.points, sql`${-delta}`)) : eq(user.id, userId);
 
   const result = await db
     .update(user)
@@ -114,9 +112,7 @@ export const getUserPointsWithResetInfo = async (userId: string) => {
   const { resetInterval, resetAmount } = creditsConfig;
   const lastResetAt = row.pointsResetAt;
   const isDueFlag = isResetDue(lastResetAt, resetInterval);
-  const nextResetAt = isDueFlag
-    ? new Date()
-    : computeNextResetAt(lastResetAt, resetInterval);
+  const nextResetAt = isDueFlag ? new Date() : computeNextResetAt(lastResetAt, resetInterval);
   const effectivePoints = computeEffectivePoints(
     row.points,
     lastResetAt,

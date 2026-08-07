@@ -109,7 +109,9 @@ function defaultResetResult(overrides?: Partial<{ applied: boolean; points: numb
   };
 }
 
-function resetInfoFixture(overrides?: Partial<{ points: number; isDue: boolean; effectivePoints: number }>) {
+function resetInfoFixture(
+  overrides?: Partial<{ points: number; isDue: boolean; effectivePoints: number }>,
+) {
   const now = new Date();
   const nextMonth = new Date(now.getTime() + 30 * 86_400_000);
   return {
@@ -170,7 +172,10 @@ describe("generate routes", () => {
 
       expect(mockApplyLazyResetIfDue).toHaveBeenCalledWith("user_123");
       expect(mockGenerateContent).toHaveBeenCalledWith("thread", "write a thread", undefined);
-      expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -creditsConfig.costPerGeneration);
+      expect(mockUpdateUserPoints).toHaveBeenCalledWith(
+        "user_123",
+        -creditsConfig.costPerGeneration,
+      );
       expect(mockSaveGeneratedContent).toHaveBeenCalledWith(
         "user_123",
         "tweet 1\n\ntweet 2",
@@ -292,11 +297,16 @@ describe("generate routes", () => {
 
       expect(res.status).toBe(200);
       expect(mockApplyLazyResetIfDue).toHaveBeenCalledWith("user_123");
-      expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -creditsConfig.costPerGeneration);
+      expect(mockUpdateUserPoints).toHaveBeenCalledWith(
+        "user_123",
+        -creditsConfig.costPerGeneration,
+      );
     });
 
     it("concurrent due-user POSTs do not race", async () => {
-      mockApplyLazyResetIfDue.mockResolvedValue(defaultResetResult({ points: creditsConfig.resetAmount }));
+      mockApplyLazyResetIfDue.mockResolvedValue(
+        defaultResetResult({ points: creditsConfig.resetAmount }),
+      );
       mockGenerateContent.mockResolvedValue({
         content: ["post"],
         contentType: "thread",
@@ -319,7 +329,10 @@ describe("generate routes", () => {
       expect(res1.status).toBe(200);
       expect(res2.status).toBe(200);
       expect(mockUpdateUserPoints).toHaveBeenCalledTimes(2);
-      expect(mockUpdateUserPoints).toHaveBeenCalledWith("user_123", -creditsConfig.costPerGeneration);
+      expect(mockUpdateUserPoints).toHaveBeenCalledWith(
+        "user_123",
+        -creditsConfig.costPerGeneration,
+      );
     });
 
     it("failed AI call after reset does not deduct", async () => {

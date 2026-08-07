@@ -12,9 +12,7 @@ export const creditsConfigSchema = z
 
 export type CreditsConfig = z.infer<typeof creditsConfigSchema>;
 
-export const creditsConfig: CreditsConfig = Object.freeze(
-  creditsConfigSchema.parse({}),
-);
+export const creditsConfig: CreditsConfig = Object.freeze(creditsConfigSchema.parse({}));
 
 export type ResetInterval = "day" | "week" | "month";
 
@@ -22,10 +20,7 @@ export type ResetInterval = "day" | "week" | "month";
  * `pointsResetAt` stores the LAST-APPLIED boundary, never `now()`; on apply set
  * it to `computeNextResetAt(oldBoundary, interval)` to prevent anchor drift.
  */
-export function computeNextResetAt(
-  lastResetAt: Date,
-  interval: ResetInterval,
-): Date {
+export function computeNextResetAt(lastResetAt: Date, interval: ResetInterval): Date {
   const d = new Date(lastResetAt); // clone — never mutate the input
 
   if (interval === "month") {

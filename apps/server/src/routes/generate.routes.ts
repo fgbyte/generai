@@ -2,10 +2,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { authMiddleware, type HonoEnv } from "../middlewares/auth-middleware";
 import { generateContent } from "../lib/langchain";
-import {
-  updateUserPoints,
-  getUserPointsWithResetInfo,
-} from "@generai/db/queries/users";
+import { updateUserPoints, getUserPointsWithResetInfo } from "@generai/db/queries/users";
 import { creditsConfig } from "@generai/config";
 import { applyLazyResetIfDue } from "../lib/credit-reset";
 import {

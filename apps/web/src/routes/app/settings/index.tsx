@@ -45,10 +45,7 @@ const formatNextDrop = (nextResetAt?: string): string => {
     0,
     Math.ceil((new Date(nextResetAt).getTime() - Date.now()) / 86400000),
   );
-  const formatted = new Intl.RelativeTimeFormat("en", { numeric: "auto" }).format(
-    daysUntil,
-    "day",
-  );
+  const formatted = new Intl.RelativeTimeFormat("en", { numeric: "auto" }).format(daysUntil, "day");
   return `Next drop ${formatted}`;
 };
 
