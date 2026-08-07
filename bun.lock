@@ -24,6 +24,7 @@
       "name": "server",
       "dependencies": {
         "@generai/auth": "workspace:*",
+        "@generai/config": "workspace:*",
         "@generai/db": "workspace:*",
         "@generai/env": "workspace:*",
         "@generai/mail": "workspace:*",
@@ -38,7 +39,6 @@
       },
       "devDependencies": {
         "@cloudflare/workers-types": "catalog:",
-        "@generai/config": "workspace:*",
         "@types/node": "catalog:",
         "@vitest/coverage-v8": "catalog:",
         "@vitest/ui": "catalog:",
@@ -53,6 +53,7 @@
       "dependencies": {
         "@base-ui/react": "^1.6.0",
         "@generai/auth": "workspace:*",
+        "@generai/config": "workspace:*",
         "@generai/env": "workspace:*",
         "@tailwindcss/vite": "^4.3.3",
         "@tanstack/react-form": "^1.33.3",
@@ -75,7 +76,6 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@generai/config": "workspace:*",
         "@tailwindcss/postcss": "^4.3.3",
         "@tanstack/react-query-devtools": "^5.101.4",
         "@tanstack/react-router-devtools": "^1.167.0",
@@ -122,6 +122,9 @@
     "packages/config": {
       "name": "@generai/config",
       "version": "0.0.0",
+      "dependencies": {
+        "zod": "catalog:",
+      },
     },
     "packages/db": {
       "name": "@generai/db",

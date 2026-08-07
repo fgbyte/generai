@@ -2,7 +2,9 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { authMiddleware, type HonoEnv } from "../middlewares/auth-middleware";
 import { generateContent } from "../lib/langchain";
-import { getUserPoints, updateUserPoints } from "@generai/db/queries/users";
+import { updateUserPoints, getUserPointsWithResetInfo } from "@generai/db/queries/users";
+import { creditsConfig } from "@generai/config";
+import { applyLazyResetIfDue } from "../lib/credit-reset";
 import {
   saveGeneratedContent,
   getGeneratedContentHistory,
@@ -57,10 +59,11 @@ export const generateRoutes = new Hono<HonoEnv>()
         `imageBase64=${imageKB ? `${imageKB}KB` : "none"}`,
     );
 
-    const points = await getUserPoints(user.id);
-    if (points < 5) {
+    const reset = await applyLazyResetIfDue(user.id);
+
+    if (reset.points < creditsConfig.costPerGeneration) {
       console.error(
-        `[generate] rejected — insufficient points for userId=${user.id} (have ${points})`,
+        `[generate] rejected — insufficient points for userId=${user.id} (have ${reset.points})`,
       );
       return c.json({ error: "Insufficient points" }, 400);
     }
@@ -80,7 +83,13 @@ export const generateRoutes = new Hono<HonoEnv>()
         `[generate] raw captions:\n${result.content.map((c, i) => `  #${i + 1}: ${c}`).join("\n")}`,
       );
 
-      await updateUserPoints(user.id, -5);
+      const affected = await updateUserPoints(user.id, -creditsConfig.costPerGeneration);
+      if (affected === 0) {
+        console.error(
+          `[generate] rejected — concurrent consumption won the race for userId=${user.id}`,
+        );
+        return c.json({ error: "Insufficient points" }, 400);
+      }
 
       const saved = await saveGeneratedContent(
         user.id,
@@ -119,9 +128,20 @@ export const generateRoutes = new Hono<HonoEnv>()
   .get("/api/generate/points", async (c) => {
     const user = c.get("user");
 
-    const points = await getUserPoints(user.id);
+    const info = await getUserPointsWithResetInfo(user.id);
 
-    return c.json({ points }, 200);
+    return c.json(
+      {
+        points: info.effectivePoints,
+        rawPoints: info.points,
+        nextResetAt: info.nextResetAt.toISOString(),
+        isDue: info.isDue,
+        resetAmount: creditsConfig.resetAmount,
+        resetInterval: creditsConfig.resetInterval,
+        costPerGeneration: creditsConfig.costPerGeneration,
+      },
+      200,
+    );
   })
 
   .delete("/api/generate/history", async (c) => {
