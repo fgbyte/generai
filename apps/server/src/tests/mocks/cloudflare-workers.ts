@@ -18,4 +18,6 @@ export const env = {
   TELEGRAM_BOT_TOKEN: "test-bot-token",
   TELEGRAM_CHAT_ID: "test-chat-id",
   VITE_SERVER_URL: "http://localhost:3000",
+  ANALYTICS_ENABLED: true,
+  VITE_CF_WEB_ANALYTICS_TOKEN: "test-cf-token",
 };

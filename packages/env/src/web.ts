@@ -5,6 +5,8 @@ export const env = createEnv({
   clientPrefix: "VITE_",
   client: {
     VITE_SERVER_URL: z.url().default("http://localhost:3000"),
+    // Optional Cloudflare Web Analytics token. When unset, analytics is disabled.
+    VITE_CF_WEB_ANALYTICS_TOKEN: z.string().optional(),
   },
   runtimeEnv: (import.meta as any).env,
   emptyStringAsUndefined: true,
