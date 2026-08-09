@@ -58,6 +58,10 @@ vi.mock("@generai/db/queries/generated-content", () => ({
   getGeneratedContentById: mockGetGeneratedContentById,
 }));
 
+vi.mock("@generai/db/queries/analytics", () => ({
+  insertAnalyticsEvent: vi.fn(),
+}));
+
 vi.mock("../lib/langchain", () => ({
   generateContent: mockGenerateContent,
 }));
