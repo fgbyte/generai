@@ -62,7 +62,7 @@
     "@vitest/ui": "catalog:",
     "autoprefixer": "^10.5.4",
     "jsdom": "catalog:",
-    "postcss": "^8.5.25",
+    "postcss": "^8.5.26",
     "postcss-preset-env": "^11.3.2",
     "tailwindcss": "^4.3.0",
     "typescript": "catalog:",
