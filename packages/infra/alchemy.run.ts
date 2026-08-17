@@ -17,6 +17,9 @@ export const web = await Vite("web", {
   cwd: "../../apps/web",
   assets: "dist",
   adopt: true,
+  placement: {
+    region: "aws:us-east-1"
+  },
   bindings: {
     VITE_SERVER_URL: requireEnv("VITE_SERVER_URL"),
   },
@@ -31,6 +34,9 @@ export const server = await Worker("server", {
   entrypoint: "src/index.ts",
   compatibility: "node",
   adopt: true,
+  placement: {
+    region: "aws:us-east-1"
+  },
   bindings: {
     DATABASE_URL: requireEnv("DATABASE_URL"),
     CORS_ORIGIN: requireEnv("CORS_ORIGIN"),
