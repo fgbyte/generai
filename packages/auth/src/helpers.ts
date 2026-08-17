@@ -27,9 +27,9 @@ export async function notifySignup(user: {
     return;
   }
 
-  const message = `🚀 Nuevo signup
+  const message = `🚀 New signup
 
-👤 Nombre: ${escapeHtml(user.name ?? "(sin nombre)")}
+👤 Name: ${escapeHtml(user.name ?? "(no name)")}
 📧 Email: ${escapeHtml(user.email)}
 🆔 User ID: ${user.id}
 🕐 ${new Date().toISOString()}`;
