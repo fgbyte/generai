@@ -11,6 +11,7 @@ import {
   deleteGeneratedContent,
   getGeneratedContentById,
 } from "@generai/db/queries/generated-content";
+import { trackEvent } from "../lib/analytics";
 
 const MAX_IMAGE_BASE64_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -61,10 +62,24 @@ export const generateRoutes = new Hono<HonoEnv>()
 
     const reset = await applyLazyResetIfDue(user.id);
 
+    if (reset.applied === true) {
+      trackEvent(c, "credits.reset", {
+        userId: user.id,
+        previousPoints: reset.previousPoints,
+        newPoints: reset.points,
+      });
+    }
+
     if (reset.points < creditsConfig.costPerGeneration) {
       console.error(
         `[generate] rejected — insufficient points for userId=${user.id} (have ${reset.points})`,
       );
+      trackEvent(c, "generate.rejected", {
+        userId: user.id,
+        contentType,
+        reason: "insufficient_points",
+        creditsAvailable: reset.points,
+      });
       return c.json({ error: "Insufficient points" }, 400);
     }
 
@@ -88,6 +103,11 @@ export const generateRoutes = new Hono<HonoEnv>()
         console.error(
           `[generate] rejected — concurrent consumption won the race for userId=${user.id}`,
         );
+        trackEvent(c, "generate.rejected", {
+          userId: user.id,
+          contentType,
+          reason: "race_condition",
+        });
         return c.json({ error: "Insufficient points" }, 400);
       }
 
@@ -102,6 +122,14 @@ export const generateRoutes = new Hono<HonoEnv>()
         `[generate] saved id=${saved?.id ?? "(none)"} userId=${user.id} elapsed=${elapsedMs}ms`,
       );
 
+      trackEvent(c, "generate.success", {
+        userId: user.id,
+        contentType,
+        creditsUsed: creditsConfig.costPerGeneration,
+        elapsedMs,
+        captionCount: result.content.length,
+      });
+
       return c.json(
         {
           content: result.content,
@@ -113,6 +141,11 @@ export const generateRoutes = new Hono<HonoEnv>()
     } catch (error) {
       console.error("[generate] Error generating content:", error);
       const message = error instanceof Error ? error.message : String(error);
+      trackEvent(c, "generate.rejected", {
+        userId: user.id,
+        contentType,
+        reason: "provider_error",
+      });
       return c.json({ error: "Failed to generate content", detail: message }, 500);
     }
   })

@@ -54,6 +54,9 @@ export const server = await Worker("server", {
     ...optionalEnv("GEMINI_BASE_URL"),
     ...optionalEnv("GEMINI_TEXT_MODEL"),
     ...optionalEnv("GEMINI_VISION_MODEL"),
+    // Analytics is enabled by default in prod (logger treats missing as enabled);
+    // set to "false" to disable.
+    ...optionalEnv("ANALYTICS_ENABLED"),
   },
   dev: {
     port: 3000,

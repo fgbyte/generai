@@ -6,6 +6,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { sendEmail } from "@generai/mail";
 import { bearer, openAPI } from "better-auth/plugins";
 import bcrypt from "bcryptjs";
+import { notifySignup } from "./helpers";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -41,6 +42,23 @@ export const auth = betterAuth({
     requireEmailVerification: true, // Require email verification before login
   },
   plugins: [openAPI(), bearer()], //Activate OpenAPI DOCS and bearer auth for Tauri clients
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          try {
+            await notifySignup({
+              id: user.id,
+              name: user.name,
+              email: user.email,
+            });
+          } catch (error) {
+            console.error("[auth] signup Telegram notification failed:", error);
+          }
+        },
+      },
+    },
+  },
   emailVerification: {
     sendOnSignUp: true,
     sendOnSignIn: false,

@@ -78,6 +78,25 @@
         }
       })();
     </script>
+    <!--
+      Cloudflare Web Analytics beacon. Env-gated: only injected when
+      VITE_CF_WEB_ANALYTICS_TOKEN is set at build time. Vite replaces
+      %VAR% with the env value; when unset the literal %VITE_...% string
+      remains, so the guard below keeps the beacon inert. spa: "auto"
+      enables SPA navigation tracking for the TanStack Router app.
+    -->
+    <script>
+      (function () {
+        var token = "%VITE_CF_WEB_ANALYTICS_TOKEN%";
+        // Guard: Vite leaves %VAR% literal when unset; empty string when set-but-empty.
+        if (!token || token.indexOf("%VITE_") === 0) return;
+        var s = document.createElement("script");
+        s.defer = true;
+        s.src = "https://static.cloudflareinsights.com/beacon.min.js";
+        s.setAttribute("data-cf-beacon", JSON.stringify({ token: token, spa: "auto" }));
+        document.head.appendChild(s);
+      })();
+    </script>
   </head>
 
   <body>
