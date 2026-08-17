@@ -108,6 +108,7 @@ function defaultResetResult(overrides?: Partial<{ applied: boolean; points: numb
   return {
     applied: overrides?.applied ?? false,
     points: overrides?.points ?? 50,
+    previousPoints: overrides?.points ?? 50,
     lastResetAt: now,
     nextResetAt: nextMonth,
   };
@@ -278,6 +279,7 @@ describe("generate routes", () => {
       mockApplyLazyResetIfDue.mockResolvedValue({
         applied: true,
         points: creditsConfig.resetAmount,
+        previousPoints: 42,
         lastResetAt: fortyDaysAgo,
         nextResetAt: nextMonth,
       });
@@ -343,6 +345,7 @@ describe("generate routes", () => {
       mockApplyLazyResetIfDue.mockResolvedValue({
         applied: true,
         points: creditsConfig.resetAmount,
+        previousPoints: 42,
         lastResetAt: new Date(Date.now() - 40 * 86_400_000),
         nextResetAt: new Date(Date.now() + 30 * 86_400_000),
       });

@@ -4,6 +4,8 @@ import { getUserPointsWithResetInfo, setUserPointsAbsolute } from "@generai/db/q
 export type LazyResetResult = {
   applied: boolean;
   points: number;
+  /** Points balance before this call — lets callers log a reset without a second query. */
+  previousPoints: number;
   lastResetAt: Date;
   nextResetAt: Date;
 };
@@ -21,6 +23,7 @@ export async function applyLazyResetIfDue(userId: string): Promise<LazyResetResu
     return {
       applied: false,
       points: info.points,
+      previousPoints: info.points,
       lastResetAt: info.lastResetAt,
       nextResetAt: info.nextResetAt,
     };
@@ -33,6 +36,7 @@ export async function applyLazyResetIfDue(userId: string): Promise<LazyResetResu
   return {
     applied: true,
     points: creditsConfig.resetAmount,
+    previousPoints: info.points,
     lastResetAt: newBoundary,
     nextResetAt: computeNextResetAt(newBoundary, creditsConfig.resetInterval),
   };

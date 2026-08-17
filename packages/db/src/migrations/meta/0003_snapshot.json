@@ -33,13 +33,6 @@
           "notNull": true,
           "default": "'{}'::jsonb"
         },
-        "env": {
-          "name": "env",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'production'"
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",

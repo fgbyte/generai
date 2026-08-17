@@ -53,7 +53,6 @@ vi.mock("@generai/db/queries/analytics", () => ({
 
 vi.mock("../lib/analytics", () => ({
   trackEvent: mockTrackEvent,
-  trackError: vi.fn(),
 }));
 
 vi.mock("@generai/db/queries/users", () => ({
@@ -222,15 +221,9 @@ describe("generate routes analytics (integration)", () => {
     mockApplyLazyResetIfDue.mockResolvedValue({
       applied: false,
       points: 3,
+      previousPoints: 3,
       lastResetAt: new Date(),
       nextResetAt: new Date(),
-    });
-    mockGetUserPointsWithResetInfo.mockResolvedValue({
-      points: 3,
-      lastResetAt: new Date(),
-      nextResetAt: new Date(),
-      isDue: false,
-      effectivePoints: 3,
     });
 
     const res = await makeRequest("POST", "/api/generate", {
@@ -254,15 +247,9 @@ describe("generate routes analytics (integration)", () => {
     mockApplyLazyResetIfDue.mockResolvedValue({
       applied: false,
       points: 50,
+      previousPoints: 50,
       lastResetAt: new Date(),
       nextResetAt: new Date(),
-    });
-    mockGetUserPointsWithResetInfo.mockResolvedValue({
-      points: 50,
-      lastResetAt: new Date(),
-      nextResetAt: new Date(),
-      isDue: false,
-      effectivePoints: 50,
     });
     mockGenerateContent.mockResolvedValue({
       content: ["caption one", "caption two"],
@@ -302,15 +289,9 @@ describe("generate routes analytics (integration)", () => {
     mockApplyLazyResetIfDue.mockResolvedValue({
       applied: true,
       points: 50,
+      previousPoints: 3,
       lastResetAt: new Date(),
       nextResetAt: new Date(),
-    });
-    mockGetUserPointsWithResetInfo.mockResolvedValue({
-      points: 3,
-      lastResetAt: new Date(),
-      nextResetAt: new Date(),
-      isDue: false,
-      effectivePoints: 3,
     });
     mockGenerateContent.mockResolvedValue({
       content: ["caption one"],

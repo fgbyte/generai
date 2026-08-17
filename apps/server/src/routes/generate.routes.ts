@@ -60,13 +60,12 @@ export const generateRoutes = new Hono<HonoEnv>()
         `imageBase64=${imageKB ? `${imageKB}KB` : "none"}`,
     );
 
-    const info = await getUserPointsWithResetInfo(user.id);
     const reset = await applyLazyResetIfDue(user.id);
 
     if (reset.applied === true) {
       trackEvent(c, "credits.reset", {
         userId: user.id,
-        previousPoints: info.points,
+        previousPoints: reset.previousPoints,
         newPoints: reset.points,
       });
     }

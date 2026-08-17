@@ -44,7 +44,6 @@ export function trackEvent(
         userId: safe.userId as string,
         event: eventName,
         properties: safe,
-        env: stage,
       }).catch((err) => {
         console.error("[analytics] failed to write event:", err);
       }),
@@ -52,22 +51,4 @@ export function trackEvent(
   } catch (err) {
     console.error("[analytics] trackEvent failed:", err);
   }
-}
-
-/**
- * Convenience wrapper for rejected/error events. Fires `generate.rejected`
- * with a fixed `reason` — the error message text is NEVER included in the
- * event properties (PII/leak guard). Sanitization still applies.
- */
-export function trackError(
-  c: Context<HonoEnv>,
-  error: unknown,
-  context: { userId: string; contentType?: string },
-): void {
-  void error; // intentionally not logged — see PII/leak guard above
-  trackEvent(c, "generate.rejected", {
-    userId: context.userId,
-    contentType: context.contentType,
-    reason: "provider_error",
-  });
 }

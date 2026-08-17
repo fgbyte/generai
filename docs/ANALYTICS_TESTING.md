@@ -27,7 +27,7 @@ Tres eventos por usuario, escritos en la tabla `analytics_events`:
 
 Razones posibles de `generate.rejected`: `insufficient_points`, `race_condition`, `provider_error`.
 
-Cada fila guarda: `id`, `user_id`, `event`, `properties` (JSON), `env`, `created_at`.
+Cada fila guarda: `id`, `user_id`, `event`, `properties` (JSON), `created_at`.
 
 **Seguridad PII**: nunca se guardan `prompt`, `content`, `imageBase64`, `email`, `imageKB` ni `promptPreview`. La sanitización corre siempre antes de escribir.
 
@@ -114,7 +114,7 @@ Drizzle Studio abre en el navegador. Busca la tabla `analytics_events`, revisa l
 Opción 2: consulta SQL directa a la base (psql o la consola de Neon):
 
 ```sql
-SELECT event, user_id, properties, env, created_at
+SELECT event, user_id, properties, created_at
 FROM analytics_events
 ORDER BY created_at DESC
 LIMIT 20;
@@ -126,7 +126,6 @@ LIMIT 20;
 2. **`generate.success`**: genera contenido con créditos suficientes (elige un `contentType`, escribe un prompt, pulsa Generar). En la tabla debe aparecer `generate.success` con properties como `contentType`, `creditsUsed`, `elapsedMs`, `captionCount` (y `userId`). Verifica que `prompt` NO está en properties.
 3. **`generate.rejected`**: deja al usuario con menos créditos que el coste de la generación (por ejemplo, gastándolos o ajustándolos en la DB) e intenta generar. Debe aparecer `generate.rejected` con `reason: "insufficient_points"` y `creditsAvailable`.
 4. **`credits.reset`**: cuando el usuario tiene el reset perezoso pendiente (créditos vencidos según la configuración de reset mensual) y vuelve a generar, aparecerá `credits.reset` con `previousPoints` y `newPoints`, seguido del evento del generate.
-5. Verifica que la columna `env` sea `production` en las filas (en dev el stage cae al default `production`).
 
 ### Paso C: Prueba PII
 
@@ -138,7 +137,6 @@ En Drizzle Studio (o SQL), abre el JSON de `properties` de un `generate.success`
 | --- | --- |
 | No aparecen eventos | ¿`ANALYTICS_ENABLED=false` en `apps/server/.env`? ¿El server corre vía `bun run dev` (Alchemy)? ¿`DATABASE_URL` apunta a una base que no estás inspeccionando? |
 | No aparece el beacon | ¿Token vacío en `apps/web/.env`? ¿Se reinició dev/build tras cambiar el `.env`? (es build-time) |
-| Eventos con `env` distinto de `production` | El stage gate no debería escribirlos; revisa la configuración |
 | Errores del logger | El servidor loguea `[analytics] failed to write event:` en consola. Es fire-and-forget, nunca rompe la request |
 
 ## 7. Referencias de código
@@ -150,5 +148,5 @@ En Drizzle Studio (o SQL), abre el JSON de `properties` de un `generate.success`
 | Tipos + allowlist + PII blocklist | `apps/server/src/lib/analytics-types.ts` |
 | Emisión de eventos | `apps/server/src/routes/generate.routes.ts` |
 | Tabla | `packages/db/src/schema/analytics.ts` (tabla `analytics_events`) |
-| Queries | `packages/db/src/queries/analytics.ts` (`insertAnalyticsEvent`, `getAnalyticsEvents`) |
+| Queries | `packages/db/src/queries/analytics.ts` (`insertAnalyticsEvent`) |
 | Bindings/env | `packages/infra/alchemy.run.ts` (`ANALYTICS_ENABLED` opcional), `apps/server/.env.example`, `apps/web/.env.example` |

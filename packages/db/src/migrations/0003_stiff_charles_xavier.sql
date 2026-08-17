@@ -3,7 +3,6 @@ CREATE TABLE "analytics_events" (
 	"user_id" text NOT NULL,
 	"event" varchar(100) NOT NULL,
 	"properties" jsonb DEFAULT '{}'::jsonb NOT NULL,
-	"env" varchar(20) DEFAULT 'production' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
