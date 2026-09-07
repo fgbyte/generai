@@ -17,7 +17,7 @@
     "@hono/zod-openapi": "^1.6.1",
     "@langchain/core": "^1.2.9",
     "@langchain/openai": "^1.5.10",
-    "@scalar/hono-api-reference": "^0.11.16",
+    "@scalar/hono-api-reference": "^0.12.0",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "hono": "catalog:",
