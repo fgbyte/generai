@@ -63,7 +63,7 @@
     "autoprefixer": "^10.6.1",
     "jsdom": "catalog:",
     "postcss": "^8.5.28",
-    "postcss-preset-env": "^11.5.3",
+    "postcss-preset-env": "^11.5.4",
     "tailwindcss": "^4.3.0",
     "typescript": "catalog:",
     "vite": "^8.3.0",
