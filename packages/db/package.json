@@ -17,16 +17,16 @@
   },
   "dependencies": {
     "@generai/env": "workspace:*",
-    "@neondatabase/serverless": "^1.1.0",
+    "@neondatabase/serverless": "^1.2.0",
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.3",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@generai/config": "workspace:*",
-    "@types/ws": "^8.18.1",
+    "@types/ws": "^8.18.2",
     "drizzle-kit": "^0.31.11",
     "typescript": "catalog:",
-    "ws": "^8.21.3"
+    "ws": "^8.22.0"
   }
 }
