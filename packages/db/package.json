@@ -24,9 +24,9 @@
   },
   "devDependencies": {
     "@generai/config": "workspace:*",
-    "@types/ws": "^8.18.1",
+    "@types/ws": "^8.18.2",
     "drizzle-kit": "^0.31.11",
     "typescript": "catalog:",
-    "ws": "^8.21.3"
+    "ws": "^8.22.0"
   }
 }
