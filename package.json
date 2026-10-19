@@ -29,7 +29,7 @@
       "alchemy": "^0.94.0",
       "vitest": "^4.1.10",
       "@vitest/ui": "^4.1.10",
-      "@vitest/coverage-v8": "^4.1.10",
+      "@vitest/coverage-v8": "^5.0.3",
       "jsdom": "^29.1.1"
     }
   },
