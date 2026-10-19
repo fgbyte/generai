@@ -15,7 +15,7 @@
     "@generai/env": "workspace:*",
     "@generai/mail": "workspace:*",
     "@hono/zod-openapi": "^1.6.3",
-    "@langchain/core": "^1.2.17",
+    "@langchain/core": "^1.2.18",
     "@langchain/openai": "^1.6.2",
     "@scalar/hono-api-reference": "^0.12.11",
     "better-auth": "catalog:",
