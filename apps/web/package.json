@@ -60,7 +60,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
-    "autoprefixer": "^10.6.1",
+    "autoprefixer": "^10.6.2",
     "jsdom": "catalog:",
     "postcss": "^8.5.30",
     "postcss-preset-env": "^11.6.1",
