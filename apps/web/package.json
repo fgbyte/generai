@@ -43,7 +43,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/postcss": "^4.3.5",
     "@tanstack/react-query-devtools": "^5.104.4",
     "@tanstack/react-router-devtools": "^1.167.2",
     "@tanstack/router-cli": "^1.167.45",
