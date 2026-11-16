@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@generai/env": "workspace:*",
-    "@neondatabase/serverless": "^1.2.0",
+    "@neondatabase/serverless": "^1.2.1",
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.4",
     "zod": "catalog:"
